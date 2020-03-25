@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Text.Json;
 
 namespace ConfigurationManager
 {
@@ -23,18 +24,6 @@ namespace ConfigurationManager
         public MainWindow()
         {
             InitializeComponent();
-        }
-
-        private List<>
-
-        private void pnlMainGrid_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            MessageBox.Show("You clicked me at " + e.GetPosition(this).ToString());
-        }
-
-        private void pnlMainGrid_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-
         }
     }
 }
