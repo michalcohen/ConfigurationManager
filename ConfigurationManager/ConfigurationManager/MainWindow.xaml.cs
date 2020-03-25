@@ -24,5 +24,17 @@ namespace ConfigurationManager
         {
             InitializeComponent();
         }
+
+        private List<>
+
+        private void pnlMainGrid_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            MessageBox.Show("You clicked me at " + e.GetPosition(this).ToString());
+        }
+
+        private void pnlMainGrid_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
     }
 }

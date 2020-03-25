@@ -6,7 +6,6 @@
         xmlns:local="clr-namespace:ConfigurationManager"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        <Grid Name="pnlMainGrid" MouseUp="pnlMainGrid_MouseUp" Background="LightBlue" MouseDown="pnlMainGrid_MouseDown">
+        </Grid>
 </Window>
