@@ -16,6 +16,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.IO;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ConfigurationManager
 {
@@ -24,6 +25,7 @@ namespace ConfigurationManager
     /// </summary>
     public partial class MainWindow : Window
     {
+        //private readonly MyViewModel _viewModel;
         public MainWindow()
         {
             InitializeComponent();
@@ -31,50 +33,16 @@ namespace ConfigurationManager
         }
 
 
-        static IEnumerable<string> GetFiles(string path)
-        {
-            Queue<string> queue = new Queue<string>();
-            queue.Enqueue(path);
-            while (queue.Count > 0)
-            {
-                path = queue.Dequeue();
-                try
-                {
-                    foreach (string subDir in Directory.GetDirectories(path))
-                    {
-                        queue.Enqueue(subDir);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.Error.WriteLine(ex);
-                }
-                string[] files = null;
-                try
-                {
-                    files = Directory.GetFiles(path);
-                }
-                catch (Exception ex)
-                {
-                    Console.Error.WriteLine(ex);
-                }
-                if (files != null)
-                {
-                    for (int i = 0; i < files.Length; i++)
-                    {
-                        yield return files[i];
-                    }
-                }
-            }
-        }
-
         private void LoadedObjects()
         {
-            foreach (string file in GetFiles("Configurations"))
+            foreach (string file in Directory.GetFiles("Configurations", "*", SearchOption.AllDirectories))
             {
                 using StreamReader r = new StreamReader(file);
                 string json = r.ReadToEnd();
-                dynamic array = JsonConvert.DeserializeObject(json);
+                JObject array = (JObject)JsonConvert.DeserializeObject(json);
+                ConfigurationFile c = new ConfigurationFile(array);
+
+                // @Lidor: here we will use the object c to create the GUI
             }
         }
 

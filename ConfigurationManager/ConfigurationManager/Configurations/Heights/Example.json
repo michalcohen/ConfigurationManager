@@ -1,0 +1,21 @@
+﻿{
+	"use_bloop": {
+		first: true,
+		second: true,
+		third: false
+	},
+	"folder": "C:\\Users\\Trumpy\\Documents",
+	"index": 3,
+	"choose": [1, 2, 3],
+	"bloop": [
+		{
+			"bla": 1,
+			"bli": 2
+		},
+		{
+			"bla": 3,
+			"bli": 4
+		}],
+	"run_with_profiler": false,
+	"method": "soft"
+}
