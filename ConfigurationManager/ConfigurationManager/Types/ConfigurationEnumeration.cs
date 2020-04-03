@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ConfigurationManager.Types
 {
-    class ConfigurationEnumeration: IConfigurationVariable
+    class ConfigurationEnumeration: ConfigurationVariable
     {
         private bool _isValid;
 
@@ -54,14 +54,7 @@ namespace ConfigurationManager.Types
         //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         //}
 
-        public bool IsValidValue(object o)
-        {
-            float x = (float)o;
-            //return x >= LowestValue || x <= HighestValue;
-            return true;
-        }
-
-        public static IConfigurationVariable TryConvert(JToken fromJson)
+        public static ConfigurationVariable TryConvert(JToken fromJson)
         {
             // Not correct
             return new ConfigurationFloat(fromJson.ToObject<float>());
@@ -70,6 +63,11 @@ namespace ConfigurationManager.Types
         public static bool IsRelevantType(JToken fromJson)
         {
             return false;
+        }
+
+        public override bool IsValidValue(object o)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -5,30 +5,30 @@ using System.Text;
 
 namespace ConfigurationManager.Types
 {
-    class CompositeConfiguraionVariable: IConfigurationVariable
+    class CompositeConfiguraionVariable: ConfigurationVariable
     {
-        private Dictionary<String, IConfigurationVariable> _variables;
+        private Dictionary<String, ConfigurationVariable> _variables;
 
         public CompositeConfiguraionVariable(JObject array)
         {
-            _variables = new Dictionary<String, IConfigurationVariable>();
+            _variables = new Dictionary<String, ConfigurationVariable>();
             foreach (KeyValuePair<String, JToken> value in array)
             {
-                _variables[value.Key] = IConfigurationVariable.ConvertJsonToConfiguration(value.Value);
+                _variables[value.Key] = ConfigurationVariable.ConvertJsonToConfiguration(value.Value);
             }
         }
 
-        public static IConfigurationVariable TryConvert(JToken fromJson)
+        public static new ConfigurationVariable TryConvert(JToken fromJson)
         {
             return new CompositeConfiguraionVariable((JObject)fromJson);
         }
 
-        public static bool IsRelevantType(JToken fromJson)
+        public static new bool IsRelevantType(JToken fromJson)
         {
-            return fromJson.Type == JTokenType.Object;
+            return fromJson.Type == JTokenType.Object && !((JObject)fromJson).ContainsKey("type");
         }
 
-        public bool IsValidValue(object o)
+        public override bool IsValidValue(object o)
         {
             throw new NotImplementedException();
         }

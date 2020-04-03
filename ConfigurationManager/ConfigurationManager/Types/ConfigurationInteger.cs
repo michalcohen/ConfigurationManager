@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ConfigurationManager.Types
 {
-    class ConfigurationInteger: IConfigurationVariable
+    class ConfigurationInteger: ConfigurationVariable
     {
         private int _lowest_value, _highest_value;
         private bool _isValid;
@@ -93,20 +93,34 @@ namespace ConfigurationManager.Types
         //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         //}
 
-        public bool IsValidValue(object o)
+        public override bool IsValidValue(object o)
         {
             int x = (int)o;
             return x >= LowestValue || x <= HighestValue;
         }
 
-        public static IConfigurationVariable TryConvert(JToken fromJson)
+        public static new ConfigurationVariable TryConvert(JToken fromJson)
         {
-            return new ConfigurationInteger(fromJson.ToObject<int>());
+            if (IsImplicitType(fromJson))
+            {
+                return new ConfigurationInteger(fromJson.ToObject<int>());
+            }
+            return new ConfigurationInteger(fromJson["value"].ToObject<int>());
         }
 
-        public static bool IsRelevantType(JToken fromJson)
+        private static new bool IsImplicitType(JToken fromJson)
         {
             return fromJson.Type == JTokenType.Integer;
+        }
+
+        public static new bool IsExplicitType(JToken fromJson)
+        {
+            return fromJson.Type == JTokenType.Object && ((JObject)fromJson)["type"].ToString().Equals("int");
+        }
+
+        public static new bool IsRelevantType(JToken fromJson)
+        {
+            return IsImplicitType(fromJson) || IsExplicitType(fromJson);
         }
     }
 }

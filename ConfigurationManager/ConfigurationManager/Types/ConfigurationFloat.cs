@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ConfigurationManager.Types
 {
-    class ConfigurationFloat: IConfigurationVariable
+    class ConfigurationFloat: ConfigurationVariable
     {
         private float _lowest_value, _highest_value;
         private bool _isValid;
@@ -61,53 +61,33 @@ namespace ConfigurationManager.Types
             }
         }
 
-        /// <summary>
-        /// Indicates whether the model is in a valid state or not.
-        /// </summary>
-        public bool IsValid
+        public static new ConfigurationVariable TryConvert(JToken fromJson)
         {
-            get
+            if (IsImplicitType(fromJson))
             {
-                return _isValid;
+                return new ConfigurationFloat(fromJson.ToObject<float>());
             }
-            set
-            {
-                if (_isValid != value)
-                {
-                    _isValid = value;
-                    //OnPropertyChanged();
-                }
-            }
+            return new ConfigurationFloat(fromJson["value"].ToObject<float>());
         }
 
-        private void SetIsValid()
-        {
-            //IsValid = !string.IsNullOrEmpty(Name);
-        }
-
-        /// <summary>
-        /// Raises the PropertyChanged event.
-        /// </summary>
-        /// <param name="propertyName">Name of the property.</param>
-        //private void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        //{
-        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        //}
-
-        public bool IsValidValue(object o)
-        {
-            float x = (float)o;
-            return x >= LowestValue || x <= HighestValue;
-        }
-
-        public static IConfigurationVariable TryConvert(JToken fromJson)
-        {
-            return new ConfigurationFloat(fromJson.ToObject<float>());
-        }
-
-        public static bool IsRelevantType(JToken fromJson)
+        private static new bool IsImplicitType(JToken fromJson)
         {
             return fromJson.Type == JTokenType.Float;
+        }
+
+        public static new bool IsExplicitType(JToken fromJson)
+        {
+            return fromJson.Type == JTokenType.Object && ((JObject)fromJson)["type"].ToString().Equals("float");
+        }
+
+        public override bool IsValidValue(object o)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static new bool IsRelevantType(JToken fromJson)
+        {
+            return IsImplicitType(fromJson) || IsExplicitType(fromJson);
         }
     }
 }

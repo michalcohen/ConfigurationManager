@@ -17,5 +17,53 @@
 			"bli": 4
 		}],
 	"run_with_profiler": false,
-	"method": "soft"
+	"method": "soft",
+	"try_bool": {
+		"type": "bool",
+		"value": true
+	},
+	"try_int": {
+		"type": "int",
+		value: 5
+	},
+	"try_int_lower_bound": {
+		"type": "int",
+		"value": 6,
+		"lower_bound": 4
+	},
+	"try_int_higher_bound": {
+		"type": "int",
+		"value": 3,
+		"higher_bound": 8
+	},
+	"try_int_both_bounds": {
+		"type": "int",
+		"value": 6,
+		"lower_bound": 4,
+		"higher_bound": 7
+	},
+	"try_float": {
+		"type": "float",
+		value: 5.7
+	},
+	"try_float_lower_bound": {
+		"type": "float",
+		"value": 6.9,
+		"lower_bound": 4.4
+	},
+	"try_float_higher_bound": {
+		"type": "float",
+		"value": 3.0,
+		"higher_bound": 8.1
+	},
+	"try_float_both_bounds": {
+		"type": "float",
+		"value": 6.6,
+		"lower_bound": 4.8,
+		"higher_bound": 7.0
+	},
+	"try_string": {
+		"type": "string",
+		"value": "bananana"
+	}
 }

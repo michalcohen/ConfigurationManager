@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ConfigurationManager.Types
 {
-    class ConfigurationString: IConfigurationVariable
+    class ConfigurationString: ConfigurationVariable
     {
         string _value;
 
@@ -21,19 +21,34 @@ namespace ConfigurationManager.Types
                 return _value;
             }
         }
-        public bool IsValidValue(Object o)
+        
+        public override bool IsValidValue(Object o)
         {
             return true;
         }
-
-        public static IConfigurationVariable TryConvert(JToken fromJson)
+        
+        public static new ConfigurationVariable TryConvert(JToken fromJson)
         {
-            return new ConfigurationString(fromJson.ToObject<string>());
+            if (IsImplicitType(fromJson))
+            {
+                return new ConfigurationString(fromJson.ToObject<string>());
+            }
+            return new ConfigurationString(fromJson["value"].ToObject<string>());
         }
 
-        public static bool IsRelevantType(JToken fromJson)
+        private static new bool IsImplicitType(JToken fromJson)
         {
             return fromJson.Type == JTokenType.String;
+        }
+
+        public static new bool IsExplicitType(JToken fromJson)
+        {
+            return fromJson.Type == JTokenType.Object && ((JObject)fromJson)["type"].ToString().Equals("string");
+        }
+
+        public static new bool IsRelevantType(JToken fromJson)
+        {
+            return IsImplicitType(fromJson) || IsExplicitType(fromJson);
         }
     }
 }

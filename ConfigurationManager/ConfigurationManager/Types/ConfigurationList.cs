@@ -5,20 +5,20 @@ using System.Text;
 
 namespace ConfigurationManager.Types
 {
-    class ConfigurationList : IConfigurationVariable
+    class ConfigurationList : ConfigurationVariable
     {
-        List<IConfigurationVariable> _variables;
+        List<ConfigurationVariable> _variables;
 
         public ConfigurationList(JArray array)
         {
-            _variables = new List<IConfigurationVariable>();
+            _variables = new List<ConfigurationVariable>();
             foreach (JToken value in array)
             {
-                _variables.Add(IConfigurationVariable.ConvertJsonToConfiguration(value));
+                _variables.Add(ConfigurationVariable.ConvertJsonToConfiguration(value));
             }
         }
 
-        public static IConfigurationVariable TryConvert(JToken fromJson)
+        public static ConfigurationVariable TryConvert(JToken fromJson)
         {
             return new ConfigurationList((JArray)fromJson);
         }
@@ -28,11 +28,9 @@ namespace ConfigurationManager.Types
             return fromJson.Type == JTokenType.Array;
         }
 
-        public bool IsValidValue(object o)
+        public override bool IsValidValue(object o)
         {
             throw new NotImplementedException();
         }
-
-        
     }
 }
