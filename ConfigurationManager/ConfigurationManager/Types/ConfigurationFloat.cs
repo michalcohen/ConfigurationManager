@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ConfigurationManager.Types
 {
-    class ConfigurationFloat: ConfigurationVariable
+    public class ConfigurationFloat: ConfigurationVariable
     {
         private float _lowest_value, _highest_value;
         private bool _isValid;
@@ -17,6 +17,10 @@ namespace ConfigurationManager.Types
             _value = val;
             _lowest_value = lowest;
             _highest_value = highest;
+            if (lowest > highest)
+            {
+                throw new Exception("Invlid bounderies");
+            }
         }
 
         public float Value
@@ -67,7 +71,10 @@ namespace ConfigurationManager.Types
             {
                 return new ConfigurationFloat(fromJson.ToObject<float>());
             }
-            return new ConfigurationFloat(fromJson["value"].ToObject<float>());
+            JObject j = (JObject)fromJson;
+            float l = j.ContainsKey("lower_bound") ? j["lower_bound"].ToObject<float>() : float.MinValue;
+            float h = j.ContainsKey("higher_bound") ? j["higher_bound"].ToObject<float>() : float.MaxValue;
+            return new ConfigurationFloat(fromJson["value"].ToObject<float>(), lowest: l, highest: h);
         }
 
         private static new bool IsImplicitType(JToken fromJson)

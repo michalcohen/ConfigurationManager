@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ConfigurationManager.Types
 {
-    class ConfigurationInteger: ConfigurationVariable
+    public class ConfigurationInteger: ConfigurationVariable
     {
         private int _lowest_value, _highest_value;
         private bool _isValid;
@@ -105,7 +105,10 @@ namespace ConfigurationManager.Types
             {
                 return new ConfigurationInteger(fromJson.ToObject<int>());
             }
-            return new ConfigurationInteger(fromJson["value"].ToObject<int>());
+            JObject j = (JObject)fromJson;
+            int l = j.ContainsKey("lower_bound") ? j["lower_bound"].ToObject<int>() : int.MinValue;
+            int h = j.ContainsKey("higher_bound") ? j["higher_bound"].ToObject<int>() : int.MaxValue;
+            return new ConfigurationInteger(fromJson["value"].ToObject<int>(), lowest: l, highest: h);
         }
 
         private static new bool IsImplicitType(JToken fromJson)

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ConfigurationManager.Types
 {
-    class ConfigurationBool : ConfigurationVariable
+    public class ConfigurationBool : ConfigurationVariable
     {
         bool _value;
         public ConfigurationBool(bool value)

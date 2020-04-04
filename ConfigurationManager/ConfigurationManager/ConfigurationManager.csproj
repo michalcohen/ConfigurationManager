@@ -14,7 +14,7 @@
     <None Update="Configurations\Heights\Aves.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Configurations\Heights\Example.json">
+    <None Update="Configurations\Example.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Configurations\Heights\Mammals.json">

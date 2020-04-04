@@ -8,11 +8,11 @@ namespace ConfigurationManager
 {
     public class ConfigurationFile
     {
-        CompositeConfiguraionVariable _content;
+        public CompositeConfiguraionVariable Content { get; }
 
         public ConfigurationFile(JObject array)
         {
-            _content = new CompositeConfiguraionVariable(array);
+            Content= new CompositeConfiguraionVariable(array);
         }
     }
 }

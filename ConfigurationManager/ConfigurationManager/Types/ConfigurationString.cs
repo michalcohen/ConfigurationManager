@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ConfigurationManager.Types
 {
-    class ConfigurationString: ConfigurationVariable
+    public class ConfigurationString: ConfigurationVariable
     {
         string _value;
 

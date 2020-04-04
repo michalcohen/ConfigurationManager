@@ -5,16 +5,16 @@ using System.Text;
 
 namespace ConfigurationManager.Types
 {
-    class CompositeConfiguraionVariable: ConfigurationVariable
+    public class CompositeConfiguraionVariable: ConfigurationVariable
     {
-        private Dictionary<String, ConfigurationVariable> _variables;
+        public Dictionary<String, ConfigurationVariable> Variables { get; set; }
 
         public CompositeConfiguraionVariable(JObject array)
         {
-            _variables = new Dictionary<String, ConfigurationVariable>();
+            Variables = new Dictionary<String, ConfigurationVariable>();
             foreach (KeyValuePair<String, JToken> value in array)
             {
-                _variables[value.Key] = ConfigurationVariable.ConvertJsonToConfiguration(value.Value);
+                Variables[value.Key] = ConfigurationVariable.ConvertJsonToConfiguration(value.Value);
             }
         }
 

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace ConfigurationManager.Types
 {
-    abstract class ConfigurationVariable
+    abstract public class ConfigurationVariable
     {
         abstract public bool IsValidValue(Object o);
 

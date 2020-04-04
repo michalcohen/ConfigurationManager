@@ -5,25 +5,25 @@ using System.Text;
 
 namespace ConfigurationManager.Types
 {
-    class ConfigurationList : ConfigurationVariable
+    public class ConfigurationList : ConfigurationVariable
     {
-        List<ConfigurationVariable> _variables;
+        public List<ConfigurationVariable> Variables { get; set; }
 
         public ConfigurationList(JArray array)
         {
-            _variables = new List<ConfigurationVariable>();
+            Variables = new List<ConfigurationVariable>();
             foreach (JToken value in array)
             {
-                _variables.Add(ConfigurationVariable.ConvertJsonToConfiguration(value));
+                Variables.Add(ConfigurationVariable.ConvertJsonToConfiguration(value));
             }
         }
 
-        public static ConfigurationVariable TryConvert(JToken fromJson)
+        public static new ConfigurationVariable TryConvert(JToken fromJson)
         {
             return new ConfigurationList((JArray)fromJson);
         }
 
-        public static bool IsRelevantType(JToken fromJson)
+        public static new bool IsRelevantType(JToken fromJson)
         {
             return fromJson.Type == JTokenType.Array;
         }
