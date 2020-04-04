@@ -20,12 +20,11 @@ namespace ConfigurationManager.Types
 
         public static new ConfigurationVariable TryConvert(JToken fromJson)
         {
-            return new ConfigurationList((JArray)fromJson);
-        }
-
-        public static new bool IsRelevantType(JToken fromJson)
-        {
-            return fromJson.Type == JTokenType.Array;
+            if (fromJson.Type == JTokenType.Array)
+            {
+                return new ConfigurationList((JArray)fromJson);
+            }
+            return null;
         }
 
         public override bool IsValidValue(object o)

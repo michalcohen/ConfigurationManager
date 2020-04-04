@@ -20,10 +20,14 @@ namespace ConfigurationManager.Types
 
         public static new ConfigurationVariable TryConvert(JToken fromJson)
         {
-            return new CompositeConfiguraionVariable((JObject)fromJson);
+            if (IsRelevantType(fromJson))
+            {
+                return new CompositeConfiguraionVariable((JObject)fromJson);
+            }
+            return null;
         }
 
-        public static new bool IsRelevantType(JToken fromJson)
+        public static bool IsRelevantType(JToken fromJson)
         {
             return fromJson.Type == JTokenType.Object && !((JObject)fromJson).ContainsKey("type");
         }

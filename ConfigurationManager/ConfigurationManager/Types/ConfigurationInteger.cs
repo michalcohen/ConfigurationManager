@@ -104,11 +104,14 @@ namespace ConfigurationManager.Types
             if (IsImplicitType(fromJson))
             {
                 return new ConfigurationInteger(fromJson.ToObject<int>());
+            } else if (IsExplicitType(fromJson))
+            {
+                JObject j = (JObject)fromJson;
+                int l = j.ContainsKey("lower_bound") ? j["lower_bound"].ToObject<int>() : int.MinValue;
+                int h = j.ContainsKey("higher_bound") ? j["higher_bound"].ToObject<int>() : int.MaxValue;
+                return new ConfigurationInteger(fromJson["value"].ToObject<int>(), lowest: l, highest: h);
             }
-            JObject j = (JObject)fromJson;
-            int l = j.ContainsKey("lower_bound") ? j["lower_bound"].ToObject<int>() : int.MinValue;
-            int h = j.ContainsKey("higher_bound") ? j["higher_bound"].ToObject<int>() : int.MaxValue;
-            return new ConfigurationInteger(fromJson["value"].ToObject<int>(), lowest: l, highest: h);
+            return null;
         }
 
         private static new bool IsImplicitType(JToken fromJson)
@@ -119,11 +122,6 @@ namespace ConfigurationManager.Types
         public static new bool IsExplicitType(JToken fromJson)
         {
             return fromJson.Type == JTokenType.Object && ((JObject)fromJson)["type"].ToString().Equals("int");
-        }
-
-        public static new bool IsRelevantType(JToken fromJson)
-        {
-            return IsImplicitType(fromJson) || IsExplicitType(fromJson);
         }
     }
 }

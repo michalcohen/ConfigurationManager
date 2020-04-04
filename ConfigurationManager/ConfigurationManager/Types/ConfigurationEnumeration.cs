@@ -5,21 +5,31 @@ using System.Text;
 
 namespace ConfigurationManager.Types
 {
-    class ConfigurationEnumeration: ConfigurationVariable
+    public class ConfigurationEnumeration: ConfigurationVariable
     {
         private bool _isValid;
 
-        ConfigurationEnumerationType _type;
-        string _value;
+        public string Value { get; }
 
-        public string Value
+        public bool IsGlobalEnum { get; }
+
+        public string EnumName { get; }
+
+        public List<string> EnumValues { get; }
+
+        public ConfigurationEnumeration(string value, string enum_name)
         {
-            get
-            {
-                return _value;
-            }
+            Value = value;
+            EnumName = enum_name;
+            IsGlobalEnum = true;
         }
 
+        public ConfigurationEnumeration(string value, List<string> enum_values)
+        {
+            Value = value;
+            EnumValues = enum_values;
+            IsGlobalEnum = false;
+        }
 
         /// <summary>
         /// Indicates whether the model is in a valid state or not.
@@ -54,15 +64,41 @@ namespace ConfigurationManager.Types
         //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         //}
 
-        public static ConfigurationVariable TryConvert(JToken fromJson)
+        public static new ConfigurationVariable TryConvert(JToken fromJson)
         {
-            // Not correct
-            return new ConfigurationFloat(fromJson.ToObject<float>());
-        }
-
-        public static bool IsRelevantType(JToken fromJson)
-        {
-            return false;
+            if (fromJson.Type != JTokenType.Object)
+            {
+                return null;
+            }
+            JObject j = (JObject)fromJson;
+            if (!j.ContainsKey("type"))
+            {
+                return null;
+            }
+            JToken t = j["type"];
+            if (t.Type == JTokenType.String)
+            {
+                string name = t.ToObject<string>();
+                if (Enums.HasEnum(name))
+                {
+                    return new ConfigurationEnumeration(j["value"].ToObject<string>(), name);
+                }
+            }
+            else if (t.Type == JTokenType.Array)
+            {
+                JArray vals = (JArray)t;
+                if (vals[0].Type != JTokenType.String)
+                {
+                    return null;
+                }
+                List<string> values = new List<string>();
+                foreach (JToken value in vals)
+                {
+                    values.Add(value.ToObject<string>());
+                }
+                return new ConfigurationEnumeration(j["value"].ToObject<string>(), values);
+            }
+            return null;
         }
 
         public override bool IsValidValue(object o)

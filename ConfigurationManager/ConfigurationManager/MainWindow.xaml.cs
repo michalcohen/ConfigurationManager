@@ -29,14 +29,19 @@ namespace ConfigurationManager
         public MainWindow()
         {
             InitializeComponent();
+            Enums.LoadEnums();
             LoadedObjects();
         }
 
-
+        
         private void LoadedObjects()
         {
+
             foreach (string file in Directory.GetFiles("Configurations", "*", SearchOption.AllDirectories))
             {
+                if (file.Equals("Configurations\\Enums.json")){
+                    continue;
+                }
                 using StreamReader r = new StreamReader(file);
                 string json = r.ReadToEnd();
                 JObject array = (JObject)JsonConvert.DeserializeObject(json);

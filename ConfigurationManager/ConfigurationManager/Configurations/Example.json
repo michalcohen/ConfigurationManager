@@ -1,13 +1,13 @@
 ﻿{
 	"use_bloop": {
-		first: true,
-		second: true,
-		third: false
+		"first": true,
+		"second": true,
+		"third": false
 	},
 	"folder": "C:\\Users\\Trumpy\\Documents",
 	"index": 3,
 	"threshold": 5.8,
-	"choose": [1, 2, 3],
+	"choose": [ 1, 2, 3 ],
 	"bloop": [
 		{
 			"bla": 1,
@@ -16,7 +16,8 @@
 		{
 			"bla": 3,
 			"bli": 4
-		}],
+		}
+	],
 	"run_with_profiler": false,
 	"method": "soft",
 	"try_bool": {
@@ -66,5 +67,13 @@
 	"try_string": {
 		"type": "string",
 		"value": "bananana"
+	},
+	"try_enum_inplace": {
+		"type": [ "dummy_method", "parallel_method", "serial_method" ],
+		"value": "dummy_method"
+	},
+	"try_enum_global": {
+		"type": "Colors",
+		"value": "Blue"
 	}
 }

@@ -26,8 +26,11 @@ namespace ConfigurationManager.Types
             if (IsImplicitType(fromJson))
             {
                 return new ConfigurationBool(fromJson.ToObject<bool>());
+            } else if (IsExplicitType(fromJson))
+            {
+                return new ConfigurationBool(fromJson["value"].ToObject<bool>());
             }
-            return new ConfigurationBool(fromJson["value"].ToObject<bool>());
+            return null;
         }
 
         public static new bool IsImplicitType(JToken fromJson)
@@ -43,11 +46,6 @@ namespace ConfigurationManager.Types
         public override bool IsValidValue(object o)
         {
             throw new NotImplementedException();
-        }
-
-        public static  new bool IsRelevantType(JToken fromJson)
-        {
-            return IsImplicitType(fromJson) || IsExplicitType(fromJson);
         }
     }
 }

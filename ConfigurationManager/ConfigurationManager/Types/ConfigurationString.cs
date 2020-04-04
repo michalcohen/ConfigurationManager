@@ -32,8 +32,11 @@ namespace ConfigurationManager.Types
             if (IsImplicitType(fromJson))
             {
                 return new ConfigurationString(fromJson.ToObject<string>());
+            } else if (IsExplicitType(fromJson))
+            {
+                return new ConfigurationString(fromJson["value"].ToObject<string>());
             }
-            return new ConfigurationString(fromJson["value"].ToObject<string>());
+            return null;
         }
 
         private static new bool IsImplicitType(JToken fromJson)
@@ -44,11 +47,6 @@ namespace ConfigurationManager.Types
         public static new bool IsExplicitType(JToken fromJson)
         {
             return fromJson.Type == JTokenType.Object && ((JObject)fromJson)["type"].ToString().Equals("string");
-        }
-
-        public static new bool IsRelevantType(JToken fromJson)
-        {
-            return IsImplicitType(fromJson) || IsExplicitType(fromJson);
         }
     }
 }

@@ -20,17 +20,13 @@ namespace ConfigurationManager.Types
 
         public static ConfigurationVariable ConvertJsonToConfiguration(JToken fromJson)
         {
-            Type relevant_type = GetAllConfigurationTypes().Find(t => (bool)t.GetMethod("IsRelevantType").Invoke(null, new object[] { fromJson }));
-            return (ConfigurationVariable)relevant_type.GetMethod("TryConvert").Invoke(null, new object[] { fromJson });
+            return GetAllConfigurationTypes().
+                Select<Type, ConfigurationVariable>(t => (ConfigurationVariable)t.GetMethod("TryConvert").Invoke(null, new object[] { fromJson })).
+                First<ConfigurationVariable>(o => o != null);
         }
 
         public static bool IsImplicitType(JToken fromJson) => throw new NotImplementedException();
 
         public static bool IsExplicitType(JToken fromJson) => throw new NotImplementedException();
-
-        public static bool IsRelevantType(JToken fromJson)
-        {
-            return IsImplicitType(fromJson) || IsExplicitType(fromJson);
-        }
     }
 }

@@ -1,0 +1,4 @@
+﻿{
+	"CarTypes": [ "Van", "Private", "Truck", "Motorcycle" ],
+	"Colors": ["Green", "Blue", "Red", "Yellow", "Brown", "Gray"]
+}

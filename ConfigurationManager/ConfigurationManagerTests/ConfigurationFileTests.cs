@@ -22,6 +22,7 @@ namespace ConfigurationManager.Tests
         [TestMethod()]
         public void ExampleTest()
         {
+            Enums.LoadEnums();
             using StreamReader r = new StreamReader("Configurations\\Example.json");
             string json = r.ReadToEnd();
             JObject array = (JObject)JsonConvert.DeserializeObject(json);
@@ -44,6 +45,8 @@ namespace ConfigurationManager.Tests
             Assert.IsInstanceOfType(c.Content.Variables["try_float_higher_bound"], typeof(ConfigurationFloat));
             Assert.IsInstanceOfType(c.Content.Variables["try_float_both_bounds"], typeof(ConfigurationFloat));
             Assert.IsInstanceOfType(c.Content.Variables["try_string"], typeof(ConfigurationString));
+            Assert.IsInstanceOfType(c.Content.Variables["try_enum_inplace"], typeof(ConfigurationEnumeration));
+            Assert.IsInstanceOfType(c.Content.Variables["try_enum_global"], typeof(ConfigurationEnumeration));
 
 
             Assert.AreEqual(((ConfigurationBool)((CompositeConfiguraionVariable)c.Content.Variables["use_bloop"]).Variables["first"]).Value, true);
@@ -62,7 +65,19 @@ namespace ConfigurationManager.Tests
             Assert.AreEqual(((ConfigurationFloat)c.Content.Variables["try_float_both_bounds"]).LowestValue, 4.8, 0.00001);
             Assert.AreEqual(((ConfigurationFloat)c.Content.Variables["try_float_both_bounds"]).HighestValue, 7.0, 0.00001);
             Assert.AreEqual(((ConfigurationString)c.Content.Variables["try_string"]).Value, "bananana");
+            
+            Assert.AreEqual(((ConfigurationEnumeration)c.Content.Variables["try_enum_inplace"]).Value, "dummy_method");
+            Assert.AreEqual(((ConfigurationEnumeration)c.Content.Variables["try_enum_inplace"]).IsGlobalEnum, false);
+            Assert.AreEqual(((ConfigurationEnumeration)c.Content.Variables["try_enum_inplace"]).EnumValues.Count, 3);
+            Assert.AreEqual(((ConfigurationEnumeration)c.Content.Variables["try_enum_inplace"]).EnumValues[0], "dummy_method");
+            Assert.AreEqual(((ConfigurationEnumeration)c.Content.Variables["try_enum_inplace"]).EnumValues[1], "parallel_method");
+            Assert.AreEqual(((ConfigurationEnumeration)c.Content.Variables["try_enum_inplace"]).EnumValues[2], "serial_method");
 
+
+            Assert.AreEqual(((ConfigurationEnumeration)c.Content.Variables["try_enum_global"]).Value, "Blue");
+            Assert.AreEqual(((ConfigurationEnumeration)c.Content.Variables["try_enum_global"]).IsGlobalEnum, true);
+            Assert.AreEqual(((ConfigurationEnumeration)c.Content.Variables["try_enum_global"]).EnumName, "Colors");
+            Assert.IsTrue(Enums.EnumsOptions["Colors"].Contains("Blue"));
         }
     }
 }

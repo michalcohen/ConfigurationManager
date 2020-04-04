@@ -70,11 +70,14 @@ namespace ConfigurationManager.Types
             if (IsImplicitType(fromJson))
             {
                 return new ConfigurationFloat(fromJson.ToObject<float>());
+            } else if (IsExplicitType(fromJson))
+            {
+                JObject j = (JObject)fromJson;
+                float l = j.ContainsKey("lower_bound") ? j["lower_bound"].ToObject<float>() : float.MinValue;
+                float h = j.ContainsKey("higher_bound") ? j["higher_bound"].ToObject<float>() : float.MaxValue;
+                return new ConfigurationFloat(fromJson["value"].ToObject<float>(), lowest: l, highest: h);
             }
-            JObject j = (JObject)fromJson;
-            float l = j.ContainsKey("lower_bound") ? j["lower_bound"].ToObject<float>() : float.MinValue;
-            float h = j.ContainsKey("higher_bound") ? j["higher_bound"].ToObject<float>() : float.MaxValue;
-            return new ConfigurationFloat(fromJson["value"].ToObject<float>(), lowest: l, highest: h);
+            return null;
         }
 
         private static new bool IsImplicitType(JToken fromJson)
@@ -90,11 +93,6 @@ namespace ConfigurationManager.Types
         public override bool IsValidValue(object o)
         {
             throw new NotImplementedException();
-        }
-
-        public static new bool IsRelevantType(JToken fromJson)
-        {
-            return IsImplicitType(fromJson) || IsExplicitType(fromJson);
         }
     }
 }
