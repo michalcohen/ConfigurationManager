@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using ConfigurationManager.GUIComponents;
 
 namespace ConfigurationManager
 {
@@ -29,12 +30,36 @@ namespace ConfigurationManager
         public MainWindow()
         {
             InitializeComponent();
+            ConfigurationTreeViewItem c = new ConfigurationTreeViewItem("Configuration");
+            configuration_folder_view.Items.Add(c);
+            DirSearch("Configurations", c);
             Enums.LoadEnums();
-            LoadedObjects();
+            LoadeJsons();
         }
 
-        
-        private void LoadedObjects()
+        static void DirSearch(string sDir, ConfigurationTreeViewItem sTree)
+        {
+            try
+            {
+                foreach (string f in Directory.GetFiles(sDir))
+                {
+                    sTree.Items.Add(new ConfigurationTreeViewItem(f));
+                }
+                foreach (string d in Directory.GetDirectories(sDir))
+                {
+                    ConfigurationTreeViewItem t = new ConfigurationTreeViewItem(d);
+                    sTree.Items.Add(t);
+                    DirSearch(d, t);
+                }
+            }
+            catch (System.Exception excpt)
+            {
+                Console.WriteLine(excpt.Message);
+            }
+        }
+
+
+        private void LoadeJsons()
         {
 
             foreach (string file in Directory.GetFiles("Configurations", "*", SearchOption.AllDirectories))
@@ -46,7 +71,7 @@ namespace ConfigurationManager
                 string json = r.ReadToEnd();
                 JObject array = (JObject)JsonConvert.DeserializeObject(json);
                 ConfigurationFile c = new ConfigurationFile(array);
-
+                configuration_folder_view.Items.Add(new TreeViewItem());
                 // @Lidor: here we will use the object c to create the GUI
             }
         }
