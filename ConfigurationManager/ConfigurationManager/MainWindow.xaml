@@ -12,10 +12,10 @@
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="_File">
                     <MenuItem Header="_New" />
-                    <MenuItem Header="_Open" />
+                    <MenuItem Header="_Open" x:Name="menu_open" Click="MenuOpenClick"/>
                     <MenuItem Header="_Save" />
                     <Separator />
-                    <MenuItem Header="_Exit" />
+                    <MenuItem Header="_Exit" x:Name="menu_exit" Click="MenuExitClick"/>
                 </MenuItem>
             </Menu>
             <TreeView x:Name="configuration_folder_view" Margin="0,0,607,0"/>

@@ -19,9 +19,12 @@ namespace ConfigurationManager
             EnumsOptions[name] = new List<string>(values.Values<string>());
         }
 
-        public static void LoadEnums()
+        public static void LoadEnums(string root_path)
         {
-            using StreamReader r = new StreamReader("Configurations\\Enums.json");
+            if (!File.Exists(root_path + "\\Enums.json")){
+                return;
+            }
+            using StreamReader r = new StreamReader(root_path + "\\Enums.json");
             string json = r.ReadToEnd();
             foreach (KeyValuePair<String, JToken> value in (JObject)JsonConvert.DeserializeObject(json))
             {

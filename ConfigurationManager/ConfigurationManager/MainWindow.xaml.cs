@@ -30,15 +30,22 @@ namespace ConfigurationManager
         //private readonly MyViewModel _viewModel;
 
         private static String RootPath;
+
+        private static readonly string configuration_manager_configuration = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\ConfiurationManagerData\\RecentConfigurationFolder.json";
+        
         public MainWindow()
         {
             InitializeComponent();
             RootPath = GetRootPath();
+            CreateTreeViewOfConfiguraionFiles();
+            LoadeJsons();
+        }
+
+        private void CreateTreeViewOfConfiguraionFiles()
+        {
             ConfigurationTreeViewItem c = new ConfigurationTreeViewItem(RootPath);
             configuration_folder_view.Items.Add(c);
             DirSearch(RootPath, c);
-            Enums.LoadEnums();
-            LoadeJsons();
         }
 
         private String GetRootPathFromDialog()
@@ -51,11 +58,11 @@ namespace ConfigurationManager
 
         private String GetRootPath()
         {
-            if (!File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\ConfiurationManagerData\\RecentConfigurationFolder.json"))
+            if (!File.Exists(configuration_manager_configuration))
             {
                 return GetRootPathFromDialog();
             } 
-            using StreamReader r = new StreamReader("RecentConfigurationFolder.json");
+            using StreamReader r = new StreamReader(configuration_manager_configuration);
             string json = r.ReadToEnd();
             JObject array = (JObject)JsonConvert.DeserializeObject(json);
             string folder_name = array["recent_configuration_folder"].ToObject<string>();
@@ -70,7 +77,7 @@ namespace ConfigurationManager
         {
             try
             {
-                foreach (string f in Directory.GetFiles(sDir))
+                foreach (string f in Directory.GetFiles(sDir, "*.json"))
                 {
                     sTree.Items.Add(new ConfigurationTreeViewItem(f));
                 }
@@ -87,13 +94,12 @@ namespace ConfigurationManager
             }
         }
 
-
         private void LoadeJsons()
         {
-
-            foreach (string file in Directory.GetFiles("Configurations", "*", SearchOption.AllDirectories))
+            Enums.LoadEnums(RootPath);
+            foreach (string file in Directory.GetFiles(RootPath, "*.json", SearchOption.AllDirectories))
             {
-                if (file.Equals("Configurations\\Enums.json")){
+                if (file.Equals(RootPath + "\\Enums.json")){
                     continue;
                 }
                 using StreamReader r = new StreamReader(file);
@@ -105,18 +111,33 @@ namespace ConfigurationManager
             }
         }
 
-
-        void MainWindowClosing(object sender, CancelEventArgs e)
+        void MainWindowClosing(object sender, EventArgs e)
         {
             Dictionary<string, string> to_save = new Dictionary<string, string>();
             to_save["recent_configuration_folder"] = RootPath;
             string json = JsonConvert.SerializeObject(to_save);
 
-            System.IO.FileInfo file = new System.IO.FileInfo(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\ConfiurationManagerData\\RecentConfigurationFolder.json");
+            System.IO.FileInfo file = new System.IO.FileInfo(configuration_manager_configuration);
             file.Directory.Create(); // If the directory already exists, this method does nothing.
             System.IO.File.WriteAllText(file.FullName, json);
 
         }
+        private void MenuExitClick(object sender, EventArgs e)
+        {
+            Close();
+        }
 
+        private void MenuOpenClick(object sender, RoutedEventArgs e)
+        {
+            string root_path = GetRootPathFromDialog();
+            if (root_path.Equals(""))
+            {
+                return;
+            }
+            RootPath = root_path;
+            configuration_folder_view.Items.Clear();
+            CreateTreeViewOfConfiguraionFiles();
+            LoadeJsons();
+        }
     }
 }
