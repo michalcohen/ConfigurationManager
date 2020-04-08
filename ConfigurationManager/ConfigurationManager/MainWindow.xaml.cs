@@ -31,14 +31,16 @@ namespace ConfigurationManager
 
         private static String RootPath;
 
+        private ConfigurationModel model;
+
         private static readonly string configuration_manager_configuration = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\ConfiurationManagerData\\RecentConfigurationFolder.json";
         
         public MainWindow()
         {
             InitializeComponent();
             RootPath = GetRootPath();
+            model = new ConfigurationModel(RootPath);
             CreateTreeViewOfConfiguraionFiles();
-            LoadeJsons();
         }
 
         private void CreateTreeViewOfConfiguraionFiles()
@@ -94,22 +96,7 @@ namespace ConfigurationManager
             }
         }
 
-        private void LoadeJsons()
-        {
-            Enums.LoadEnums(RootPath);
-            foreach (string file in Directory.GetFiles(RootPath, "*.json", SearchOption.AllDirectories))
-            {
-                if (file.Equals(RootPath + "\\Enums.json")){
-                    continue;
-                }
-                using StreamReader r = new StreamReader(file);
-                string json = r.ReadToEnd();
-                JObject array = (JObject)JsonConvert.DeserializeObject(json);
-                ConfigurationFile c = new ConfigurationFile(array);
-                configuration_folder_view.Items.Add(new TreeViewItem());
-                // @Lidor: here we will use the object c to create the GUI
-            }
-        }
+        
 
         void MainWindowClosing(object sender, EventArgs e)
         {
@@ -120,6 +107,7 @@ namespace ConfigurationManager
             System.IO.FileInfo file = new System.IO.FileInfo(configuration_manager_configuration);
             file.Directory.Create(); // If the directory already exists, this method does nothing.
             System.IO.File.WriteAllText(file.FullName, json);
+            model.Save();
 
         }
         private void MenuExitClick(object sender, EventArgs e)
@@ -137,7 +125,13 @@ namespace ConfigurationManager
             RootPath = root_path;
             configuration_folder_view.Items.Clear();
             CreateTreeViewOfConfiguraionFiles();
-            LoadeJsons();
+            model = new ConfigurationModel(RootPath);
+        }
+
+        private void MenuSaveClick(object sender, RoutedEventArgs e)
+        {
+            model.Save();
+            MessageBox.Show("Configuration successfuly saved!");
         }
     }
 }

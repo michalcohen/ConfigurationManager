@@ -8,9 +8,11 @@ namespace ConfigurationManager.Types
     public class ConfigurationBool : ConfigurationVariable
     {
         bool _value;
-        public ConfigurationBool(bool value)
+        bool IsExplicit { get; set; }
+        public ConfigurationBool(bool value, bool is_explicit)
         {
             _value = value;
+            IsExplicit = is_explicit;
         }
 
         public bool Value
@@ -25,10 +27,10 @@ namespace ConfigurationManager.Types
         {
             if (IsImplicitType(fromJson))
             {
-                return new ConfigurationBool(fromJson.ToObject<bool>());
+                return new ConfigurationBool(fromJson.ToObject<bool>(), false);
             } else if (IsExplicitType(fromJson))
             {
-                return new ConfigurationBool(fromJson["value"].ToObject<bool>());
+                return new ConfigurationBool(fromJson["value"].ToObject<bool>(), true);
             }
             return null;
         }
@@ -46,6 +48,18 @@ namespace ConfigurationManager.Types
         public override bool IsValidValue(object o)
         {
             throw new NotImplementedException();
+        }
+
+        public override object GetDictionary()
+        {
+            if (IsExplicit)
+            {
+                Dictionary<string, object> dict = new Dictionary<string, object>();
+                dict["type"] = "bool";
+                dict["value"] = Value;
+                return dict;
+            }
+            return Value;
         }
     }
 }

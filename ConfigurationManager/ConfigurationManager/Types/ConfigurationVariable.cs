@@ -28,5 +28,7 @@ namespace ConfigurationManager.Types
         public static bool IsImplicitType(JToken fromJson) => throw new NotImplementedException();
 
         public static bool IsExplicitType(JToken fromJson) => throw new NotImplementedException();
+
+        public abstract object GetDictionary();
     }
 }

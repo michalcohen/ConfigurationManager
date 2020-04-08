@@ -36,5 +36,15 @@ namespace ConfigurationManager.Types
         {
             throw new NotImplementedException();
         }
+
+        public override object GetDictionary()
+        {
+            Dictionary<string, object> dict = new Dictionary<string, object>();
+            foreach (KeyValuePair<string, ConfigurationVariable>  variable in Variables)
+            {
+                dict[variable.Key] = variable.Value.GetDictionary();
+            }
+            return dict;
+        }
     }
 }

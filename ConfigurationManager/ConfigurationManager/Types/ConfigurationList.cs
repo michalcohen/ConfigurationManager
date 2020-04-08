@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace ConfigurationManager.Types
@@ -30,6 +31,11 @@ namespace ConfigurationManager.Types
         public override bool IsValidValue(object o)
         {
             throw new NotImplementedException();
+        }
+
+        public override object GetDictionary()
+        {
+            return new List<object>(Variables.Select(x => x.GetDictionary()));
         }
     }
 }

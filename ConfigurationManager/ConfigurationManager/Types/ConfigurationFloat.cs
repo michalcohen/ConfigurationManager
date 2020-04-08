@@ -9,11 +9,12 @@ namespace ConfigurationManager.Types
     {
         private float _lowest_value, _highest_value;
         private bool _isValid;
-
+        bool IsExplicit { get; set; }
         float _value;
 
-        public ConfigurationFloat(float val, float lowest=float.MinValue, float highest=float.MaxValue)
+        public ConfigurationFloat(float val, bool is_explicit, float lowest=float.MinValue, float highest=float.MaxValue)
         {
+            IsExplicit = is_explicit;
             _value = val;
             _lowest_value = lowest;
             _highest_value = highest;
@@ -69,13 +70,13 @@ namespace ConfigurationManager.Types
         {
             if (IsImplicitType(fromJson))
             {
-                return new ConfigurationFloat(fromJson.ToObject<float>());
+                return new ConfigurationFloat(fromJson.ToObject<float>(), false);
             } else if (IsExplicitType(fromJson))
             {
                 JObject j = (JObject)fromJson;
                 float l = j.ContainsKey("lower_bound") ? j["lower_bound"].ToObject<float>() : float.MinValue;
                 float h = j.ContainsKey("higher_bound") ? j["higher_bound"].ToObject<float>() : float.MaxValue;
-                return new ConfigurationFloat(fromJson["value"].ToObject<float>(), lowest: l, highest: h);
+                return new ConfigurationFloat(fromJson["value"].ToObject<float>(), true, lowest: l, highest: h);
             }
             return null;
         }
@@ -93,6 +94,18 @@ namespace ConfigurationManager.Types
         public override bool IsValidValue(object o)
         {
             throw new NotImplementedException();
+        }
+
+        public override object GetDictionary()
+        {
+            if (IsExplicit)
+            {
+                Dictionary<string, object> dict = new Dictionary<string, object>();
+                dict["type"] = "float";
+                dict["value"] = Value;
+                return dict;
+            }
+            return Value;
         }
     }
 }

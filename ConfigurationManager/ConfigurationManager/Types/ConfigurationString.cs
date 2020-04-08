@@ -8,11 +8,7 @@ namespace ConfigurationManager.Types
     public class ConfigurationString: ConfigurationVariable
     {
         string _value;
-
-        public ConfigurationString(string val)
-        {
-            _value = val;
-        }
+        bool IsExplicit { get; set; }
 
         public string Value
         {
@@ -21,7 +17,13 @@ namespace ConfigurationManager.Types
                 return _value;
             }
         }
-        
+
+        public ConfigurationString(string val, bool is_explicit)
+        {
+            _value = val;
+            IsExplicit = is_explicit;
+        }
+
         public override bool IsValidValue(Object o)
         {
             return true;
@@ -31,10 +33,10 @@ namespace ConfigurationManager.Types
         {
             if (IsImplicitType(fromJson))
             {
-                return new ConfigurationString(fromJson.ToObject<string>());
+                return new ConfigurationString(fromJson.ToObject<string>(), false);
             } else if (IsExplicitType(fromJson))
             {
-                return new ConfigurationString(fromJson["value"].ToObject<string>());
+                return new ConfigurationString(fromJson["value"].ToObject<string>(), true);
             }
             return null;
         }
@@ -47,6 +49,18 @@ namespace ConfigurationManager.Types
         public static new bool IsExplicitType(JToken fromJson)
         {
             return fromJson.Type == JTokenType.Object && ((JObject)fromJson)["type"].ToString().Equals("string");
+        }
+
+        public override object GetDictionary()
+        {
+            if (IsExplicit)
+            {
+                Dictionary<string, object> dict = new Dictionary<string, object>();
+                dict["type"] = "string";
+                dict["value"] = Value;
+                return dict;
+            }
+            return Value;
         }
     }
 }

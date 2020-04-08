@@ -14,5 +14,10 @@ namespace ConfigurationManager
         {
             Content= new CompositeConfiguraionVariable(array);
         }
+
+        public Dictionary<string, object> GetDictionary()
+        {
+            return Content.GetDictionary() as Dictionary<string, object>;
+        }
     }
 }

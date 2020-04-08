@@ -105,5 +105,22 @@ namespace ConfigurationManager.Types
         {
             throw new NotImplementedException();
         }
+
+        public override object GetDictionary()
+        {
+            if (IsGlobalEnum)
+            {
+                Dictionary<string, object> dict = new Dictionary<string, object>();
+                dict["type"] = EnumName;
+                dict["value"] = Value;
+                return dict;
+            } else
+            {
+                Dictionary<string, object> dict = new Dictionary<string, object>();
+                dict["type"] = EnumValues;
+                dict["value"] = Value;
+                return dict;
+            }
+        }
     }
 }
