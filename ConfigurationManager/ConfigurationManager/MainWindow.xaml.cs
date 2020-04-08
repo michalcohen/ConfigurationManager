@@ -18,6 +18,7 @@ using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ConfigurationManager.GUIComponents;
+using System.ComponentModel;
 
 namespace ConfigurationManager
 {
@@ -27,14 +28,42 @@ namespace ConfigurationManager
     public partial class MainWindow : Window
     {
         //private readonly MyViewModel _viewModel;
+
+        private static String RootPath;
         public MainWindow()
         {
             InitializeComponent();
-            ConfigurationTreeViewItem c = new ConfigurationTreeViewItem("Configuration");
+            RootPath = GetRootPath();
+            ConfigurationTreeViewItem c = new ConfigurationTreeViewItem(RootPath);
             configuration_folder_view.Items.Add(c);
-            DirSearch("Configurations", c);
+            DirSearch(RootPath, c);
             Enums.LoadEnums();
             LoadeJsons();
+        }
+
+        private String GetRootPathFromDialog()
+        {
+            ChooseConfigurationFolder inputDialog = new ChooseConfigurationFolder();
+            if (inputDialog.ShowDialog() == true)
+                return inputDialog.Answer;
+            return "";
+        }
+
+        private String GetRootPath()
+        {
+            if (!File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\ConfiurationManagerData\\RecentConfigurationFolder.json"))
+            {
+                return GetRootPathFromDialog();
+            } 
+            using StreamReader r = new StreamReader("RecentConfigurationFolder.json");
+            string json = r.ReadToEnd();
+            JObject array = (JObject)JsonConvert.DeserializeObject(json);
+            string folder_name = array["recent_configuration_folder"].ToObject<string>();
+            if (folder_name.Equals(""))
+            {
+                return GetRootPathFromDialog();
+            }
+            return folder_name;
         }
 
         static void DirSearch(string sDir, ConfigurationTreeViewItem sTree)
@@ -74,6 +103,19 @@ namespace ConfigurationManager
                 configuration_folder_view.Items.Add(new TreeViewItem());
                 // @Lidor: here we will use the object c to create the GUI
             }
+        }
+
+
+        void MainWindowClosing(object sender, CancelEventArgs e)
+        {
+            Dictionary<string, string> to_save = new Dictionary<string, string>();
+            to_save["recent_configuration_folder"] = RootPath;
+            string json = JsonConvert.SerializeObject(to_save);
+
+            System.IO.FileInfo file = new System.IO.FileInfo(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\ConfiurationManagerData\\RecentConfigurationFolder.json");
+            file.Directory.Create(); // If the directory already exists, this method does nothing.
+            System.IO.File.WriteAllText(file.FullName, json);
+
         }
 
     }
