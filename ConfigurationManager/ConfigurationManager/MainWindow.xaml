@@ -29,7 +29,8 @@
                 <DataTemplate>
                     <DockPanel>
                         <TextBlock Width="80" Text="{Binding Header}"/>
-                        <Image Source="Resources\x.png" Width="20" Height="20" MouseDown="Image_MouseDown"/>
+                        <Button Background="Transparent" BorderThickness="0" Click="CloseCurrentTab">X</Button>
+                        
                     </DockPanel>
                 </DataTemplate>
             </TabControl.ItemTemplate>

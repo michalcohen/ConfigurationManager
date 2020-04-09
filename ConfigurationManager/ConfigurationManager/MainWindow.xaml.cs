@@ -91,10 +91,18 @@ namespace ConfigurationManager
             {
                 foreach (string f in Directory.GetFiles(sDir, "*.json"))
                 {
+                    if (f.Equals(RootPath + "\\Enums.json"))
+                    {
+                        continue;
+                    }
                     sTree.Items.Add(new ConfigurationTreeViewItem(f));
                 }
                 foreach (string d in Directory.GetDirectories(sDir))
                 {
+                    if (!Directory.EnumerateFileSystemEntries(d).Any())
+                    {
+                        continue;
+                    }
                     ConfigurationTreeViewItem t = new ConfigurationTreeViewItem(d);
                     sTree.Items.Add(t);
                     DirSearch(d, t);
@@ -180,9 +188,8 @@ namespace ConfigurationManager
             }
         }
 
-        private void Image_MouseDown(object sender, MouseButtonEventArgs e)
+        private void CloseCurrentTab(object sender, RoutedEventArgs e)
         {
-            // This event will be thrown when on a close image clicked
             vmd.Tabs.RemoveAt(tab_control.SelectedIndex);
         }
     }
