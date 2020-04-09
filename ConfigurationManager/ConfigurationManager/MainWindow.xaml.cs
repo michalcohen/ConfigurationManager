@@ -160,6 +160,7 @@ namespace ConfigurationManager
             configuration_folder_view.Items.Clear();
             CreateTreeViewOfConfiguraionFiles();
             model = new ConfigurationModel(RootPath);
+            CreateTabs();
         }
 
         private void MenuSaveClick(object sender, RoutedEventArgs e)
@@ -174,8 +175,7 @@ namespace ConfigurationManager
             }
             
         }
-
-        
+  
         private void ShowFile(object sender, MouseButtonEventArgs args)
         {
             if (sender is ConfigurationTreeViewItem)

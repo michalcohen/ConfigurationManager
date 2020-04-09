@@ -54,10 +54,10 @@ namespace ConfigurationManager.Types
             {
                 Dictionary<string, object> dict = new Dictionary<string, object>();
                 dict["type"] = "string";
-                dict["value"] = Value;
+                dict["value"] = Value.Value;
                 return dict;
             }
-            return Value;
+            return Value.Value;
         }
 
         public override bool IsDirty()

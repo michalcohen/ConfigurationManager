@@ -65,7 +65,15 @@ namespace ConfigurationManager.Types
             {
                 Dictionary<string, object> dict = new Dictionary<string, object>();
                 dict["type"] = "float";
-                dict["value"] = Value;
+                dict["value"] = Value.Value;
+                if (Value.HighestValue < float.MaxValue)
+                {
+                    dict["higher_bound"] = Value.HighestValue;
+                }
+                if (Value.LowestValue > float.MinValue)
+                {
+                    dict["lower_bound"] = Value.LowestValue;
+                }
                 return dict;
             }
             return Value;

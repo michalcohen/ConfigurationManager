@@ -61,10 +61,18 @@ namespace ConfigurationManager.Types
             {
                 Dictionary<string, object> dict = new Dictionary<string, object>();
                 dict["type"] = "int";
-                dict["value"] = Value;
+                dict["value"] = Value.Value;
+                if (Value.HighestValue < int.MaxValue)
+                {
+                    dict["higher_bound"] = Value.HighestValue;
+                }
+                if (Value.LowestValue > int.MinValue)
+                {
+                    dict["lower_bound"] = Value.LowestValue;
+                }
                 return dict;
             }
-            return Value;
+            return Value.Value;
         }
 
         public override bool IsDirty()
