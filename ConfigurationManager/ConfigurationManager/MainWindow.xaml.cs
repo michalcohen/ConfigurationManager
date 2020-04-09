@@ -19,6 +19,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ConfigurationManager.GUIComponents;
 using System.ComponentModel;
+using BrightIdeasSoftware;
 
 namespace ConfigurationManager
 {
@@ -33,6 +34,8 @@ namespace ConfigurationManager
 
         private ConfigurationModel model;
 
+        private ActionTabViewModal vmd;
+
         private static readonly string configuration_manager_configuration = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\ConfiurationManagerData\\RecentConfigurationFolder.json";
         
         public MainWindow()
@@ -41,6 +44,13 @@ namespace ConfigurationManager
             RootPath = GetRootPath();
             model = new ConfigurationModel(RootPath);
             CreateTreeViewOfConfiguraionFiles();
+            CreateTabs();
+        }
+
+        private void CreateTabs()
+        {
+            vmd = new ActionTabViewModal();
+            tab_control.ItemsSource = vmd.Tabs;
         }
 
         private void CreateTreeViewOfConfiguraionFiles()
@@ -155,6 +165,25 @@ namespace ConfigurationManager
                 MessageBox.Show("something went wrong while saving...");
             }
             
+        }
+
+        
+        private void ShowFile(object sender, MouseButtonEventArgs args)
+        {
+            if (sender is ConfigurationTreeViewItem)
+            {
+                ConfigurationTreeViewItem ctvi = ((ConfigurationTreeViewItem)sender).IsSelected ? sender as ConfigurationTreeViewItem : configuration_folder_view.SelectedItem as ConfigurationTreeViewItem;
+                string path_to_add = ctvi.Path;
+                model.AddOpenedFile(path_to_add);
+                int index = vmd.AddOpenedFile(path_to_add, model.GetConfigurationFile(path_to_add));
+                tab_control.SelectedIndex = index;
+            }
+        }
+
+        private void Image_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            // This event will be thrown when on a close image clicked
+            vmd.Tabs.RemoveAt(tab_control.SelectedIndex);
         }
     }
 }

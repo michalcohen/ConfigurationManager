@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29920.165
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConfigurationManager", "ConfigurationManager\ConfigurationManager.csproj", "{7A066E69-A3E4-41D6-ABDA-58404B19AFA7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigurationManagerTests", "ConfigurationManagerTests\ConfigurationManagerTests.csproj", "{D832F64B-EF35-43D6-AEBC-5BE353AE31A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConfigurationManagerTests", "ConfigurationManagerTests\ConfigurationManagerTests.csproj", "{D832F64B-EF35-43D6-AEBC-5BE353AE31A8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

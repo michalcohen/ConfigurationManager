@@ -7,18 +7,37 @@
         mc:Ignorable="d"
         Closing="MainWindowClosing"  
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <DockPanel>
-            <Menu DockPanel.Dock="Top">
-                <MenuItem Header="_File">
-                    <MenuItem Header="_New" />
-                    <MenuItem Header="_Open" x:Name="menu_open" Click="MenuOpenClick"/>
-                    <MenuItem Header="_Save" x:Name="menu_save" Click="MenuSaveClick"/>
-                    <Separator />
-                    <MenuItem Header="_Exit" x:Name="menu_exit" Click="MenuExitClick"/>
-                </MenuItem>
-            </Menu>
-            <TreeView x:Name="configuration_folder_view" Margin="0,0,607,0"/>
-        </DockPanel>
-	</Grid>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New" />
+                <MenuItem Header="_Open" x:Name="menu_open" Click="MenuOpenClick"/>
+                <MenuItem Header="_Save" x:Name="menu_save" Click="MenuSaveClick"/>
+                <Separator />
+                <MenuItem Header="_Exit" x:Name="menu_exit" Click="MenuExitClick"/>
+            </MenuItem>
+        </Menu>
+        <TreeView x:Name="configuration_folder_view" DockPanel.Dock="Left">
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="{x:Type TreeViewItem}">
+                    <EventSetter Event="MouseDoubleClick" Handler="ShowFile"/>
+                </Style>
+            </TreeView.ItemContainerStyle>
+        </TreeView>
+        <TabControl x:Name="tab_control" TabStripPlacement="Top" DockPanel.Dock="Right">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel>
+                        <TextBlock Width="80" Text="{Binding Header}"/>
+                        <Image Source="Resources\x.png" Width="20" Height="20" MouseDown="Image_MouseDown"/>
+                    </DockPanel>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <UserControl Content="{Binding Content}" Margin="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
+    </DockPanel>
 </Window>

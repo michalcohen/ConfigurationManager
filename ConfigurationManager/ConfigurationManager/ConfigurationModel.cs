@@ -11,12 +11,15 @@ namespace ConfigurationManager
     public class ConfigurationModel
     {
         Dictionary<string, ConfigurationFile> all_files;
+        List<string> opened_files;
+
         string RootPath { get; set; }
 
         public ConfigurationModel(string root_path)
         {
             all_files = new Dictionary<string, ConfigurationFile>();
             LoadeJsons(root_path);
+            opened_files = new List<string>();
         }
 
         private void LoadeJsons(string root_path)
@@ -49,6 +52,32 @@ namespace ConfigurationManager
         internal bool IsDirty()
         {
             return all_files.Values.Any<ConfigurationFile>(f => f.IsDirty());
+        }
+
+        public void AddOpenedFile(string path)
+        {
+            if (!opened_files.Contains(path))
+            {
+                opened_files.Add(path);
+            }
+        }
+
+        public ConfigurationFile GetConfigurationFile(string path)
+        {
+            return all_files[path];
+        }
+
+        public bool IsFileOpened(string path)
+        {
+            return opened_files.Contains(path);
+        }
+
+        public void CloseFile(string path)
+        {
+            if (opened_files.Contains(path))
+            {
+                opened_files.Remove(path);
+            }
         }
     }
 }

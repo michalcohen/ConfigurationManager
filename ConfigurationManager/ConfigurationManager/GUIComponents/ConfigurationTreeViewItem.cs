@@ -13,7 +13,6 @@ namespace ConfigurationManager.GUIComponents
         {
             Header = path.Split("\\")[^1];
             Path = path;
-
         }
     }
 }
