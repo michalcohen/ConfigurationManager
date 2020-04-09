@@ -33,11 +33,6 @@ namespace ConfigurationManager.Types
             return fromJson.Type == JTokenType.Object && !((JObject)fromJson).ContainsKey("type");
         }
 
-        public override bool IsValidValue(object o)
-        {
-            throw new NotImplementedException();
-        }
-
         public override object GetDictionary()
         {
             Dictionary<string, object> dict = new Dictionary<string, object>();

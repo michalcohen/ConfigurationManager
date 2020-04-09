@@ -22,7 +22,7 @@ namespace ConfigurationManager.Tests
         [TestMethod()]
         public void ExampleTest()
         {
-            Enums.LoadEnums();
+            Enums.LoadEnums("Configurations");
             using StreamReader r = new StreamReader("Configurations\\Example.json");
             string json = r.ReadToEnd();
             JObject array = (JObject)JsonConvert.DeserializeObject(json);
@@ -53,30 +53,30 @@ namespace ConfigurationManager.Tests
             Assert.AreEqual(((ConfigurationBool)((CompositeConfiguraionVariable)c.Content.Variables["use_bloop"]).Variables["second"]).Value, true);
             Assert.AreEqual(((ConfigurationBool)((CompositeConfiguraionVariable)c.Content.Variables["use_bloop"]).Variables["third"]).Value, false);
 
-            Assert.AreEqual(((ConfigurationString)c.Content.Variables["folder"]).Value, "C:\\Users\\Trumpy\\Documents");
-            Assert.AreEqual(((ConfigurationInteger)c.Content.Variables["index"]).Value, 3);
-            Assert.AreEqual(((ConfigurationFloat)c.Content.Variables["threshold"]).Value, 5.8, 0.00001);
-            Assert.AreEqual(((ConfigurationInteger)((ConfigurationList)c.Content.Variables["choose"]).Variables[2]).Value, 3);
-            Assert.AreEqual(((ConfigurationBool)c.Content.Variables["run_with_profiler"]).Value, false);
-            Assert.AreEqual(((ConfigurationString)c.Content.Variables["method"]).Value, "soft");
-            Assert.AreEqual(((ConfigurationBool)c.Content.Variables["try_bool"]).Value, true);
-            Assert.AreEqual(((ConfigurationInteger)c.Content.Variables["try_int"]).Value, 5);
-            Assert.AreEqual(((ConfigurationFloat)c.Content.Variables["try_float"]).Value, 5.7, 0.00001);
-            Assert.AreEqual(((ConfigurationFloat)c.Content.Variables["try_float_both_bounds"]).LowestValue, 4.8, 0.00001);
-            Assert.AreEqual(((ConfigurationFloat)c.Content.Variables["try_float_both_bounds"]).HighestValue, 7.0, 0.00001);
-            Assert.AreEqual(((ConfigurationString)c.Content.Variables["try_string"]).Value, "bananana");
+            Assert.AreEqual(((ConfigurationString)c.Content.Variables["folder"]).Value.Value, "C:\\Users\\Trumpy\\Documents");
+            Assert.AreEqual(((ConfigurationInteger)c.Content.Variables["index"]).Value.Value, 3);
+            Assert.AreEqual(((ConfigurationFloat)c.Content.Variables["threshold"]).Value.Value, 5.8, 0.00001);
+            Assert.AreEqual(((ConfigurationInteger)((ConfigurationList)c.Content.Variables["choose"]).Variables[2]).Value.Value, 3);
+            Assert.AreEqual(((ConfigurationBool)c.Content.Variables["run_with_profiler"]).Value.Value, false);
+            Assert.AreEqual(((ConfigurationString)c.Content.Variables["method"]).Value.Value, "soft");
+            Assert.AreEqual(((ConfigurationBool)c.Content.Variables["try_bool"]).Value.Value, true);
+            Assert.AreEqual(((ConfigurationInteger)c.Content.Variables["try_int"]).Value.Value, 5);
+            Assert.AreEqual(((ConfigurationFloat)c.Content.Variables["try_float"]).Value.Value, 5.7, 0.00001);
+            Assert.AreEqual(((ConfigurationFloat)c.Content.Variables["try_float_both_bounds"]).Value.LowestValue, 4.8, 0.00001);
+            Assert.AreEqual(((ConfigurationFloat)c.Content.Variables["try_float_both_bounds"]).Value.HighestValue, 7.0, 0.00001);
+            Assert.AreEqual(((ConfigurationString)c.Content.Variables["try_string"]).Value.Value, "bananana");
             
-            Assert.AreEqual(((ConfigurationEnumeration)c.Content.Variables["try_enum_inplace"]).Value, "dummy_method");
-            Assert.AreEqual(((ConfigurationEnumeration)c.Content.Variables["try_enum_inplace"]).IsGlobalEnum, false);
-            Assert.AreEqual(((ConfigurationEnumeration)c.Content.Variables["try_enum_inplace"]).EnumValues.Count, 3);
-            Assert.AreEqual(((ConfigurationEnumeration)c.Content.Variables["try_enum_inplace"]).EnumValues[0], "dummy_method");
-            Assert.AreEqual(((ConfigurationEnumeration)c.Content.Variables["try_enum_inplace"]).EnumValues[1], "parallel_method");
-            Assert.AreEqual(((ConfigurationEnumeration)c.Content.Variables["try_enum_inplace"]).EnumValues[2], "serial_method");
+            Assert.AreEqual(((ConfigurationEnumeration)c.Content.Variables["try_enum_inplace"]).Value.Value, "dummy_method");
+            Assert.AreEqual(((ConfigurationEnumeration)c.Content.Variables["try_enum_inplace"]).Value.IsGlobalEnum, false);
+            Assert.AreEqual(((ConfigurationEnumeration)c.Content.Variables["try_enum_inplace"]).Value.EnumValues.Count, 3);
+            Assert.AreEqual(((ConfigurationEnumeration)c.Content.Variables["try_enum_inplace"]).Value.EnumValues[0], "dummy_method");
+            Assert.AreEqual(((ConfigurationEnumeration)c.Content.Variables["try_enum_inplace"]).Value.EnumValues[1], "parallel_method");
+            Assert.AreEqual(((ConfigurationEnumeration)c.Content.Variables["try_enum_inplace"]).Value.EnumValues[2], "serial_method");
 
 
-            Assert.AreEqual(((ConfigurationEnumeration)c.Content.Variables["try_enum_global"]).Value, "Blue");
-            Assert.AreEqual(((ConfigurationEnumeration)c.Content.Variables["try_enum_global"]).IsGlobalEnum, true);
-            Assert.AreEqual(((ConfigurationEnumeration)c.Content.Variables["try_enum_global"]).EnumName, "Colors");
+            Assert.AreEqual(((ConfigurationEnumeration)c.Content.Variables["try_enum_global"]).Value.Value, "Blue");
+            Assert.AreEqual(((ConfigurationEnumeration)c.Content.Variables["try_enum_global"]).Value.IsGlobalEnum, true);
+            Assert.AreEqual(((ConfigurationEnumeration)c.Content.Variables["try_enum_global"]).Value.EnumName, "Colors");
             Assert.IsTrue(Enums.EnumsOptions["Colors"].Contains("Blue"));
         }
     }

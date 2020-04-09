@@ -5,10 +5,8 @@ using System.Text;
 
 namespace ConfigurationManager.Types
 {
-    public class ConfigurationEnumeration: ConfigurationVariable
+    public class EnumType
     {
-        private bool _isValid;
-
         public string Value { get; }
 
         public bool IsGlobalEnum { get; }
@@ -17,52 +15,57 @@ namespace ConfigurationManager.Types
 
         public List<string> EnumValues { get; }
 
-        public ConfigurationEnumeration(string value, string enum_name)
+        public EnumType(string value, string enum_name)
         {
             Value = value;
             EnumName = enum_name;
             IsGlobalEnum = true;
         }
 
-        public ConfigurationEnumeration(string value, List<string> enum_values)
+        public EnumType(string value, List<string> enum_values)
         {
             Value = value;
             EnumValues = enum_values;
             IsGlobalEnum = false;
         }
 
-        /// <summary>
-        /// Indicates whether the model is in a valid state or not.
-        /// </summary>
-        public bool IsValid
+        public object GetDictionary()
         {
-            get
+            if (IsGlobalEnum)
             {
-                return _isValid;
-            }
-            set
-            {
-                if (_isValid != value)
+                Dictionary<string, object> dict = new Dictionary<string, object>
                 {
-                    _isValid = value;
-                    //OnPropertyChanged();
-                }
+                    ["type"] = EnumName,
+                    ["value"] = Value
+                };
+                return dict;
+            }
+            else
+            {
+                Dictionary<string, object> dict = new Dictionary<string, object>
+                {
+                    ["type"] = EnumValues,
+                    ["value"] = Value
+                };
+                return dict;
             }
         }
 
-        private void SetIsValid()
+    }
+    
+    public class ConfigurationEnumeration: ConfigurationVariable<EnumType>
+    {
+        public EnumType Value { get; set; }
+
+        public ConfigurationEnumeration(string value, string enum_name)
         {
-            //IsValid = !string.IsNullOrEmpty(Name);
+            Value = new EnumType(value, enum_name);
         }
 
-        /// <summary>
-        /// Raises the PropertyChanged event.
-        /// </summary>
-        /// <param name="propertyName">Name of the property.</param>
-        //private void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        //{
-        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        //}
+        public ConfigurationEnumeration(string value, List<string> enum_values)
+        {
+            Value = new EnumType(value, enum_values);
+        }
 
         public static new ConfigurationVariable TryConvert(JToken fromJson)
         {
@@ -101,31 +104,20 @@ namespace ConfigurationManager.Types
             return null;
         }
 
-        public override bool IsValidValue(object o)
-        {
-            throw new NotImplementedException();
-        }
 
         public override object GetDictionary()
         {
-            if (IsGlobalEnum)
-            {
-                Dictionary<string, object> dict = new Dictionary<string, object>();
-                dict["type"] = EnumName;
-                dict["value"] = Value;
-                return dict;
-            } else
-            {
-                Dictionary<string, object> dict = new Dictionary<string, object>();
-                dict["type"] = EnumValues;
-                dict["value"] = Value;
-                return dict;
-            }
+            return Value.GetDictionary();
         }
 
         public override bool IsDirty()
         {
             return Dirty;
+        }
+
+        public override void Update(EnumType new_value)
+        {
+            Value = new_value;
         }
     }
 }

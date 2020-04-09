@@ -21,20 +21,20 @@ namespace ConfigurationManager.Types.Tests
             ConfigurationFloat flh = new ConfigurationFloat((float)5.0, highest: (float)6.0, lowest: (float)3.4);
 
             Assert.AreEqual(5.0, f.Value);
-            Assert.AreEqual(float.MaxValue, f.HighestValue);
-            Assert.AreEqual(float.MinValue, f.LowestValue);
+            Assert.AreEqual(float.MaxValue, f.Value.HighestValue);
+            Assert.AreEqual(float.MinValue, f.Value.LowestValue);
             
             Assert.AreEqual(5.0, fl.Value);
-            Assert.AreEqual(float.MaxValue, fl.HighestValue);
-            Assert.AreEqual(4.0, fl.LowestValue);
+            Assert.AreEqual(float.MaxValue, fl.Value.HighestValue);
+            Assert.AreEqual(4.0, fl.Value.LowestValue);
 
             Assert.AreEqual(5.0, fh.Value);
-            Assert.AreEqual(6.0, fh.HighestValue);
-            Assert.AreEqual(float.MinValue, fh.LowestValue);
+            Assert.AreEqual(6.0, fh.Value.HighestValue);
+            Assert.AreEqual(float.MinValue, fh.Value.LowestValue);
 
             Assert.AreEqual(5.0, flh.Value);
-            Assert.AreEqual(6.0, flh.HighestValue);
-            Assert.AreEqual(3.4, flh.LowestValue, 0.0001);
+            Assert.AreEqual(6.0, flh.Value.HighestValue);
+            Assert.AreEqual(3.4, flh.Value.LowestValue, 0.0001);
 
             Assert.ThrowsException<Exception>(() => new ConfigurationFloat((float)5.0, highest: (float)2.0, lowest: (float)3.4));
         }

@@ -9,11 +9,8 @@ namespace ConfigurationManager
 {
     public class Enums
     {
-        
-
         public static Dictionary<string, List<string>> EnumsOptions = new Dictionary<string, List<string>>();
         
-
         private static void AddEnum(string name, JArray values)
         {
             EnumsOptions[name] = new List<string>(values.Values<string>());

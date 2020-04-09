@@ -28,11 +28,6 @@ namespace ConfigurationManager.Types
             return null;
         }
 
-        public override bool IsValidValue(object o)
-        {
-            throw new NotImplementedException();
-        }
-
         public override object GetDictionary()
         {
             return new List<object>(Variables.Select(x => x.GetDictionary()));

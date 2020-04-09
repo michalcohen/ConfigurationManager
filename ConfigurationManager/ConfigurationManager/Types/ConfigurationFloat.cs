@@ -5,65 +5,33 @@ using System.Text;
 
 namespace ConfigurationManager.Types
 {
-    public class ConfigurationFloat: ConfigurationVariable
+    public class FloatType
     {
-        private float _lowest_value, _highest_value;
-        private bool _isValid;
-        bool IsExplicit { get; set; }
-        float _value;
+        public float Value { get; set; }
 
-        public ConfigurationFloat(float val, bool is_explicit, float lowest=float.MinValue, float highest=float.MaxValue)
+        public float LowestValue { get; set; }
+
+        public float HighestValue { get; set; }
+
+        public FloatType(float value, float lowest, float highest)
         {
-            IsExplicit = is_explicit;
-            _value = val;
-            _lowest_value = lowest;
-            _highest_value = highest;
+
+        }
+    }
+    public class ConfigurationFloat: ConfigurationVariable<FloatType>
+    {
+        bool IsExplicit { get; set; }
+
+        public FloatType Value { get; set; }
+
+        public ConfigurationFloat(float val, bool is_explicit = false, float lowest=float.MinValue, float highest=float.MaxValue)
+        {
             if (lowest > highest)
             {
                 throw new Exception("Invlid bounderies");
             }
-        }
-
-        public float Value
-        {
-            get
-            {
-                return _value;
-            }
-        }
-
-        public float LowestValue
-        {
-            get
-            {
-                return _lowest_value;
-            }
-            set
-            {
-                if (_lowest_value != value)
-                {
-                    _lowest_value = value;
-                    // OnPropertyChanged();
-                    //SetIsValid();
-                }
-            }
-        }
-
-        public float HighestValue
-        {
-            get
-            {
-                return _highest_value;
-            }
-            set
-            {
-                if (_highest_value != value)
-                {
-                    _highest_value = value;
-                    // OnPropertyChanged();
-                    //SetIsValid();
-                }
-            }
+            IsExplicit = is_explicit;
+            Value = new FloatType(val, lowest, highest);
         }
 
         public static new ConfigurationVariable TryConvert(JToken fromJson)
@@ -91,11 +59,6 @@ namespace ConfigurationManager.Types
             return fromJson.Type == JTokenType.Object && ((JObject)fromJson)["type"].ToString().Equals("float");
         }
 
-        public override bool IsValidValue(object o)
-        {
-            throw new NotImplementedException();
-        }
-
         public override object GetDictionary()
         {
             if (IsExplicit)
@@ -111,6 +74,11 @@ namespace ConfigurationManager.Types
         public override bool IsDirty()
         {
             return Dirty;
+        }
+
+        public override void Update(FloatType new_value)
+        {
+            Value = new_value;
         }
     }
 }

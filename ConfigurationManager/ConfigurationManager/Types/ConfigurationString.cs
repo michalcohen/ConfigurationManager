@@ -5,31 +5,28 @@ using System.Text;
 
 namespace ConfigurationManager.Types
 {
-    public class ConfigurationString: ConfigurationVariable
+    public class StringType
     {
-        string _value;
+        public string Value { get; set; }
+
+        public StringType(string value)
+        {
+            Value = value;
+        }
+    }
+    public class ConfigurationString: ConfigurationVariable<StringType>
+    {
         bool IsExplicit { get; set; }
 
-        public string Value
-        {
-            get
-            {
-                return _value;
-            }
-        }
+        public StringType Value { get; set; }
 
-        public ConfigurationString(string val, bool is_explicit)
+        public ConfigurationString(string val, bool is_explicit = false)
         {
-            _value = val;
+            Value = new StringType(val);
             IsExplicit = is_explicit;
         }
-
-        public override bool IsValidValue(Object o)
-        {
-            return true;
-        }
         
-        public static new ConfigurationVariable TryConvert(JToken fromJson)
+        public static new ConfigurationString TryConvert(JToken fromJson)
         {
             if (IsImplicitType(fromJson))
             {
@@ -66,6 +63,11 @@ namespace ConfigurationManager.Types
         public override bool IsDirty()
         {
             return Dirty;
+        }
+
+        public override void Update(StringType new_value)
+        {
+            Value = new_value;
         }
     }
 }

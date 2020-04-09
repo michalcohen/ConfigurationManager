@@ -5,22 +5,23 @@ using System.Text;
 
 namespace ConfigurationManager.Types
 {
-    public class ConfigurationBool : ConfigurationVariable
+    public class BoolType
     {
-        bool _value;
-        bool IsExplicit { get; set; }
-        public ConfigurationBool(bool value, bool is_explicit)
-        {
-            _value = value;
-            IsExplicit = is_explicit;
-        }
+        public bool Value { get; set; }
 
-        public bool Value
+        public BoolType(bool value)
         {
-            get
-            {
-                return _value;
-            }
+            Value = value;
+        }
+    }
+    public class ConfigurationBool : ConfigurationVariable<BoolType>
+    {
+        public BoolType Value { get; set; }
+        bool IsExplicit { get; set; }
+        public ConfigurationBool(bool value, bool is_explicit = false)
+        {
+            Value = new BoolType(value);
+            IsExplicit = is_explicit;
         }
 
         public static new ConfigurationVariable TryConvert(JToken fromJson)
@@ -45,10 +46,6 @@ namespace ConfigurationManager.Types
             return fromJson.Type == JTokenType.Object && ((JObject)fromJson)["type"].ToString().Equals("bool");
         }
 
-        public override bool IsValidValue(object o)
-        {
-            throw new NotImplementedException();
-        }
 
         public override object GetDictionary()
         {
@@ -56,15 +53,20 @@ namespace ConfigurationManager.Types
             {
                 Dictionary<string, object> dict = new Dictionary<string, object>();
                 dict["type"] = "bool";
-                dict["value"] = Value;
+                dict["value"] = Value.Value;
                 return dict;
             }
-            return Value;
+            return Value.Value;
         }
 
         public override bool IsDirty()
         {
             return Dirty;
+        }
+
+        public override void Update(BoolType new_value)
+        {
+            Value = new_value;
         }
     }
 }
