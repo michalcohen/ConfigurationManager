@@ -114,8 +114,7 @@ namespace ConfigurationManager
         }
 
         void MainWindowClosing(object sender, EventArgs e)
-        {
-            
+        { 
             Dictionary<string, string> to_save = new Dictionary<string, string>();
             to_save["recent_configuration_folder"] = RootPath;
             string json = JsonConvert.SerializeObject(to_save);
@@ -125,6 +124,7 @@ namespace ConfigurationManager
             System.IO.File.WriteAllText(file.FullName, json);
             SaveContentIfNeeded();
         }
+        
         private void MenuExitClick(object sender, EventArgs e)
         {
             Close();
@@ -132,6 +132,7 @@ namespace ConfigurationManager
 
         private void MenuOpenClick(object sender, RoutedEventArgs e)
         {
+            SaveContentIfNeeded();
             string root_path = GetRootPathFromDialog();
             if (root_path.Equals(""))
             {
