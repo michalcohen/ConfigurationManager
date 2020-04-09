@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace ConfigurationManager.Types
@@ -45,6 +46,12 @@ namespace ConfigurationManager.Types
                 dict[variable.Key] = variable.Value.GetDictionary();
             }
             return dict;
+        }
+
+
+        public override bool IsDirty()
+        {
+            return Variables.Values.Any<ConfigurationVariable>(v => v.IsDirty());
         }
     }
 }

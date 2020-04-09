@@ -19,5 +19,15 @@ namespace ConfigurationManager
         {
             return Content.GetDictionary() as Dictionary<string, object>;
         }
+
+        internal void Saved()
+        {
+            Content.Saved();
+        }
+
+        internal bool IsDirty()
+        {
+            return Content.IsDirty();
+        }
     }
 }

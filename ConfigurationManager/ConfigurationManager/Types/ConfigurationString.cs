@@ -62,5 +62,10 @@ namespace ConfigurationManager.Types
             }
             return Value;
         }
+
+        public override bool IsDirty()
+        {
+            return Dirty;
+        }
     }
 }

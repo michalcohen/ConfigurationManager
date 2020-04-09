@@ -96,10 +96,26 @@ namespace ConfigurationManager
             }
         }
 
-        
+        void SaveContentIfNeeded()
+        {
+            if (!model.IsDirty())
+            {
+                return;
+            }
+            string messageBoxText = "Do you want to save changes?";
+            string caption = "Word Processor";
+            MessageBoxButton button = MessageBoxButton.YesNo;
+            MessageBoxImage icon = MessageBoxImage.Warning;
+            MessageBoxResult result = MessageBox.Show(messageBoxText, caption, button, icon);
+            if (result != MessageBoxResult.Yes)
+            {
+                model.Save();
+            }
+        }
 
         void MainWindowClosing(object sender, EventArgs e)
         {
+            
             Dictionary<string, string> to_save = new Dictionary<string, string>();
             to_save["recent_configuration_folder"] = RootPath;
             string json = JsonConvert.SerializeObject(to_save);
@@ -107,8 +123,7 @@ namespace ConfigurationManager
             System.IO.FileInfo file = new System.IO.FileInfo(configuration_manager_configuration);
             file.Directory.Create(); // If the directory already exists, this method does nothing.
             System.IO.File.WriteAllText(file.FullName, json);
-            model.Save();
-
+            SaveContentIfNeeded();
         }
         private void MenuExitClick(object sender, EventArgs e)
         {
@@ -130,8 +145,15 @@ namespace ConfigurationManager
 
         private void MenuSaveClick(object sender, RoutedEventArgs e)
         {
-            model.Save();
-            MessageBox.Show("Configuration successfuly saved!");
+            try
+            {
+                model.Save();
+                MessageBox.Show("Configuration successfuly saved!");
+            } catch (Exception)
+            {
+                MessageBox.Show("something went wrong while saving...");
+            }
+            
         }
     }
 }

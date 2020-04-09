@@ -122,5 +122,10 @@ namespace ConfigurationManager.Types
                 return dict;
             }
         }
+
+        public override bool IsDirty()
+        {
+            return Dirty;
+        }
     }
 }

@@ -8,6 +8,7 @@ namespace ConfigurationManager.Types
 {
     abstract public class ConfigurationVariable
     {
+        protected bool Dirty { get; set; }
         abstract public bool IsValidValue(Object o);
 
         public static ConfigurationVariable TryConvert(JToken fromJson) => throw new NotImplementedException();
@@ -30,5 +31,13 @@ namespace ConfigurationManager.Types
         public static bool IsExplicitType(JToken fromJson) => throw new NotImplementedException();
 
         public abstract object GetDictionary();
+
+        public void Saved()
+        {
+            Dirty = false;
+        }
+
+        public abstract bool IsDirty();
+
     }
 }

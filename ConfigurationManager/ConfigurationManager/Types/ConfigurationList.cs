@@ -37,5 +37,19 @@ namespace ConfigurationManager.Types
         {
             return new List<object>(Variables.Select(x => x.GetDictionary()));
         }
+
+        public override bool IsDirty()
+        {
+            return Variables.Any<ConfigurationVariable>(v => v.IsDirty());
+        }
+
+        public new void Saved()
+        {
+            Dirty = false;
+            foreach (ConfigurationVariable variable in Variables)
+            {
+                variable.Saved();
+            }
+        }
     }
 }

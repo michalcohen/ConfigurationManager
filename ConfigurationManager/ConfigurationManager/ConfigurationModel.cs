@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace ConfigurationManager
@@ -41,7 +42,13 @@ namespace ConfigurationManager
             foreach (KeyValuePair<string, ConfigurationFile> v in all_files)
             {
                 System.IO.File.WriteAllText(v.Key, JsonConvert.SerializeObject(v.Value.GetDictionary(), Formatting.Indented));
+                v.Value.Saved();
             }
+        }
+
+        internal bool IsDirty()
+        {
+            return all_files.Values.Any<ConfigurationFile>(f => f.IsDirty());
         }
     }
 }
