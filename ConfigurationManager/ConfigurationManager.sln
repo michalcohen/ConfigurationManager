@@ -1,8 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.29920.165
-MinimumVisualStudioVersion = 10.0.40219.1
+VisualStudioVersion = 16.0.28803.202
+MinimumVisualStudioVersion = 15.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConfigurationManager", "ConfigurationManager\ConfigurationManager.csproj", "{7A066E69-A3E4-41D6-ABDA-58404B19AFA7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConfigurationManagerTests", "ConfigurationManagerTests\ConfigurationManagerTests.csproj", "{D832F64B-EF35-43D6-AEBC-5BE353AE31A8}"
@@ -26,6 +26,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {E2419FDD-5728-450E-BE32-EC85B9B8F72C}
+		SolutionGuid = {C764218F-7633-4412-923D-558CE7EE0560}
 	EndGlobalSection
 EndGlobal

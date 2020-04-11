@@ -190,7 +190,18 @@ namespace ConfigurationManager
 
         private void CloseCurrentTab(object sender, RoutedEventArgs e)
         {
-            vmd.Tabs.RemoveAt(tab_control.SelectedIndex);
+            ActionTabItem current_item = ((ActionTabItem)((sender as Button).Parent as DockPanel).DataContext);
+            int index = 0;
+            foreach (ActionTabItem item in tab_control.Items)
+            {
+                if (item.Header.Equals(current_item.Header))
+                {
+                    break;
+                }
+                index++;
+            }
+            vmd.Tabs.RemoveAt(index);
+            vmd.RemoveOpenedFile(current_item.FileName);
         }
     }
 }

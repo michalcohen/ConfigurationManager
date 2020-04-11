@@ -22,7 +22,7 @@ namespace ConfigurationManager.GUIComponents
             {
                 return Tabs.IndexOf(opened_files[name].Item2);
             }
-            ActionTabItem tab = new ActionTabItem { Header = name.Split("\\")[^1], Content = 5 };
+            ActionTabItem tab = new ActionTabItem { Header = name.Split("\\")[^1], Content = 5, FileName = name };
             opened_files[name] = new Tuple<ConfigurationFile, ActionTabItem>(model, tab);
             Tabs.Add(tab);
             return Tabs.Count - 1;
