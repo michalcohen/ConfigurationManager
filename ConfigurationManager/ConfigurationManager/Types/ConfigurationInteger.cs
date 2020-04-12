@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Media;
 
 namespace ConfigurationManager.Types
 {
@@ -16,6 +17,11 @@ namespace ConfigurationManager.Types
             Value = value;
             LowestValue = lowest;
             HighestValue = highest;
+        }
+
+        public override string ToString()
+        {
+            return Value.ToString();
         }
     }
     public class ConfigurationInteger: ConfigurationVariable<IntegerType>
@@ -83,6 +89,16 @@ namespace ConfigurationManager.Types
         public override void Update(IntegerType new_value)
         {
             Value = new_value;
+        }
+
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
+
+        public override Brush GetFontColor()
+        {
+            return Brushes.Green;
         }
     }
 }

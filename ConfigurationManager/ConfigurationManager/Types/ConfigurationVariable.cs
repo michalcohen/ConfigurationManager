@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Windows.Media;
 
 namespace ConfigurationManager.Types
 {
@@ -37,6 +39,7 @@ namespace ConfigurationManager.Types
 
         public static ConfigurationVariable TryConvert(JToken fromJson) => throw new NotImplementedException();
 
+        public abstract Brush GetFontColor();
     }
 
     abstract public class ConfigurationVariable<T>: ConfigurationVariable

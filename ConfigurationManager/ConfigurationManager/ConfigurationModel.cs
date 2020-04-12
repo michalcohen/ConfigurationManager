@@ -54,12 +54,13 @@ namespace ConfigurationManager
             return all_files.Values.Any<ConfigurationFile>(f => f.IsDirty());
         }
 
-        public void AddOpenedFile(string path)
+        public ConfigurationFile AddOpenedFile(string path)
         {
             if (!opened_files.Contains(path))
             {
                 opened_files.Add(path);
             }
+            return all_files[path];
         }
 
         public ConfigurationFile GetConfigurationFile(string path)

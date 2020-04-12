@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Media;
 
 namespace ConfigurationManager.Types
 {
@@ -15,7 +16,14 @@ namespace ConfigurationManager.Types
 
         public FloatType(float value, float lowest, float highest)
         {
+            Value = value;
+            LowestValue = lowest;
+            HighestValue = highest;
+        }
 
+        public override string ToString()
+        {
+            return Value.ToString();
         }
     }
     public class ConfigurationFloat: ConfigurationVariable<FloatType>
@@ -76,7 +84,7 @@ namespace ConfigurationManager.Types
                 }
                 return dict;
             }
-            return Value;
+            return Value.Value;
         }
 
         public override bool IsDirty()
@@ -87,6 +95,16 @@ namespace ConfigurationManager.Types
         public override void Update(FloatType new_value)
         {
             Value = new_value;
+        }
+
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
+
+        public override Brush GetFontColor()
+        {
+            return Brushes.BlueViolet;
         }
     }
 }

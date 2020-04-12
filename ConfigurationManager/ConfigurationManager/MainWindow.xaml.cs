@@ -182,8 +182,8 @@ namespace ConfigurationManager
             {
                 ConfigurationTreeViewItem ctvi = ((ConfigurationTreeViewItem)sender).IsSelected ? sender as ConfigurationTreeViewItem : configuration_folder_view.SelectedItem as ConfigurationTreeViewItem;
                 string path_to_add = ctvi.Path;
-                model.AddOpenedFile(path_to_add);
-                int index = vmd.AddOpenedFile(path_to_add, model.GetConfigurationFile(path_to_add));
+                ConfigurationFile f = model.AddOpenedFile(path_to_add);
+                int index = vmd.AddOpenedFile(path_to_add, f);
                 tab_control.SelectedIndex = index;
             }
         }

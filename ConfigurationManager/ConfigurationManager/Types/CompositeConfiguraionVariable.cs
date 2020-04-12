@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Media;
 
 namespace ConfigurationManager.Types
 {
@@ -47,6 +48,16 @@ namespace ConfigurationManager.Types
         public override bool IsDirty()
         {
             return Variables.Values.Any<ConfigurationVariable>(v => v.IsDirty());
+        }
+
+        public override string ToString()
+        {
+            return "";
+        }
+
+        public override Brush GetFontColor()
+        {
+            return Brushes.OrangeRed;
         }
     }
 }

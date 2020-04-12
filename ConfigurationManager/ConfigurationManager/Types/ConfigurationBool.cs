@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Media;
 
 namespace ConfigurationManager.Types
 {
@@ -12,6 +13,11 @@ namespace ConfigurationManager.Types
         public BoolType(bool value)
         {
             Value = value;
+        }
+
+        public override string ToString()
+        {
+            return Value.ToString();
         }
     }
     public class ConfigurationBool : ConfigurationVariable<BoolType>
@@ -67,6 +73,16 @@ namespace ConfigurationManager.Types
         public override void Update(BoolType new_value)
         {
             Value = new_value;
+        }
+
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
+
+        public override Brush GetFontColor()
+        {
+            return Brushes.OrangeRed;
         }
     }
 }
