@@ -84,7 +84,7 @@ namespace ConfigurationManager.Types
 
         public override Brush GetFontColor()
         {
-            return Brushes.Azure;
+            return Brushes.DarkKhaki;
         }
     }
 }
