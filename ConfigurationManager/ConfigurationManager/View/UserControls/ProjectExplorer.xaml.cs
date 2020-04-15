@@ -27,27 +27,24 @@ namespace ConfigurationManager.View.UserControls
 
         public void ShowFile(object sender, MouseButtonEventArgs args)
         {
-            if (sender is TreeViewItem)
+            if (args.LeftButton == MouseButtonState.Pressed && args.ClickCount == 2)
             {
-                TreeViewItem ctvi = (((TreeViewItem)sender).IsSelected || configuration_folder_view.SelectedItem == null? sender : configuration_folder_view.SelectedItem) as TreeViewItem;
-                ProjectExplorerItem cpei = ctvi.DataContext as ProjectExplorerItem;
-                string path_to_add = cpei.FullPath;
-                if (!path_to_add.Split(".")[^1].Equals("json"))
+                if (sender is TextBlock)
                 {
-                    return;
+                    ((ProjectExplorerItem)((TextBlock)sender).DataContext).OpenTab();
                 }
-                cpei.OpenTab();
             }
+            
         }
 
         private void TreeViewItem_MouseEnter(object sender, MouseEventArgs e)
         {
-            ((TreeViewItem)sender).Background = Brushes.Aquamarine;
+            ((TextBlock)sender).Background = Brushes.Aquamarine;
         }
 
         private void TreeViewItem_MouseLeave(object sender, MouseEventArgs e)
         {
-            ((TreeViewItem)sender).Background = Brushes.White;
+            ((TextBlock)sender).Background = Brushes.White;
         }
     }
 }

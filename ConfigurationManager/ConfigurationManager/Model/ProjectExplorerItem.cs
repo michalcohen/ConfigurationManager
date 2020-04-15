@@ -15,7 +15,6 @@ namespace ConfigurationManager.Model
     {
         public string FullPath { get; set; }
 
-
         public string AllNames
         {
             get
@@ -23,6 +22,7 @@ namespace ConfigurationManager.Model
                 return Content.AllNames;
             }
         }
+        
         public string ProjectExplorerItemsLabel { get; set; }
 
         public ProjectExplorerItem AutoReference { get; set; }
@@ -85,6 +85,10 @@ namespace ConfigurationManager.Model
 
         public void OpenTab()
         {
+            if (!IsFile(FullPath))
+            {
+                return;
+            }
             if (!IsOpened)
             {
                 tab = PM.TabCount;

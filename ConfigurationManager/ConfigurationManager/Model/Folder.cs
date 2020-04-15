@@ -12,22 +12,6 @@ namespace ConfigurationManager.Model
         public string Name { get; set; }
         public string FullPath { get; set; }
 
-        public bool is_selected;
-        public bool IsSelected
-        {
-            get { 
-                return is_selected; 
-            }
-            set
-            {
-                if (value != is_selected)
-                {
-                    is_selected = value;
-                    RaisePropertyChanged("IsSelected");
-                }
-            }
-        }
-
         public List<Folder> SubFolders {get; set;}
 
         public event PropertyChangedEventHandler PropertyChanged;

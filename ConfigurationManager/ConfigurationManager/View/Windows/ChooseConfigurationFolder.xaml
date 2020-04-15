@@ -17,6 +17,7 @@
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         <TreeView x:Name="folder_view" BorderThickness="0" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding SubFolders}">
+            
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding SubFolders}" DataType="{x:Type local:Model.Folder}">
                     <TextBlock Text="{Binding Name}" MouseEnter="TreeViewItem_MouseEnter" MouseLeave="TreeViewItem_MouseLeave"/>

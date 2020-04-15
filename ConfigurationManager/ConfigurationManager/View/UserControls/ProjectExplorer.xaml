@@ -11,8 +11,8 @@
     <TreeView x:Name="configuration_folder_view" ItemsSource="{Binding RootExplorerItem.ProjectExplorerItems}">
         <TreeView.ItemTemplate>
             <HierarchicalDataTemplate ItemsSource="{Binding ProjectExplorerItems}" DataType="{x:Type local:Model.ProjectExplorerItem}">
-                <TreeViewItem Header="{Binding ProjectExplorerItemsLabel}" MouseDoubleClick="ShowFile" MouseEnter="TreeViewItem_MouseEnter" MouseLeave="TreeViewItem_MouseLeave">
-                </TreeViewItem>
+                <TextBlock Text="{Binding ProjectExplorerItemsLabel}" MouseDown="ShowFile" MouseEnter="TreeViewItem_MouseEnter" MouseLeave="TreeViewItem_MouseLeave">
+                </TextBlock>
             </HierarchicalDataTemplate>
         </TreeView.ItemTemplate>
     </TreeView>
