@@ -1,14 +1,22 @@
-﻿using ConfigurationManager.Types;
+﻿using ConfigurationManager.Model.Types;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json.Linq;
+using System.Linq;
 
 namespace ConfigurationManager
 {
     public class ConfigurationFile
     {
         public CompositeConfiguraionVariable Content { get; }
+
+        public string AllNames { get
+            {
+                return String.Join(" ", Content.AllNames);
+            } 
+        }
+
 
         public ConfigurationFile(JObject array)
         {
@@ -25,9 +33,12 @@ namespace ConfigurationManager
             Content.Saved();
         }
 
-        internal bool IsDirty()
+        internal bool IsDirty
         {
-            return Content.IsDirty();
+            get
+            {
+                return Content.IsDirty();
+            }
         }
     }
 }

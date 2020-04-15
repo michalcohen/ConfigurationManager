@@ -2,9 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace ConfigurationManager.Types
+namespace ConfigurationManager.Model.Types
 {
     public class BoolType
     {
@@ -24,20 +26,22 @@ namespace ConfigurationManager.Types
     {
         public BoolType Value { get; set; }
         bool IsExplicit { get; set; }
-        public ConfigurationBool(bool value, bool is_explicit = false)
+        public ConfigurationBool(bool value, bool is_explicit = false, string name="")
         {
+            FontColor = Brushes.Magenta;
+            ConfigurationName = name;
             Value = new BoolType(value);
             IsExplicit = is_explicit;
         }
 
-        public static new ConfigurationVariable TryConvert(JToken fromJson)
+        public static new ConfigurationVariable TryConvert(string name, JToken fromJson)
         {
             if (IsImplicitType(fromJson))
             {
-                return new ConfigurationBool(fromJson.ToObject<bool>(), false);
+                return new ConfigurationBool(fromJson.ToObject<bool>(), false, name);
             } else if (IsExplicitType(fromJson))
             {
-                return new ConfigurationBool(fromJson["value"].ToObject<bool>(), true);
+                return new ConfigurationBool(fromJson["value"].ToObject<bool>(), true, name);
             }
             return null;
         }
@@ -80,9 +84,9 @@ namespace ConfigurationManager.Types
             return Value.ToString();
         }
 
-        public override Brush GetFontColor()
+        public override Window GetGUIElementsForEdit()
         {
-            return Brushes.Magenta;
+            return new Window();
         }
     }
 }

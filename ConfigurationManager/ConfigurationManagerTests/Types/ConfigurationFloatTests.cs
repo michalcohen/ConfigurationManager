@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ConfigurationManager.Types;
+using ConfigurationManager.Model.Types;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,7 +7,7 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 
-namespace ConfigurationManager.Types.Tests
+namespace ConfigurationManager.Model.Types.Tests
 {
     [TestClass()]
     public class ConfigurationFloatTests

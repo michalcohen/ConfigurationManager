@@ -1,10 +1,13 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using ConfigurationManager.GUIComponents.EditValuesWindows;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace ConfigurationManager.Types
+namespace ConfigurationManager.Model.Types
 {
     public class StringType
     {
@@ -27,20 +30,22 @@ namespace ConfigurationManager.Types
 
         public StringType Value { get; set; }
 
-        public ConfigurationString(string val, bool is_explicit = false)
+        public ConfigurationString(string val, bool is_explicit = false, string name="")
         {
+            FontColor = Brushes.DarkKhaki;
             Value = new StringType(val);
             IsExplicit = is_explicit;
+            ConfigurationName = name;
         }
         
-        public static new ConfigurationString TryConvert(JToken fromJson)
+        public static new ConfigurationString TryConvert(string name, JToken fromJson)
         {
             if (IsImplicitType(fromJson))
             {
-                return new ConfigurationString(fromJson.ToObject<string>(), false);
+                return new ConfigurationString(fromJson.ToObject<string>(), false, name);
             } else if (IsExplicitType(fromJson))
             {
-                return new ConfigurationString(fromJson["value"].ToObject<string>(), true);
+                return new ConfigurationString(fromJson["value"].ToObject<string>(), true, name);
             }
             return null;
         }
@@ -82,9 +87,9 @@ namespace ConfigurationManager.Types
             return Value.ToString();
         }
 
-        public override Brush GetFontColor()
+        public override Window GetGUIElementsForEdit()
         {
-            return Brushes.DarkKhaki;
+            return new StringEdit(this, ConfigurationName);
         }
     }
 }

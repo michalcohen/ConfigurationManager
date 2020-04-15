@@ -2,9 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace ConfigurationManager.Types
+namespace ConfigurationManager.Model.Types
 {
     public class FloatType
     {
@@ -32,8 +34,10 @@ namespace ConfigurationManager.Types
 
         public FloatType Value { get; set; }
 
-        public ConfigurationFloat(float val, bool is_explicit = false, float lowest=float.MinValue, float highest=float.MaxValue)
+        public ConfigurationFloat(float val, bool is_explicit = false, float lowest=float.MinValue, float highest=float.MaxValue, string name="")
         {
+            FontColor = Brushes.BlueViolet;
+            ConfigurationName = name;
             if (lowest > highest)
             {
                 throw new Exception("Invlid bounderies");
@@ -42,17 +46,17 @@ namespace ConfigurationManager.Types
             Value = new FloatType(val, lowest, highest);
         }
 
-        public static new ConfigurationVariable TryConvert(JToken fromJson)
+        public static new ConfigurationVariable TryConvert(string name, JToken fromJson)
         {
             if (IsImplicitType(fromJson))
             {
-                return new ConfigurationFloat(fromJson.ToObject<float>(), false);
+                return new ConfigurationFloat(fromJson.ToObject<float>(), false, name: name);
             } else if (IsExplicitType(fromJson))
             {
                 JObject j = (JObject)fromJson;
                 float l = j.ContainsKey("lower_bound") ? j["lower_bound"].ToObject<float>() : float.MinValue;
                 float h = j.ContainsKey("higher_bound") ? j["higher_bound"].ToObject<float>() : float.MaxValue;
-                return new ConfigurationFloat(fromJson["value"].ToObject<float>(), true, lowest: l, highest: h);
+                return new ConfigurationFloat(fromJson["value"].ToObject<float>(), true, lowest: l, highest: h, name:name);
             }
             return null;
         }
@@ -102,9 +106,9 @@ namespace ConfigurationManager.Types
             return Value.ToString();
         }
 
-        public override Brush GetFontColor()
+        public override Window GetGUIElementsForEdit()
         {
-            return Brushes.BlueViolet;
+            return new Window();
         }
     }
 }

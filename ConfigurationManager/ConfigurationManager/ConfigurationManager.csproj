@@ -12,31 +12,24 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Configurations\Enums.json">
+    <None Update="Resources\ConfigurationsForExample\Enums.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Configurations\Heights\Aves.json">
+    <None Update="Resources\ConfigurationsForExample\Heights\Aves.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Configurations\Example.json">
+    <None Update="Resources\ConfigurationsForExample\Example.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Configurations\Heights\Mammals.json">
+    <None Update="Resources\ConfigurationsForExample\Heights\Mammals.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Configurations\Weights\Aves.json">
+    <None Update="Resources\ConfigurationsForExample\Weights\Aves.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Configurations\Weights\Mammals.json">
+    <None Update="Resources\ConfigurationsForExample\Weights\Mammals.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\x.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Resources\" />
   </ItemGroup>
 
 </Project>

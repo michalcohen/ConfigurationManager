@@ -1,25 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ConfigurationManager.GUIComponents;
-using System.ComponentModel;
-using BrightIdeasSoftware;
+using ConfigurationManager.ViewModel;
+using ConfigurationManager.Model;
 
 namespace ConfigurationManager
 {
@@ -28,13 +18,9 @@ namespace ConfigurationManager
     /// </summary>
     public partial class MainWindow : Window
     {
-        //private readonly MyViewModel _viewModel;
-
         private static String RootPath;
 
-        private ConfigurationModel model;
-
-        private ActionTabViewModal vmd;
+        private ProjectViewModel PVM;
 
         private static readonly string configuration_manager_configuration = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\ConfiurationManagerData\\RecentConfigurationFolder.json";
         
@@ -42,27 +28,12 @@ namespace ConfigurationManager
         {
             InitializeComponent();
             RootPath = GetRootPath();
-            model = new ConfigurationModel(RootPath);
-            CreateTreeViewOfConfiguraionFiles();
-            CreateTabs();
-        }
-
-        private void CreateTabs()
-        {
-            vmd = new ActionTabViewModal();
-            tab_control.ItemsSource = vmd.Tabs;
-        }
-
-        private void CreateTreeViewOfConfiguraionFiles()
-        {
-            ConfigurationTreeViewItem c = new ConfigurationTreeViewItem(RootPath);
-            configuration_folder_view.Items.Add(c);
-            DirSearch(RootPath, c);
+            PVM = new ProjectViewModel(RootPath);
         }
 
         private String GetRootPathFromDialog()
         {
-            ChooseConfigurationFolder inputDialog = new ChooseConfigurationFolder();
+            ChooseConfigurationFolder inputDialog = new ChooseConfigurationFolder(new FolderViewModel());
             if (inputDialog.ShowDialog() == true)
                 return inputDialog.Answer;
             return "";
@@ -85,38 +56,9 @@ namespace ConfigurationManager
             return folder_name;
         }
 
-        static void DirSearch(string sDir, ConfigurationTreeViewItem sTree)
-        {
-            try
-            {
-                foreach (string f in Directory.GetFiles(sDir, "*.json"))
-                {
-                    if (f.Equals(RootPath + "\\Enums.json"))
-                    {
-                        continue;
-                    }
-                    sTree.Items.Add(new ConfigurationTreeViewItem(f));
-                }
-                foreach (string d in Directory.GetDirectories(sDir))
-                {
-                    if (!Directory.EnumerateFileSystemEntries(d).Any())
-                    {
-                        continue;
-                    }
-                    ConfigurationTreeViewItem t = new ConfigurationTreeViewItem(d);
-                    sTree.Items.Add(t);
-                    DirSearch(d, t);
-                }
-            }
-            catch (System.Exception excpt)
-            {
-                Console.WriteLine(excpt.Message);
-            }
-        }
-
         void SaveContentIfNeeded()
         {
-            if (!model.IsDirty())
+            if (!PVM.IsDirty())
             {
                 return;
             }
@@ -127,7 +69,7 @@ namespace ConfigurationManager
             MessageBoxResult result = MessageBox.Show(messageBoxText, caption, button, icon);
             if (result != MessageBoxResult.Yes)
             {
-                model.Save();
+                PVM.Save();
             }
         }
 
@@ -157,17 +99,18 @@ namespace ConfigurationManager
                 return;
             }
             RootPath = root_path;
-            configuration_folder_view.Items.Clear();
-            CreateTreeViewOfConfiguraionFiles();
-            model = new ConfigurationModel(RootPath);
-            CreateTabs();
+            PVM = new ProjectViewModel(RootPath);
+            ProjectExplorerControl.DataContext = PVM.PM;
+            ProjectExplorerControl.UpdateLayout();
+            TabsControl.DataContext = PVM.PM;
+            TabsControl.UpdateLayout();
         }
 
         private void MenuSaveClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                model.Save();
+                PVM.Save();
                 MessageBox.Show("Configuration successfuly saved!");
             } catch (Exception)
             {
@@ -176,32 +119,16 @@ namespace ConfigurationManager
             
         }
   
-        private void ShowFile(object sender, MouseButtonEventArgs args)
+        private void ProjectExplorerControl_Loaded(object sender, RoutedEventArgs e)
         {
-            if (sender is ConfigurationTreeViewItem)
-            {
-                ConfigurationTreeViewItem ctvi = ((ConfigurationTreeViewItem)sender).IsSelected ? sender as ConfigurationTreeViewItem : configuration_folder_view.SelectedItem as ConfigurationTreeViewItem;
-                string path_to_add = ctvi.Path;
-                ConfigurationFile f = model.AddOpenedFile(path_to_add);
-                int index = vmd.AddOpenedFile(path_to_add, f);
-                tab_control.SelectedIndex = index;
-            }
+            ProjectExplorerControl.DataContext = PVM.PM;
+        }
+        
+        private void TabsControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            TabsControl.DataContext = PVM.PM;
         }
 
-        private void CloseCurrentTab(object sender, RoutedEventArgs e)
-        {
-            ActionTabItem current_item = ((ActionTabItem)((sender as Button).Parent as DockPanel).DataContext);
-            int index = 0;
-            foreach (ActionTabItem item in tab_control.Items)
-            {
-                if (item.Header.Equals(current_item.Header))
-                {
-                    break;
-                }
-                index++;
-            }
-            vmd.Tabs.RemoveAt(index);
-            vmd.RemoveOpenedFile(current_item.FileName);
-        }
+
     }
 }

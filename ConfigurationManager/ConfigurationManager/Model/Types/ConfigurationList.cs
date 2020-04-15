@@ -3,28 +3,30 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace ConfigurationManager.Types
+namespace ConfigurationManager.Model.Types
 {
     public class ConfigurationList : ConfigurationVariable
     {
-        public List<ConfigurationVariable> Variables { get; set; }
-
-        public ConfigurationList(JArray array)
+        public ConfigurationList(JArray array, string name="")
         {
+            FontColor = Brushes.Black;
+            ConfigurationName = name;
             Variables = new List<ConfigurationVariable>();
             foreach (JToken value in array)
             {
-                Variables.Add(ConfigurationVariable.ConvertJsonToConfiguration(value));
+                Variables.Add(ConfigurationVariable.ConvertJsonToConfiguration("", value));
             }
         }
 
-        public static new ConfigurationVariable TryConvert(JToken fromJson)
+        public static new ConfigurationVariable TryConvert(string name, JToken fromJson)
         {
             if (fromJson.Type == JTokenType.Array)
             {
-                return new ConfigurationList((JArray)fromJson);
+                return new ConfigurationList((JArray)fromJson, name);
             }
             return null;
         }
@@ -53,9 +55,9 @@ namespace ConfigurationManager.Types
             return "";
         }
 
-        public override Brush GetFontColor()
+        public override Window GetGUIElementsForEdit()
         {
-            return Brushes.Black;
+            return new Window();
         }
     }
 }

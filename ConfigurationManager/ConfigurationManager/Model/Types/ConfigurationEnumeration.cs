@@ -2,9 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace ConfigurationManager.Types
+namespace ConfigurationManager.Model.Types
 {
     public class EnumType
     {
@@ -63,17 +65,20 @@ namespace ConfigurationManager.Types
     {
         public EnumType Value { get; set; }
 
-        public ConfigurationEnumeration(string value, string enum_name)
+        public ConfigurationEnumeration(string value, string enum_name, string name="")
         {
+            FontColor = Brushes.DarkGoldenrod;
+            ConfigurationName = name;
             Value = new EnumType(value, enum_name);
         }
 
-        public ConfigurationEnumeration(string value, List<string> enum_values)
+        public ConfigurationEnumeration(string value, List<string> enum_values, string name="")
         {
+            ConfigurationName = name;
             Value = new EnumType(value, enum_values);
         }
 
-        public static new ConfigurationVariable TryConvert(JToken fromJson)
+        public static new ConfigurationVariable TryConvert(string name, JToken fromJson)
         {
             if (fromJson.Type != JTokenType.Object)
             {
@@ -87,10 +92,10 @@ namespace ConfigurationManager.Types
             JToken t = j["type"];
             if (t.Type == JTokenType.String)
             {
-                string name = t.ToObject<string>();
-                if (Enums.HasEnum(name))
+                string type_name = t.ToObject<string>();
+                if (Enums.HasEnum(type_name))
                 {
-                    return new ConfigurationEnumeration(j["value"].ToObject<string>(), name);
+                    return new ConfigurationEnumeration(j["value"].ToObject<string>(), type_name, name);
                 }
             }
             else if (t.Type == JTokenType.Array)
@@ -105,7 +110,7 @@ namespace ConfigurationManager.Types
                 {
                     values.Add(value.ToObject<string>());
                 }
-                return new ConfigurationEnumeration(j["value"].ToObject<string>(), values);
+                return new ConfigurationEnumeration(j["value"].ToObject<string>(), values, name);
             }
             return null;
         }
@@ -131,9 +136,9 @@ namespace ConfigurationManager.Types
             return Value.ToString();
         }
 
-        public override Brush GetFontColor()
+        public override Window GetGUIElementsForEdit()
         {
-            return Brushes.DarkGoldenrod;
+            return new Window();
         }
     }
 }

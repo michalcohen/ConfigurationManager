@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ConfigurationManager"
+        xmlns:views = "clr-namespace:ConfigurationManager.View.UserControls"
         mc:Ignorable="d"
         Closing="MainWindowClosing"  
         Title="MainWindow" Height="450" Width="800">
@@ -17,28 +18,7 @@
                 <MenuItem Header="_Exit" x:Name="menu_exit" Click="MenuExitClick"/>
             </MenuItem>
         </Menu>
-        <TreeView x:Name="configuration_folder_view" DockPanel.Dock="Left">
-            <TreeView.ItemContainerStyle>
-                <Style TargetType="{x:Type TreeViewItem}">
-                    <EventSetter Event="MouseDoubleClick" Handler="ShowFile"/>
-                </Style>
-            </TreeView.ItemContainerStyle>
-        </TreeView>
-        <TabControl x:Name="tab_control" TabStripPlacement="Top" DockPanel.Dock="Right">
-            <TabControl.ItemTemplate>
-                <DataTemplate>
-                    <DockPanel>
-                        <TextBlock Width="80" Text="{Binding Header}"/>
-                        <Button Background="Transparent" BorderThickness="0" Click="CloseCurrentTab">X</Button>
-                        
-                    </DockPanel>
-                </DataTemplate>
-            </TabControl.ItemTemplate>
-            <TabControl.ContentTemplate>
-                <DataTemplate>
-                    <UserControl Content="{Binding Content}" Margin="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-                </DataTemplate>
-            </TabControl.ContentTemplate>
-        </TabControl>
+        <views:ProjectExplorer x:Name = "ProjectExplorerControl" Loaded = "ProjectExplorerControl_Loaded" DockPanel.Dock="Left"/>
+        <views:TabsView x:Name="TabsControl" Loaded="TabsControl_Loaded" DockPanel.Dock="Right"/>
     </DockPanel>
 </Window>
