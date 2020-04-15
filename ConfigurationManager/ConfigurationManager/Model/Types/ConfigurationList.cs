@@ -11,12 +11,8 @@ namespace ConfigurationManager.Model.Types
 {
     public class ConfigurationList : ConfigurationVariable
     {
-        public ConfigurationList(JArray array, Changable father, string name="")
+        public ConfigurationList(JArray array, Changable father, string name="") : base(father, Brushes.Black, name)
         {
-            Father = father;
-            FontColor = Brushes.Black;
-            ConfigurationName = name;
-            Variables = new List<ConfigurationVariable>();
             foreach (JToken value in array)
             {
                 Variables.Add(ConfigurationVariable.ConvertJsonToConfiguration("", value, father));
@@ -42,9 +38,5 @@ namespace ConfigurationManager.Model.Types
             return "";
         }
 
-        public override Window GetGUIElementsForEdit()
-        {
-            return new Window();
-        }
     }
 }

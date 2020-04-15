@@ -34,18 +34,13 @@ namespace ConfigurationManager.Model.Types
 
         public FloatType Value { get; set; }
 
-        public ConfigurationFloat(float val, Changable father, bool is_explicit = false, float lowest=float.MinValue, float highest=float.MaxValue, string name="")
+        public ConfigurationFloat(float val, Changable father, bool is_explicit = false, float lowest=float.MinValue, float highest=float.MaxValue, string name="") : base(father, Brushes.BlueViolet, name, is_explicit)
         {
-            Father = father;
-            FontColor = Brushes.BlueViolet;
-            ConfigurationName = name;
             if (lowest > highest)
             {
                 throw new Exception("Invlid bounderies");
             }
-            IsExplicit = is_explicit;
             Value = new FloatType(val, lowest, highest);
-            Variables = new List<ConfigurationVariable>();
         }
 
         public static new ConfigurationVariable TryConvert(string name, JToken fromJson, Changable father)
@@ -103,9 +98,5 @@ namespace ConfigurationManager.Model.Types
             return Value.ToString();
         }
 
-        public override Window GetGUIElementsForEdit()
-        {
-            return new Window();
-        }
     }
 }

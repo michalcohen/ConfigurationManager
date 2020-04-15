@@ -49,6 +49,20 @@ namespace ConfigurationManager.Model.Types
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        
+        protected ConfigurationVariable(Changable father, Brush font_color, string name, Window edit_window=null)
+        {
+            Father = father;
+            FontColor = font_color;
+            ConfigurationName = name;
+            Variables = new List<ConfigurationVariable>();
+        }
+
+        public virtual void OpenEditWindow()
+        {
+            new Window();
+        }
+
         private static List<Type> GetAllConfigurationTypes()
         {
             return AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes())
@@ -77,8 +91,6 @@ namespace ConfigurationManager.Model.Types
 
         public static ConfigurationVariable TryConvert(string name, JToken fromJson, Changable father) => throw new NotImplementedException();
 
-        public abstract Window GetGUIElementsForEdit();
-
         public void RaisePropertyChanged(string property)
         {
             if (PropertyChanged != null)
@@ -102,11 +114,20 @@ namespace ConfigurationManager.Model.Types
         }
     }
 
-    abstract public class ConfigurationVariable<T>: ConfigurationVariable
+    abstract public class ConfigurationVariable<T> : ConfigurationVariable
     {
+        public bool IsExplicit { get; set; }
+
+        protected ConfigurationVariable(Changable father, Brush font_color, string name, bool is_explicit): base(father, font_color, name)
+        {
+            IsExplicit = is_explicit;
+        }
+
         public static new ConfigurationVariable<T> TryConvert(JToken fromJson) => throw new NotImplementedException();
 
         public abstract void Update(T new_value);
+
+
 
     }
 }

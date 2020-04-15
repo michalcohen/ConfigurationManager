@@ -11,12 +11,8 @@ namespace ConfigurationManager.Model.Types
 {
     public class CompositeConfiguraionVariable: ConfigurationVariable
     {
-        public CompositeConfiguraionVariable(JObject array, Changable father, string name="")
+        public CompositeConfiguraionVariable(JObject array, Changable father, string name="") : base(father, Brushes.Black, name)
         {
-            Father = father;
-            FontColor = Brushes.Black;
-            ConfigurationName = name;
-            Variables = new List<ConfigurationVariable>();
             foreach (KeyValuePair<String, JToken> value in array)
             {
                 Variables.Add(ConfigurationVariable.ConvertJsonToConfiguration(value.Key, value.Value, this));
@@ -63,10 +59,6 @@ namespace ConfigurationManager.Model.Types
         public ConfigurationVariable this[string key]
         {
             get => Variables.Find(x => x.ConfigurationName == key);
-        }
-        public override Window GetGUIElementsForEdit()
-        {
-            return new Window();
         }
     }
 }

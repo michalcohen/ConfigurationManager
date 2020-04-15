@@ -47,19 +47,18 @@ namespace ConfigurationManager.Model.Types
     
     public class ConfigurationString: ConfigurationVariable<StringType>
     {
-        bool IsExplicit { get; set; }
+        
 
         public StringType Value { get; set; }
 
-        public ConfigurationString(string val, Changable father, bool is_explicit = false, string name="")
+        public ConfigurationString(string val, Changable father, bool is_explicit = false, string name=""): base(father, Brushes.DarkKhaki, name, is_explicit)
         {
-
-            Father = father;
-            FontColor = Brushes.DarkKhaki;
             Value = new StringType(val);
-            IsExplicit = is_explicit;
-            ConfigurationName = name;
-            Variables = new List<ConfigurationVariable>();
+        }
+
+        public override void OpenEditWindow()
+        {
+            (new StringEdit(this)).Show();
         }
 
         public void ChangeContent(string new_string)
@@ -117,9 +116,5 @@ namespace ConfigurationManager.Model.Types
             return Value.ToString();
         }
 
-        public override Window GetGUIElementsForEdit()
-        {
-            return new StringEdit(this, ConfigurationName);
-        }
     }
 }

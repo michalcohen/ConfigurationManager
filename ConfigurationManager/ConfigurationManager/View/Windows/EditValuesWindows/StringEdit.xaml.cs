@@ -19,7 +19,7 @@ namespace ConfigurationManager.GUIComponents.EditValuesWindows
     public partial class StringEdit : Window
     {
         ConfigurationString CS;
-        public StringEdit(ConfigurationString cs, string variable_name)
+        public StringEdit(ConfigurationString cs)
         {
             CS = cs;
             DataContext = cs;

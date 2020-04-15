@@ -42,8 +42,7 @@ namespace ConfigurationManager.View.UserControls
 
         private void TreeViewItem_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            Window w = ((ConfigurationVariable)((TreeViewItem)sender).DataContext).GetGUIElementsForEdit();
-            w.Show();
+            (((TreeViewItem)sender).DataContext as ConfigurationVariable).OpenEditWindow();
         }
     }
 }

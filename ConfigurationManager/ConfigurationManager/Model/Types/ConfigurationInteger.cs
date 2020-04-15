@@ -30,16 +30,10 @@ namespace ConfigurationManager.Model.Types
     {
         public IntegerType Value { get; set; }
         
-        bool IsExplicit { get; set; }
 
-        public ConfigurationInteger(int val, Changable father, bool is_explicit = false, int lowest=int.MinValue, int highest = int.MaxValue, string name="")
+        public ConfigurationInteger(int val, Changable father, bool is_explicit = false, int lowest=int.MinValue, int highest = int.MaxValue, string name="") : base(father, Brushes.Green, name, is_explicit)
         {
-            Father = father;
-            FontColor = Brushes.Green;
-            ConfigurationName = name;
-            IsExplicit = is_explicit;
             Value = new IntegerType(val, lowest, highest);
-            Variables = new List<ConfigurationVariable>();
         }
 
         public static new ConfigurationInteger TryConvert(string name, JToken fromJson, Changable father)
@@ -97,9 +91,5 @@ namespace ConfigurationManager.Model.Types
             return Value.ToString();
         }
 
-        public override Window GetGUIElementsForEdit()
-        {
-            return new Window();
-        }
     }
 }

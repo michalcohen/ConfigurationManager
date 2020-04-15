@@ -26,14 +26,9 @@ namespace ConfigurationManager.Model.Types
     {
         public BoolType Value { get; set; }
         bool IsExplicit { get; set; }
-        public ConfigurationBool(bool value, Changable father, bool is_explicit = false, string name="")
+        public ConfigurationBool(bool value, Changable father, bool is_explicit = false, string name="") : base(father, Brushes.Magenta, name, is_explicit)
         {
-            Father = father;
-            FontColor = Brushes.Magenta;
-            ConfigurationName = name;
             Value = new BoolType(value);
-            IsExplicit = is_explicit;
-            Variables = new List<ConfigurationVariable>();
         }
 
         public static new ConfigurationVariable TryConvert(string name, JToken fromJson, Changable father)
@@ -81,9 +76,5 @@ namespace ConfigurationManager.Model.Types
             return Value.ToString();
         }
 
-        public override Window GetGUIElementsForEdit()
-        {
-            return new Window();
-        }
     }
 }

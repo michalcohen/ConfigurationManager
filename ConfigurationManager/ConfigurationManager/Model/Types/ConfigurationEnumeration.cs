@@ -65,21 +65,14 @@ namespace ConfigurationManager.Model.Types
     {
         public EnumType Value { get; set; }
 
-        public ConfigurationEnumeration(string value, Changable father, string enum_name, string name="")
+        public ConfigurationEnumeration(string value, Changable father, string enum_name, string name="") : base(father, Brushes.DarkGoldenrod, name, true)
         {
-            Father = father;
-            FontColor = Brushes.DarkGoldenrod;
-            ConfigurationName = name;
             Value = new EnumType(value, enum_name);
-            Variables = new List<ConfigurationVariable>();
         }
 
-        public ConfigurationEnumeration(string value, Changable father, List<string> enum_values, string name="")
+        public ConfigurationEnumeration(string value, Changable father, List<string> enum_values, string name="") : base(father, Brushes.DarkKhaki, name, true)
         {
-            Father = father;
-            ConfigurationName = name;
             Value = new EnumType(value, enum_values);
-            Variables = new List<ConfigurationVariable>();
         }
 
         public static new ConfigurationVariable TryConvert(string name, JToken fromJson, Changable father)
@@ -135,9 +128,5 @@ namespace ConfigurationManager.Model.Types
             return Value.ToString();
         }
 
-        public override Window GetGUIElementsForEdit()
-        {
-            return new Window();
-        }
     }
 }
