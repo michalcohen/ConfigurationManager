@@ -18,29 +18,19 @@ namespace ConfigurationManager.GUIComponents.EditValuesWindows
     /// </summary>
     public partial class StringEdit : Window
     {
-
-        class ViewModel
-        {
-            ConfigurationString CS;
-            string VariableName;
-
-            public ViewModel(ConfigurationString cs, string variable_name)
-            {
-                CS = cs;
-                VariableName = variable_name;
-            }
-        }
-        ViewModel vm;
+        ConfigurationString CS;
         public StringEdit(ConfigurationString cs, string variable_name)
         {
-            vm = new ViewModel(cs, variable_name);
+            CS = cs;
+            DataContext = cs;
             InitializeComponent();
-            DataContext = vm;
         }
 
         private void SaveClick(object sender, RoutedEventArgs e)
         {
-
+            CS.ConfigurationName = nameText.Text;
+            CS.ChangeContent(valeText.Text);
+            Close();
         }
     }
 }

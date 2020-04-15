@@ -79,8 +79,15 @@ namespace ConfigurationManager.Model
 
         internal void Save()
         {
-            System.IO.File.WriteAllText(FullPath, JsonConvert.SerializeObject(Content.GetDictionary(), Formatting.Indented));
-            Content.Saved();
+            if (IsDirty)
+            {
+                System.IO.File.WriteAllText(FullPath, JsonConvert.SerializeObject(Content.GetDictionary(), Formatting.Indented));
+                Content.Saved();
+            }
+            foreach (ProjectExplorerItem pei in ProjectExplorerItems)
+            {
+                pei.Save();
+            }
         }
 
         public void OpenTab()

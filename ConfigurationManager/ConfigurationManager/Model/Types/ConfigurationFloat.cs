@@ -34,8 +34,9 @@ namespace ConfigurationManager.Model.Types
 
         public FloatType Value { get; set; }
 
-        public ConfigurationFloat(float val, bool is_explicit = false, float lowest=float.MinValue, float highest=float.MaxValue, string name="")
+        public ConfigurationFloat(float val, Changable father, bool is_explicit = false, float lowest=float.MinValue, float highest=float.MaxValue, string name="")
         {
+            Father = father;
             FontColor = Brushes.BlueViolet;
             ConfigurationName = name;
             if (lowest > highest)
@@ -44,19 +45,20 @@ namespace ConfigurationManager.Model.Types
             }
             IsExplicit = is_explicit;
             Value = new FloatType(val, lowest, highest);
+            Variables = new List<ConfigurationVariable>();
         }
 
-        public static new ConfigurationVariable TryConvert(string name, JToken fromJson)
+        public static new ConfigurationVariable TryConvert(string name, JToken fromJson, Changable father)
         {
             if (IsImplicitType(fromJson))
             {
-                return new ConfigurationFloat(fromJson.ToObject<float>(), false, name: name);
+                return new ConfigurationFloat(fromJson.ToObject<float>(), father, false, name: name);
             } else if (IsExplicitType(fromJson))
             {
                 JObject j = (JObject)fromJson;
                 float l = j.ContainsKey("lower_bound") ? j["lower_bound"].ToObject<float>() : float.MinValue;
                 float h = j.ContainsKey("higher_bound") ? j["higher_bound"].ToObject<float>() : float.MaxValue;
-                return new ConfigurationFloat(fromJson["value"].ToObject<float>(), true, lowest: l, highest: h, name:name);
+                return new ConfigurationFloat(fromJson["value"].ToObject<float>(), father, true, lowest: l, highest: h, name:name);
             }
             return null;
         }
@@ -89,11 +91,6 @@ namespace ConfigurationManager.Model.Types
                 return dict;
             }
             return Value.Value;
-        }
-
-        public override bool IsDirty()
-        {
-            return Dirty;
         }
 
         public override void Update(FloatType new_value)

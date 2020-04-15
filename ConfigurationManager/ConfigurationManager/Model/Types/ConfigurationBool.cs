@@ -26,22 +26,24 @@ namespace ConfigurationManager.Model.Types
     {
         public BoolType Value { get; set; }
         bool IsExplicit { get; set; }
-        public ConfigurationBool(bool value, bool is_explicit = false, string name="")
+        public ConfigurationBool(bool value, Changable father, bool is_explicit = false, string name="")
         {
+            Father = father;
             FontColor = Brushes.Magenta;
             ConfigurationName = name;
             Value = new BoolType(value);
             IsExplicit = is_explicit;
+            Variables = new List<ConfigurationVariable>();
         }
 
-        public static new ConfigurationVariable TryConvert(string name, JToken fromJson)
+        public static new ConfigurationVariable TryConvert(string name, JToken fromJson, Changable father)
         {
             if (IsImplicitType(fromJson))
             {
-                return new ConfigurationBool(fromJson.ToObject<bool>(), false, name);
+                return new ConfigurationBool(fromJson.ToObject<bool>(), father, false, name);
             } else if (IsExplicitType(fromJson))
             {
-                return new ConfigurationBool(fromJson["value"].ToObject<bool>(), true, name);
+                return new ConfigurationBool(fromJson["value"].ToObject<bool>(), father, true, name);
             }
             return null;
         }
@@ -67,11 +69,6 @@ namespace ConfigurationManager.Model.Types
                 return dict;
             }
             return Value.Value;
-        }
-
-        public override bool IsDirty()
-        {
-            return Dirty;
         }
 
         public override void Update(BoolType new_value)

@@ -3,18 +3,32 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Security.Policy;
 using System.Windows;
 using System.Windows.Media;
 
 namespace ConfigurationManager.Model.Types
 {
 
-    abstract public class ConfigurationVariable: INotifyPropertyChanged
+    abstract public class ConfigurationVariable: INotifyPropertyChanged, Changable
     {
         public List<ConfigurationVariable> Variables { get; set; }
-        protected bool Dirty { get; set; }
+        
+        public bool Dirty { get; set; }
 
-        public string ConfigurationName { get; set; }
+        private string configuration_name;
+        
+        public string ConfigurationName { 
+            get { return configuration_name; } 
+            set {
+                if (value != configuration_name)
+                {
+                    Dirty = true;
+                    configuration_name = value;
+                    RaisePropertyChanged("ConfigurationName");
+                    RaisePropertyChanged("LabelName");
+                }
+            } }
 
         public string LabelName
         {
@@ -23,6 +37,8 @@ namespace ConfigurationManager.Model.Types
                 return ConfigurationName.Equals("") ? "" : ConfigurationName + ": ";
             }
         }
+
+        public Changable Father { get; set; }
 
         public string TextRepresentation { get
             {
@@ -39,16 +55,18 @@ namespace ConfigurationManager.Model.Types
                  .Where(x => typeof(ConfigurationVariable).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract).ToList();
         }
 
-        public static ConfigurationVariable ConvertJsonToConfiguration(string name, JToken fromJson)
+        public static ConfigurationVariable ConvertJsonToConfiguration(string name, JToken fromJson, Changable father)
         {
-            return GetAllConfigurationTypes().Select(t => t.GetMethod("TryConvert").Invoke(null, new object[] { name, fromJson })).First(o => o != null) as ConfigurationVariable;
+            return GetAllConfigurationTypes().Select(t => t.GetMethod("TryConvert").Invoke(null, new object[] { name, fromJson, father })).First(o => o != null) as ConfigurationVariable;
         }
-
-        public abstract bool IsDirty();
 
         public void Saved()
         {
             Dirty = false;
+            foreach (ConfigurationVariable cv in Variables)
+            {
+                cv.Saved();
+            }
         }
 
         public abstract object GetDictionary();
@@ -57,7 +75,7 @@ namespace ConfigurationManager.Model.Types
 
         public static bool IsExplicitType(JToken fromJson) => throw new NotImplementedException();
 
-        public static ConfigurationVariable TryConvert(string name, JToken fromJson) => throw new NotImplementedException();
+        public static ConfigurationVariable TryConvert(string name, JToken fromJson, Changable father) => throw new NotImplementedException();
 
         public abstract Window GetGUIElementsForEdit();
 
@@ -66,6 +84,20 @@ namespace ConfigurationManager.Model.Types
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(property));
+                Father.Changed(property);
+            }
+        }
+
+        public void Changed(string property)
+        {
+            Father.Changed(property);
+        }
+
+        public bool IsNameNotChangeable
+        {
+            get
+            {
+                return ConfigurationName.Equals("");
             }
         }
     }

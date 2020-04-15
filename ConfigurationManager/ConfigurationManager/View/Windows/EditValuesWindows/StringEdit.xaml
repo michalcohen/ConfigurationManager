@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ConfigurationManager.GUIComponents.EditValuesWindows"
         mc:Ignorable="d"
-        Title="StringEdit" Height="450" Width="800">
+        Title="StringEdit" Height="450" Width="800"
+        SizeToContent="WidthAndHeight">
     <Grid>
-
         <Grid.RowDefinitions>
             <RowDefinition Height = "Auto" />
             <RowDefinition Height = "Auto" />
@@ -21,13 +21,13 @@
 
         <Label Name = "nameLabel" Margin = "2">_Name:</Label>
 
-        <TextBox Name = "nameText" Grid.Column = "1" Margin = "2" 
-         Text = "{Binding VariableName}"/>
+        <TextBox Name = "nameText" Grid.Column = "1" Margin = "2" IsReadOnly="{Binding IsNameNotChangeable}"
+         Text = "{Binding ConfigurationName, Mode=OneWay}"/>
 
         <Label Name = "valueLabel" Margin = "2" Grid.Row = "1">_Value:</Label>
 
         <TextBox Name = "valeText" Grid.Column = "1" Grid.Row = "1" Margin = "2" 
-         Text = "{Binding CS.Value.Value}"/>
+         Text = "{Binding Value.Value, Mode=OneWay}"/>
 
         <StackPanel Grid.Row = "2" Grid.ColumnSpan = "2">
             <Button Content = "_Save..." Click="SaveClick" />

@@ -11,22 +11,23 @@ namespace ConfigurationManager.Model.Types
 {
     public class ConfigurationList : ConfigurationVariable
     {
-        public ConfigurationList(JArray array, string name="")
+        public ConfigurationList(JArray array, Changable father, string name="")
         {
+            Father = father;
             FontColor = Brushes.Black;
             ConfigurationName = name;
             Variables = new List<ConfigurationVariable>();
             foreach (JToken value in array)
             {
-                Variables.Add(ConfigurationVariable.ConvertJsonToConfiguration("", value));
+                Variables.Add(ConfigurationVariable.ConvertJsonToConfiguration("", value, father));
             }
         }
 
-        public static new ConfigurationVariable TryConvert(string name, JToken fromJson)
+        public static new ConfigurationVariable TryConvert(string name, JToken fromJson, Changable father)
         {
             if (fromJson.Type == JTokenType.Array)
             {
-                return new ConfigurationList((JArray)fromJson, name);
+                return new ConfigurationList((JArray)fromJson, father, name);
             }
             return null;
         }
@@ -34,20 +35,6 @@ namespace ConfigurationManager.Model.Types
         public override object GetDictionary()
         {
             return new List<object>(Variables.Select(x => x.GetDictionary()));
-        }
-
-        public override bool IsDirty()
-        {
-            return Variables.Any<ConfigurationVariable>(v => v.IsDirty());
-        }
-
-        public new void Saved()
-        {
-            Dirty = false;
-            foreach (ConfigurationVariable variable in Variables)
-            {
-                variable.Saved();
-            }
         }
 
         public override string ToString()

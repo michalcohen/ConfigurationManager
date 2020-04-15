@@ -65,20 +65,24 @@ namespace ConfigurationManager.Model.Types
     {
         public EnumType Value { get; set; }
 
-        public ConfigurationEnumeration(string value, string enum_name, string name="")
+        public ConfigurationEnumeration(string value, Changable father, string enum_name, string name="")
         {
+            Father = father;
             FontColor = Brushes.DarkGoldenrod;
             ConfigurationName = name;
             Value = new EnumType(value, enum_name);
+            Variables = new List<ConfigurationVariable>();
         }
 
-        public ConfigurationEnumeration(string value, List<string> enum_values, string name="")
+        public ConfigurationEnumeration(string value, Changable father, List<string> enum_values, string name="")
         {
+            Father = father;
             ConfigurationName = name;
             Value = new EnumType(value, enum_values);
+            Variables = new List<ConfigurationVariable>();
         }
 
-        public static new ConfigurationVariable TryConvert(string name, JToken fromJson)
+        public static new ConfigurationVariable TryConvert(string name, JToken fromJson, Changable father)
         {
             if (fromJson.Type != JTokenType.Object)
             {
@@ -95,7 +99,7 @@ namespace ConfigurationManager.Model.Types
                 string type_name = t.ToObject<string>();
                 if (Enums.HasEnum(type_name))
                 {
-                    return new ConfigurationEnumeration(j["value"].ToObject<string>(), type_name, name);
+                    return new ConfigurationEnumeration(j["value"].ToObject<string>(), father, type_name, name);
                 }
             }
             else if (t.Type == JTokenType.Array)
@@ -110,7 +114,7 @@ namespace ConfigurationManager.Model.Types
                 {
                     values.Add(value.ToObject<string>());
                 }
-                return new ConfigurationEnumeration(j["value"].ToObject<string>(), values, name);
+                return new ConfigurationEnumeration(j["value"].ToObject<string>(), father, values, name);
             }
             return null;
         }
@@ -119,11 +123,6 @@ namespace ConfigurationManager.Model.Types
         public override object GetDictionary()
         {
             return Value.GetDictionary();
-        }
-
-        public override bool IsDirty()
-        {
-            return Dirty;
         }
 
         public override void Update(EnumType new_value)

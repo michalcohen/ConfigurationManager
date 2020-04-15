@@ -11,14 +11,15 @@ namespace ConfigurationManager.Model.Types
 {
     public class CompositeConfiguraionVariable: ConfigurationVariable
     {
-        public CompositeConfiguraionVariable(JObject array, string name="")
+        public CompositeConfiguraionVariable(JObject array, Changable father, string name="")
         {
+            Father = father;
             FontColor = Brushes.Black;
             ConfigurationName = name;
             Variables = new List<ConfigurationVariable>();
             foreach (KeyValuePair<String, JToken> value in array)
             {
-                Variables.Add(ConfigurationVariable.ConvertJsonToConfiguration(value.Key, value.Value));
+                Variables.Add(ConfigurationVariable.ConvertJsonToConfiguration(value.Key, value.Value, this));
             }
         }
 
@@ -30,11 +31,11 @@ namespace ConfigurationManager.Model.Types
             }
         }
 
-        public static new ConfigurationVariable TryConvert(string name, JToken fromJson)
+        public static new ConfigurationVariable TryConvert(string name, JToken fromJson, Changable father)
         {
             if (IsRelevantType(fromJson))
             {
-                return new CompositeConfiguraionVariable((JObject)fromJson, name);
+                return new CompositeConfiguraionVariable((JObject)fromJson, father, name);
             }
             return null;
         }
@@ -52,11 +53,6 @@ namespace ConfigurationManager.Model.Types
                 dict[variable.ConfigurationName] = variable.GetDictionary();
             }
             return dict;
-        }
-
-        public override bool IsDirty()
-        {
-            return Variables.Any<ConfigurationVariable>(v => v.IsDirty());
         }
 
         public override string ToString()

@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,18 +10,38 @@ using System.Windows.Media;
 
 namespace ConfigurationManager.Model.Types
 {
-    public class StringType
+    public class StringType: INotifyPropertyChanged
     {
-        public string Value { get; set; }
+        private string string_value = "";
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public string Value { 
+            get { return string_value; } 
+            set { 
+                if (!string_value.Equals(value))
+                {
+                    string_value = value;
+                    RaisePropertyChanged("TextRepresentation");
+                }
+            } }
 
         public StringType(string value)
         {
-            Value = value;
+            string_value = value;
         }
 
         public override string ToString()
         {
             return Value;
+        }
+
+        public void RaisePropertyChanged(string property)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(property));
+            }
         }
     }
     
@@ -30,22 +51,36 @@ namespace ConfigurationManager.Model.Types
 
         public StringType Value { get; set; }
 
-        public ConfigurationString(string val, bool is_explicit = false, string name="")
+        public ConfigurationString(string val, Changable father, bool is_explicit = false, string name="")
         {
+
+            Father = father;
             FontColor = Brushes.DarkKhaki;
             Value = new StringType(val);
             IsExplicit = is_explicit;
             ConfigurationName = name;
+            Variables = new List<ConfigurationVariable>();
+        }
+
+        public void ChangeContent(string new_string)
+        {
+            if (!new_string.Equals(Value.Value))
+            {
+                Dirty = true;
+                Value.Value = new_string;
+                RaisePropertyChanged("TextRepresentation");
+            }
+            
         }
         
-        public static new ConfigurationString TryConvert(string name, JToken fromJson)
+        public static new ConfigurationString TryConvert(string name, JToken fromJson, Changable father)
         {
             if (IsImplicitType(fromJson))
             {
-                return new ConfigurationString(fromJson.ToObject<string>(), false, name);
+                return new ConfigurationString(fromJson.ToObject<string>(), father, false, name);
             } else if (IsExplicitType(fromJson))
             {
-                return new ConfigurationString(fromJson["value"].ToObject<string>(), true, name);
+                return new ConfigurationString(fromJson["value"].ToObject<string>(), father, true, name);
             }
             return null;
         }
@@ -70,11 +105,6 @@ namespace ConfigurationManager.Model.Types
                 return dict;
             }
             return Value.Value;
-        }
-
-        public override bool IsDirty()
-        {
-            return Dirty;
         }
 
         public override void Update(StringType new_value)

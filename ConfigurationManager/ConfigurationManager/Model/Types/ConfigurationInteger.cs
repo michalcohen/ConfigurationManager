@@ -32,25 +32,27 @@ namespace ConfigurationManager.Model.Types
         
         bool IsExplicit { get; set; }
 
-        public ConfigurationInteger(int val, bool is_explicit = false, int lowest=int.MinValue, int highest = int.MaxValue, string name="")
+        public ConfigurationInteger(int val, Changable father, bool is_explicit = false, int lowest=int.MinValue, int highest = int.MaxValue, string name="")
         {
+            Father = father;
             FontColor = Brushes.Green;
             ConfigurationName = name;
             IsExplicit = is_explicit;
             Value = new IntegerType(val, lowest, highest);
+            Variables = new List<ConfigurationVariable>();
         }
 
-        public static new ConfigurationInteger TryConvert(string name, JToken fromJson)
+        public static new ConfigurationInteger TryConvert(string name, JToken fromJson, Changable father)
         {
             if (IsImplicitType(fromJson))
             {
-                return new ConfigurationInteger(fromJson.ToObject<int>(), false, name: name);
+                return new ConfigurationInteger(fromJson.ToObject<int>(), father, false, name: name);
             } else if (IsExplicitType(fromJson))
             {
                 JObject j = (JObject)fromJson;
                 int l = j.ContainsKey("lower_bound") ? j["lower_bound"].ToObject<int>() : int.MinValue;
                 int h = j.ContainsKey("higher_bound") ? j["higher_bound"].ToObject<int>() : int.MaxValue;
-                return new ConfigurationInteger(fromJson["value"].ToObject<int>(), true, lowest: l, highest: h, name:name);
+                return new ConfigurationInteger(fromJson["value"].ToObject<int>(), father, true, lowest: l, highest: h, name:name);
             }
             return null;
         }
@@ -83,11 +85,6 @@ namespace ConfigurationManager.Model.Types
                 return dict;
             }
             return Value.Value;
-        }
-
-        public override bool IsDirty()
-        {
-            return Dirty;
         }
 
         public override void Update(IntegerType new_value)

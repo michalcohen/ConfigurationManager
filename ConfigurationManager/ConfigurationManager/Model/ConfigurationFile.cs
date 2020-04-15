@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json.Linq;
 using System.Linq;
+using ConfigurationManager.Model;
 
 namespace ConfigurationManager
 {
-    public class ConfigurationFile
+    public class ConfigurationFile: Changable
     {
         public CompositeConfiguraionVariable Content { get; }
 
@@ -20,7 +21,7 @@ namespace ConfigurationManager
 
         public ConfigurationFile(JObject array)
         {
-            Content= new CompositeConfiguraionVariable(array);
+            Content = new CompositeConfiguraionVariable(array, this);
         }
 
         public Dictionary<string, object> GetDictionary()
@@ -33,11 +34,16 @@ namespace ConfigurationManager
             Content.Saved();
         }
 
+        public void Changed(string property)
+        {
+            
+        }
+
         internal bool IsDirty
         {
             get
             {
-                return Content.IsDirty();
+                return Content.Dirty;
             }
         }
     }
