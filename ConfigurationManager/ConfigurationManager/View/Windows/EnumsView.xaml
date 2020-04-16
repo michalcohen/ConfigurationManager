@@ -1,0 +1,29 @@
+﻿<Window x:Class="ConfigurationManager.View.Windows.EnumsView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ConfigurationManager"
+        xmlns:model="clr-namespace:ConfigurationManager.Model"
+        mc:Ignorable="d"
+        Title="EnumsView" Height="450" Width="800">
+    <Grid>
+        <ListView ItemsSource="{x:Static model:Enums.EnumsOptions}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <WrapPanel>
+                        <TextBlock Text="{Binding Name}" FontWeight="Bold" />
+                        <TextBlock Text=": " />
+                        <ListView ItemsSource="{Binding Options}">
+                            <ListView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal"></StackPanel>
+                                </ItemsPanelTemplate>
+                            </ListView.ItemsPanel>
+                        </ListView>
+                    </WrapPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</Window>

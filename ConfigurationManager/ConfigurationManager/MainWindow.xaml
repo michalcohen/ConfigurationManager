@@ -17,6 +17,10 @@
                 <Separator />
                 <MenuItem Header="_Exit" x:Name="menu_exit" Click="MenuExitClick"/>
             </MenuItem>
+            <MenuItem Header="_Edit"/>
+            <MenuItem Header="_View">
+                <MenuItem Header="Global Enums" Click="MenuEnums_Click" />
+            </MenuItem>
         </Menu>
         <views:ProjectExplorer x:Name = "ProjectExplorerControl" Loaded = "ProjectExplorerControl_Loaded" DockPanel.Dock="Left"/>
         <views:TabsView x:Name="TabsControl" Loaded="TabsControl_Loaded" DockPanel.Dock="Right"/>

@@ -10,6 +10,7 @@ using Newtonsoft.Json.Linq;
 using ConfigurationManager.GUIComponents;
 using ConfigurationManager.ViewModel;
 using ConfigurationManager.Model;
+using ConfigurationManager.View.Windows;
 
 namespace ConfigurationManager
 {
@@ -129,6 +130,9 @@ namespace ConfigurationManager
             TabsControl.DataContext = PVM.PM;
         }
 
-
+        private void MenuEnums_Click(object sender, RoutedEventArgs e)
+        {
+            (new EnumsView()).Show();
+        }
     }
 }
