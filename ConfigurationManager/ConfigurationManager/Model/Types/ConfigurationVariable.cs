@@ -181,11 +181,11 @@ namespace ConfigurationManager.Model.Types
         /// <summary>
         /// If the variable is annonimous (like element in list), then its name isan't changeable.
         /// </summary>
-        public bool IsNameNotChangeable
+        public Visibility IsNameVisable
         {
             get
             {
-                return ConfigurationName.Equals("");
+                return ConfigurationName.Equals("") ? Visibility.Hidden : Visibility.Visible;
             }
         }
     }
@@ -197,14 +197,31 @@ namespace ConfigurationManager.Model.Types
         /// </summary>
         public InnerType<T> Value { get; set; }
 
+        private bool is_explicit;
         /// <summary>
         /// True <=> the value was read as explicit type, or the user changed it to be explicit.
         /// </summary>
-        public bool IsExplicit { get; set; }
+        public bool IsExplicit {
+            get { return is_explicit; }
+            set { 
+                if (value != is_explicit)
+                {
+                    is_explicit = value;
+                }
+            } 
+        }
+
+        public bool IsImplicit
+        {
+            get
+            {
+                return !is_explicit;
+            }
+        }
 
         protected ConfigurationVariable(Changable father= null, Brush font_color = null, string name = "", bool is_explicit = false): base(father, font_color, name)
         {
-            IsExplicit = is_explicit;
+            is_explicit = is_explicit;
         }
 
         public static new ConfigurationVariable<T> TryConvert(string name, JToken fromJson, Changable father) => throw new NotImplementedException();

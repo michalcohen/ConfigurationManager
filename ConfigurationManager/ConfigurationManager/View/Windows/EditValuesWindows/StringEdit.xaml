@@ -11,6 +11,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height = "Auto" />
             <RowDefinition Height = "Auto" />
+            <RowDefinition Height = "Auto" />
             <RowDefinition Height = "*" />
         </Grid.RowDefinitions>
 
@@ -19,9 +20,9 @@
             <ColumnDefinition Width = "200" />
         </Grid.ColumnDefinitions>
 
-        <Label Name = "nameLabel" Margin = "2">_Name:</Label>
+        <Label Name = "nameLabel" Margin = "2" Visibility="{Binding IsNameVisable}" >_Name:</Label>
 
-        <TextBox Name = "nameText" Grid.Column = "1" Margin = "2" IsReadOnly="{Binding IsNameNotChangeable}"
+        <TextBox Name = "nameText" Grid.Column = "1" Margin = "2" Visibility="{Binding IsNameVisable}"
          Text = "{Binding ConfigurationName, Mode=OneWay}"/>
 
         <Label Name = "valueLabel" Margin = "2" Grid.Row = "1">_Value:</Label>
@@ -29,7 +30,9 @@
         <TextBox Name = "valeText" Grid.Column = "1" Grid.Row = "1" Margin = "2" 
          Text = "{Binding Value.Value, Mode=OneWay}"/>
 
-        <StackPanel Grid.Row = "2" Grid.ColumnSpan = "2">
+        <CheckBox x:Name="IsExplicit" IsChecked="{Binding IsExplicit}"  Margin = "2" Grid.Row = "2">Is type explicitly represented</CheckBox>
+
+        <StackPanel Grid.Row = "3" Grid.ColumnSpan = "2">
             <Button Content = "_Save..." Click="SaveClick" />
         </StackPanel>
 

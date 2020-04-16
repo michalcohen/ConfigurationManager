@@ -30,6 +30,7 @@ namespace ConfigurationManager.GUIComponents.EditValuesWindows
         {
             CS.ConfigurationName = nameText.Text;
             CS.Update(valeText.Text);
+            CS.IsExplicit = IsExplicit.IsChecked.Value;
             Close();
         }
     }
