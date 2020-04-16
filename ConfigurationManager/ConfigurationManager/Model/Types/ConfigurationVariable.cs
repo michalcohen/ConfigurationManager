@@ -81,6 +81,7 @@ namespace ConfigurationManager.Model.Types
             FontColor = font_color;
             ConfigurationName = name;
             Variables = new List<ConfigurationVariable>();
+            Dirty = false;
         }
 
         /// <summary>
