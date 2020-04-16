@@ -8,27 +8,16 @@ using System.Windows.Media;
 
 namespace ConfigurationManager.Model.Types
 {
-    public class BoolType
+    public class BoolType: InnerType<bool>
     {
-        public bool Value { get; set; }
-
-        public BoolType(bool value)
-        {
-            Value = value;
-        }
-
-        public override string ToString()
-        {
-            return Value.ToString();
-        }
+        public BoolType(bool value, bool is_explicit) : base(value, is_explicit)
+        {}
     }
-    public class ConfigurationBool : ConfigurationVariable<BoolType>
+    public class ConfigurationBool : ConfigurationVariable<bool>
     {
-        public BoolType Value { get; set; }
-        bool IsExplicit { get; set; }
-        public ConfigurationBool(bool value, Changable father, bool is_explicit = false, string name="") : base(father, Brushes.Magenta, name, is_explicit)
+        public ConfigurationBool(bool value, Changable father = null, bool is_explicit = false, string name="") : base(father, Brushes.Magenta, name, is_explicit)
         {
-            Value = new BoolType(value);
+            Value = new BoolType(value, is_explicit);
         }
 
         public static new ConfigurationVariable TryConvert(string name, JToken fromJson, Changable father)
@@ -52,29 +41,5 @@ namespace ConfigurationManager.Model.Types
         {
             return fromJson.Type == JTokenType.Object && ((JObject)fromJson)["type"].ToString().Equals("bool");
         }
-
-
-        public override object GetDictionary()
-        {
-            if (IsExplicit)
-            {
-                Dictionary<string, object> dict = new Dictionary<string, object>();
-                dict["type"] = "bool";
-                dict["value"] = Value.Value;
-                return dict;
-            }
-            return Value.Value;
-        }
-
-        public override void Update(BoolType new_value)
-        {
-            Value = new_value;
-        }
-
-        public override string ToString()
-        {
-            return Value.ToString();
-        }
-
     }
 }

@@ -11,7 +11,7 @@ namespace ConfigurationManager.Model.Types
 {
     public class ConfigurationList : ConfigurationVariable
     {
-        public ConfigurationList(JArray array, Changable father, string name="") : base(father, Brushes.Black, name)
+        public ConfigurationList(JArray array, Changable father = null, string name="") : base(father, Brushes.Black, name)
         {
             foreach (JToken value in array)
             {

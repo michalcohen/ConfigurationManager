@@ -41,11 +41,22 @@ namespace ConfigurationManager
             }
         }
 
+        /// <summary>
+        /// Checks if enum type name exists in EnumOptions
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public static bool HasEnum(string name)
         {
             return EnumsOptions.ContainsKey(name);
         }
 
+        /// <summary>
+        /// Checks if a given value is one of the option stated by the definition of enumName in EnumOption.
+        /// </summary>
+        /// <param name="enumName"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static bool ValidValue(string enumName, string value)
         {
             return EnumsOptions.ContainsKey(enumName) && EnumsOptions[enumName].Contains(value);

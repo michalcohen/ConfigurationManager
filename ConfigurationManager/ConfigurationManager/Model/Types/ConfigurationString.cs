@@ -10,66 +10,22 @@ using System.Windows.Media;
 
 namespace ConfigurationManager.Model.Types
 {
-    public class StringType: INotifyPropertyChanged
+    public class StringType: InnerType<string>
     {
-        private string string_value = "";
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public string Value { 
-            get { return string_value; } 
-            set { 
-                if (!string_value.Equals(value))
-                {
-                    string_value = value;
-                    RaisePropertyChanged("TextRepresentation");
-                }
-            } }
-
-        public StringType(string value)
-        {
-            string_value = value;
-        }
-
-        public override string ToString()
-        {
-            return Value;
-        }
-
-        public void RaisePropertyChanged(string property)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(property));
-            }
-        }
+        public StringType(string value, bool is_explicit) : base(value, is_explicit)
+        {}
     }
     
-    public class ConfigurationString: ConfigurationVariable<StringType>
+    public class ConfigurationString: ConfigurationVariable<string>
     {
-        
-
-        public StringType Value { get; set; }
-
-        public ConfigurationString(string val, Changable father, bool is_explicit = false, string name=""): base(father, Brushes.DarkKhaki, name, is_explicit)
+        public ConfigurationString(string val, Changable father = null, bool is_explicit = false, string name=""): base(father, Brushes.DarkKhaki, name, is_explicit)
         {
-            Value = new StringType(val);
+            Value = new StringType(val, is_explicit);
         }
 
         public override void OpenEditWindow()
         {
             (new StringEdit(this)).Show();
-        }
-
-        public void ChangeContent(string new_string)
-        {
-            if (!new_string.Equals(Value.Value))
-            {
-                Dirty = true;
-                Value.Value = new_string;
-                RaisePropertyChanged("TextRepresentation");
-            }
-            
         }
         
         public static new ConfigurationString TryConvert(string name, JToken fromJson, Changable father)
@@ -92,28 +48,6 @@ namespace ConfigurationManager.Model.Types
         public static new bool IsExplicitType(JToken fromJson)
         {
             return fromJson.Type == JTokenType.Object && ((JObject)fromJson)["type"].ToString().Equals("string");
-        }
-
-        public override object GetDictionary()
-        {
-            if (IsExplicit)
-            {
-                Dictionary<string, object> dict = new Dictionary<string, object>();
-                dict["type"] = "string";
-                dict["value"] = Value.Value;
-                return dict;
-            }
-            return Value.Value;
-        }
-
-        public override void Update(StringType new_value)
-        {
-            Value = new_value;
-        }
-
-        public override string ToString()
-        {
-            return Value.ToString();
         }
 
     }

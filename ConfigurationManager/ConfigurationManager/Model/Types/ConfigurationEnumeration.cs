@@ -8,26 +8,22 @@ using System.Windows.Media;
 
 namespace ConfigurationManager.Model.Types
 {
-    public class EnumType
+    public class EnumType: InnerType<string>
     {
-        public string Value { get; }
-
         public bool IsGlobalEnum { get; }
 
         public string EnumName { get; }
 
         public List<string> EnumValues { get; }
 
-        public EnumType(string value, string enum_name)
+        public EnumType(string value, string enum_name): base(value, true)
         {
-            Value = value;
             EnumName = enum_name;
             IsGlobalEnum = true;
         }
 
-        public EnumType(string value, List<string> enum_values)
+        public EnumType(string value, List<string> enum_values): base(value, true)
         {
-            Value = value;
             EnumValues = enum_values;
             IsGlobalEnum = false;
         }
@@ -61,16 +57,14 @@ namespace ConfigurationManager.Model.Types
 
     }
     
-    public class ConfigurationEnumeration: ConfigurationVariable<EnumType>
+    public class ConfigurationEnumeration: ConfigurationVariable<string>
     {
-        public EnumType Value { get; set; }
-
-        public ConfigurationEnumeration(string value, Changable father, string enum_name, string name="") : base(father, Brushes.DarkGoldenrod, name, true)
+        public ConfigurationEnumeration(string value, Changable father = null, string enum_name = "", string name="") : base(father, Brushes.DarkGoldenrod, name, true)
         {
             Value = new EnumType(value, enum_name);
         }
 
-        public ConfigurationEnumeration(string value, Changable father, List<string> enum_values, string name="") : base(father, Brushes.DarkKhaki, name, true)
+        public ConfigurationEnumeration(string value, Changable father = null, List<string> enum_values = null, string name="") : base(father, Brushes.DarkKhaki, name, true)
         {
             Value = new EnumType(value, enum_values);
         }
@@ -110,22 +104,6 @@ namespace ConfigurationManager.Model.Types
                 return new ConfigurationEnumeration(j["value"].ToObject<string>(), father, values, name);
             }
             return null;
-        }
-
-
-        public override object GetDictionary()
-        {
-            return Value.GetDictionary();
-        }
-
-        public override void Update(EnumType new_value)
-        {
-            Value = new_value;
-        }
-
-        public override string ToString()
-        {
-            return Value.ToString();
         }
 
     }

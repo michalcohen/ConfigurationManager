@@ -29,7 +29,7 @@ namespace ConfigurationManager.GUIComponents.EditValuesWindows
         private void SaveClick(object sender, RoutedEventArgs e)
         {
             CS.ConfigurationName = nameText.Text;
-            CS.ChangeContent(valeText.Text);
+            CS.Update(valeText.Text);
             Close();
         }
     }

@@ -8,32 +8,16 @@ using System.Windows.Media;
 
 namespace ConfigurationManager.Model.Types
 {
-    public class IntegerType
+    public class IntegerType: BoundedInnerType<int>
     {
-        public int LowestValue { get; set; }
-        public int HighestValue { get; set; }
-        public int Value { get; set; }
-
-        public IntegerType(int value, int lowest, int highest)
-        {
-            Value = value;
-            LowestValue = lowest;
-            HighestValue = highest;
-        }
-
-        public override string ToString()
-        {
-            return Value.ToString();
-        }
+        public IntegerType(int value, int lowest, int highest, bool is_explicit) : base(value, lowest, highest, is_explicit)
+        {}
     }
-    public class ConfigurationInteger: ConfigurationVariable<IntegerType>
+    public class ConfigurationInteger: ConfigurationVariable<int>
     {
-        public IntegerType Value { get; set; }
-        
-
-        public ConfigurationInteger(int val, Changable father, bool is_explicit = false, int lowest=int.MinValue, int highest = int.MaxValue, string name="") : base(father, Brushes.Green, name, is_explicit)
+        public ConfigurationInteger(int val, Changable father = null, bool is_explicit = false, int lowest=int.MinValue, int highest = int.MaxValue, string name="") : base(father, Brushes.Green, name, is_explicit)
         {
-            Value = new IntegerType(val, lowest, highest);
+            Value = new IntegerType(val, lowest, highest, is_explicit);
         }
 
         public static new ConfigurationInteger TryConvert(string name, JToken fromJson, Changable father)
@@ -59,36 +43,6 @@ namespace ConfigurationManager.Model.Types
         public static new bool IsExplicitType(JToken fromJson)
         {
             return fromJson.Type == JTokenType.Object && ((JObject)fromJson)["type"].ToString().Equals("int");
-        }
-
-        public override object GetDictionary()
-        {
-            if (IsExplicit)
-            {
-                Dictionary<string, object> dict = new Dictionary<string, object>();
-                dict["type"] = "int";
-                dict["value"] = Value.Value;
-                if (Value.HighestValue < int.MaxValue)
-                {
-                    dict["higher_bound"] = Value.HighestValue;
-                }
-                if (Value.LowestValue > int.MinValue)
-                {
-                    dict["lower_bound"] = Value.LowestValue;
-                }
-                return dict;
-            }
-            return Value.Value;
-        }
-
-        public override void Update(IntegerType new_value)
-        {
-            Value = new_value;
-        }
-
-        public override string ToString()
-        {
-            return Value.ToString();
         }
 
     }

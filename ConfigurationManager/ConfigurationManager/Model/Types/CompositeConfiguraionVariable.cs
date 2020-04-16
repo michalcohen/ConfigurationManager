@@ -11,19 +11,11 @@ namespace ConfigurationManager.Model.Types
 {
     public class CompositeConfiguraionVariable: ConfigurationVariable
     {
-        public CompositeConfiguraionVariable(JObject array, Changable father, string name="") : base(father, Brushes.Black, name)
+        public CompositeConfiguraionVariable(JObject array, Changable father = null, string name="") : base(father, Brushes.Black, name)
         {
             foreach (KeyValuePair<String, JToken> value in array)
             {
                 Variables.Add(ConfigurationVariable.ConvertJsonToConfiguration(value.Key, value.Value, this));
-            }
-        }
-
-        public List<string> AllNames
-        {
-            get
-            {
-                return Variables.Select(v => v.ConfigurationName).ToList();
             }
         }
 

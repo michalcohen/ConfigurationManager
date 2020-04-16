@@ -204,6 +204,11 @@ namespace ConfigurationManager.Model
             }
         }
 
+        /// <summary>
+        /// Retrives file name from full path (including extention).
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         private static string GetFileName(string path)
         {
             return path.Split("\\")[^1];
@@ -212,6 +217,10 @@ namespace ConfigurationManager.Model
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
+        /// <summary>
+        /// Child item was changed. Perform needed tasks by this change and notify father item about the change if needed.
+        /// </summary>
+        /// <param name="property"></param>
         public void Changed(string property)
         {
             Father.Changed(property);

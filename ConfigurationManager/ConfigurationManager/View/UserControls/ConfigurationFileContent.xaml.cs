@@ -20,9 +20,6 @@ namespace ConfigurationManager.View.UserControls
     /// </summary>
     public partial class ConfigurationFileContent : UserControl
     {
-
-        public ProjectExplorerItem Context;
-
         public ConfigurationFileContent()
         {
             InitializeComponent();

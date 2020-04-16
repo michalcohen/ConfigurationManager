@@ -7,11 +7,26 @@ using System.Text;
 
 namespace ConfigurationManager.Model
 {
+    /// <summary>
+    /// Represents any folders hierarchy in the disk (not neccacery configuration folders).
+    /// Enables the user to pick a new configuration folder to open. If the configuration folder
+    /// contains files with unrecognized extention, they won't be shown.
+    /// </summary>
     public class Folder : INotifyPropertyChanged
     {
+        /// <summary>
+        /// The name of the file or folder (no full path) and the extention.
+        /// </summary>
         public string Name { get; set; }
-        public string FullPath { get; set; }
 
+        /// <summary>
+        /// Full path to the file or folder
+        /// </summary>
+        public string FullPath { get; set; }
+        
+        /// <summary>
+        /// All sub folders
+        /// </summary>
         public List<Folder> SubFolders {get; set;}
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -24,18 +39,16 @@ namespace ConfigurationManager.Model
             DirSearch();
         }
 
+        /// <summary>
+        /// Recursievly creates the folder hierarchy from a given path.
+        /// </summary>
         void DirSearch()
         {
             foreach (string d in Directory.GetDirectories(FullPath))
             {
-                if (d.Contains("."))
-                {
-                    continue;
-                }
                 try
                 {
-                    Folder t = new Folder(d);
-                    SubFolders.Add(t);
+                    SubFolders.Add(new Folder(d));
                 }
                 catch (UnauthorizedAccessException)
                 {
