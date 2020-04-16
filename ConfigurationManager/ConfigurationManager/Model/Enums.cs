@@ -7,8 +7,16 @@ using System.Text;
 
 namespace ConfigurationManager
 {
+    /// <summary>
+    /// This static class contains all the known global enums of the configuration project.
+    /// If the user defines an enum with enum type which is just string, then the type of the enum is searched here,
+    /// and its values derives from EnumsOptions fiesld.
+    /// </summary>
     public class Enums
     {
+        /// <summary>
+        /// Connects between enum type name and its possible values.
+        /// </summary>
         public static Dictionary<string, List<string>> EnumsOptions = new Dictionary<string, List<string>>();
         
         private static void AddEnum(string name, JArray values)
@@ -16,6 +24,10 @@ namespace ConfigurationManager
             EnumsOptions[name] = new List<string>(values.Values<string>());
         }
 
+        /// <summary>
+        /// Loads all known enums from the file "Enums.json" in the highmost level of the project.
+        /// </summary>
+        /// <param name="root_path"></param>
         public static void LoadEnums(string root_path)
         {
             if (!File.Exists(root_path + "\\Enums.json")){

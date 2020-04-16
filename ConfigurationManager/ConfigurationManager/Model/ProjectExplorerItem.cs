@@ -13,27 +13,44 @@ namespace ConfigurationManager.Model
 {
     public class ProjectExplorerItem: INotifyPropertyChanged, Changable
     {
+        /// <summary>
+        /// The location on the disk of this configuration file
+        /// </summary>
         public string FullPath { get; set; }
-
-        public string AllNames
-        {
-            get
-            {
-                return Content.AllNames;
-            }
-        }
         
+        /// <summary>
+        /// The text that appears on tree views that wish two show all the files in the configuration folder.
+        /// for example "C:\Users\Bloop\Configuration\Threshold\weights.json" will be represented as "weights.json"
+        /// </summary>
         public string ProjectExplorerItemsLabel { get; set; }
 
+        /// <summary>
+        /// This property is handy for binding to usercontrols that their data context is the entire ProjectExplorerItem
+        /// </summary>
         public ProjectExplorerItem AutoReference { get; set; }
 
+        /// <summary>
+        /// If this Project explorer item represents folder, then this property contains all the subfolders and files.
+        /// If this Project explorer item represents file, then this list is empty.
+        /// </summary>
         public List<ProjectExplorerItem> ProjectExplorerItems { get; set; }
 
+        /// <summary>
+        /// The representation of the content of the file (the tree of configuration variables).
+        /// </summary>
         public ConfigurationFile Content { get; set; }
+
 
         private bool is_opened;
 
+        /// <summary>
+        /// The index of tab containing this configuration file.
+        /// </summary>
         public int tab;
+
+        /// <summary>
+        /// True <=> there is an opened tab containing this configuration file.
+        /// </summary>
         public bool IsOpened {
             get
             {
@@ -47,6 +64,9 @@ namespace ConfigurationManager.Model
             } 
         }
 
+        /// <summary>
+        /// True <=> any of the configuration variables in this file has been changed and not yet saved.
+        /// </summary>
         public bool IsDirty { 
             get
             {
@@ -54,8 +74,15 @@ namespace ConfigurationManager.Model
             } 
         }
 
+        /// <summary>
+        /// Parents that need notification on changes in inner properties (such as ProjectModel).
+        /// </summary>
         public Changable Father;
 
+        /// <summary>
+        /// Direct reference to the ProjectModel to save passing global data through the hierarchy of ProjectExplorerItems
+        /// For example, if we want to know how many opened tabs exist, ask PM.
+        /// </summary>
         public ProjectModel PM;
 
         public ProjectExplorerItem(string path, Changable father, ProjectModel pm)
@@ -77,6 +104,10 @@ namespace ConfigurationManager.Model
             AutoReference = this;
         }
 
+        /// <summary>
+        /// Write content of the file to the disk if it is dirty,
+        /// If this is a filder, save all its subfolders and file.
+        /// </summary>
         internal void Save()
         {
             if (IsDirty)
@@ -90,6 +121,9 @@ namespace ConfigurationManager.Model
             }
         }
 
+        /// <summary>
+        /// Assign opened tab for this element.
+        /// </summary>
         public void OpenTab()
         {
             if (!IsFile(FullPath))
@@ -109,6 +143,9 @@ namespace ConfigurationManager.Model
             }
         }
 
+        /// <summary>
+        /// update tab index about this tab closing
+        /// </summary>
         public void CloseTab()
         {
             if (IsOpened)
@@ -120,12 +157,22 @@ namespace ConfigurationManager.Model
             }
         }
 
+        /// <summary>
+        /// True <=> this is a representation of file and not directory.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         private bool IsFile(string path)
         {
             FileAttributes attr = File.GetAttributes(path);
             return (attr & FileAttributes.Directory) != FileAttributes.Directory;
         }
 
+        /// <summary>
+        /// recurcievly build the tree structure that represents the configuration folder.
+        /// </summary>
+        /// <param name="sDir"></param>
+        /// <param name="sTreeSons"></param>
         private void DirSearch(string sDir, List<ProjectExplorerItem> sTreeSons)
         {
             try

@@ -8,16 +8,14 @@ using System.Windows;
 
 namespace ConfigurationManager.ViewModel
 {
-    public class ProjectViewModel: INotifyPropertyChanged
+    public class ProjectViewModel
     {
         public ProjectModel PM { get; set; }
 
         public ProjectViewModel(string root_path)
         {
-            PM = new ProjectModel(root_path, PropertyChanged);
+            PM = new ProjectModel(root_path);
         }
-
-        public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         public bool IsDirty()
         {
