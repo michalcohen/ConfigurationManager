@@ -24,8 +24,8 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <WrapPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" FontWeight="Bold" />
-                        <TextBlock Text=": " HorizontalAlignment="Center"/>
+                        <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Center"/>
+                        <TextBlock Text=": " VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         <ListView ItemsSource="{Binding Options}" BorderThickness="0">
                             <ListView.ItemsPanel>
                                 <ItemsPanelTemplate>
@@ -33,7 +33,7 @@
                                 </ItemsPanelTemplate>
                             </ListView.ItemsPanel>
                         </ListView>
-                        <TextBox Text="Add value..." Foreground="DimGray" LostFocus="TextBox_LostFocus" KeyDown="TextBox_KeyDown" GotFocus="TextBox_GotFocus"/>
+                        <TextBox Text="Add value..." Foreground="DimGray" VerticalAlignment="Center" LostFocus="TextBox_LostFocus" KeyDown="TextBox_KeyDown" GotFocus="TextBox_GotFocus"/>
                     </WrapPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
