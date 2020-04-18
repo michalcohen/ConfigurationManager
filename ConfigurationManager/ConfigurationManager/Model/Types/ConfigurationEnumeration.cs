@@ -84,7 +84,7 @@ namespace ConfigurationManager.Model.Types
             if (t.Type == JTokenType.String)
             {
                 string type_name = t.ToObject<string>();
-                if (Enums.HasEnum(type_name))
+                if (GlobalEnums.HasEnum(type_name))
                 {
                     return new ConfigurationEnumeration(j["value"].ToObject<string>(), father, type_name, name);
                 }

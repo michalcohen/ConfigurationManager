@@ -6,24 +6,40 @@
         xmlns:local="clr-namespace:ConfigurationManager"
         xmlns:model="clr-namespace:ConfigurationManager.Model"
         mc:Ignorable="d"
-        Title="EnumsView" Height="450" Width="800">
+        Title="Enums" Height="450" Width="800"
+        SizeToContent="WidthAndHeight">
     <Grid>
-        <ListView ItemsSource="{x:Static model:Enums.EnumsOptions}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height = "Auto"/>
+            <RowDefinition Height = "Auto" />
+            <RowDefinition Height = "*" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width = "Auto" />
+            <ColumnDefinition Width = "200" />
+        </Grid.ColumnDefinitions>
+
+        <ListView ItemsSource="{Binding EnumsOptions, NotifyOnSourceUpdated=True}" BorderThickness="0">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <WrapPanel>
-                        <TextBlock Text="{Binding Name}" FontWeight="Bold" />
-                        <TextBlock Text=": " />
-                        <ListView ItemsSource="{Binding Options}">
+                    <WrapPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" FontWeight="Bold" />
+                        <TextBlock Text=": " HorizontalAlignment="Center"/>
+                        <ListView ItemsSource="{Binding Options}" BorderThickness="0">
                             <ListView.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel Orientation="Horizontal"></StackPanel>
                                 </ItemsPanelTemplate>
                             </ListView.ItemsPanel>
                         </ListView>
+                        <TextBox Text="Add value..." Foreground="DimGray" LostFocus="TextBox_LostFocus" KeyDown="TextBox_KeyDown" GotFocus="TextBox_GotFocus"/>
                     </WrapPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
+        <Button Name = "Add" Margin = "2" Grid.Row = "1">Add enum</Button>
+
     </Grid>
 </Window>

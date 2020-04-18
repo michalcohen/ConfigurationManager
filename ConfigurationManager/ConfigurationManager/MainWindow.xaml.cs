@@ -132,7 +132,7 @@ namespace ConfigurationManager
 
         private void MenuEnums_Click(object sender, RoutedEventArgs e)
         {
-            (new EnumsView()).Show();
+            (new EnumsView(GlobalEnums.GetIntance())).Show();
         }
     }
 }

@@ -21,6 +21,11 @@ namespace ConfigurationManager.Model
         public string RootPath { get; set; }
 
         /// <summary>
+        /// The known global enums given in "enums.json"
+        /// </summary>
+        public GlobalEnums GE { get; set; }
+
+        /// <summary>
         /// The root ProjectExplorerItem. each item describes eather subfolder of the root folder or configuration file.
         /// Note: this is the root of the tree representing the data!
         /// </summary>
@@ -56,7 +61,8 @@ namespace ConfigurationManager.Model
         public ProjectModel(string root_path)
         {
             RootPath = root_path;
-            Enums.LoadEnums(RootPath);
+            GlobalEnums.LoadEnums(RootPath);
+            GE = GlobalEnums.GetIntance();
             RootExplorerItem = new ProjectExplorerItem(RootPath, this, this);
             FocusedTab = -1;
         }
