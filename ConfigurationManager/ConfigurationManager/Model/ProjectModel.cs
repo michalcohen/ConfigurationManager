@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -99,6 +100,7 @@ namespace ConfigurationManager.Model
         internal void Save()
         {
             RootExplorerItem.Save();
+            GlobalEnums.Save(RootPath);
         }
 
         /// <summary>

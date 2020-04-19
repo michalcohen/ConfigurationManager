@@ -24,21 +24,25 @@ namespace ConfigurationManager.Model
 
         public ObservableCollection<GlobalEnum> EnumsOptions { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
+        public bool Dirty;
 
         private GlobalEnums()
         {
             EnumsOptions = new ObservableCollection<GlobalEnum>();
+            Dirty = false;
         }
 
         public void AddEnum(string name, JArray values = null)
         {
             EnumsOptions.Add(new GlobalEnum(name, values));
+            Dirty = true;
         }
 
         public static void RemoveEnum(GlobalEnum ge)
         {
             instance.EnumsOptions.Remove(ge);
             instance.RaisePropertyChanged("EnumsOptions");
+            instance.Dirty = true;
         }
 
         /// <summary>
@@ -97,11 +101,55 @@ namespace ConfigurationManager.Model
                 PropertyChanged(this, new PropertyChangedEventArgs("EnumsOptions"));
             }
         }
+
+        public static bool IsDirty()
+        {
+            return instance.Dirty;
+        }
+
+        public static void Saved()
+        {
+            instance.Dirty = false;
+        }
+
+        internal static object GetDictionary()
+        {
+            Dictionary<string, object> dict = new Dictionary<string, object>();
+            foreach (GlobalEnum ge in instance.EnumsOptions)
+            {
+                dict[ge.Name] = ge.GetDictionary();
+            }
+            return dict;
+        }
+
+        public static void Save(string root_path)
+        {
+            if (GlobalEnums.IsDirty())
+            {
+                System.IO.File.WriteAllText(root_path + "\\Enums.json", JsonConvert.SerializeObject(GlobalEnums.GetDictionary(), Formatting.Indented));
+                GlobalEnums.Saved();
+            }
+        }
     }
 
     public class GlobalEnum: INotifyPropertyChanged{
 
-        public string Name { get; set; }
+        private string _name;
+        public string Name 
+        { 
+            get 
+            { 
+                return _name; 
+            } 
+            set 
+            { 
+                if (value != _name) 
+                { 
+                    _name = value; 
+                    GlobalEnums.GetIntance().Dirty = false; 
+                } 
+            } 
+        }
         public ObservableCollection<GlobalEnumValue> Options { get; set; }
 
         public GlobalEnum(string name, JArray values = null)
@@ -142,6 +190,11 @@ namespace ConfigurationManager.Model
         {
             GlobalEnums.RemoveEnum(this);
         }
+
+        internal object GetDictionary()
+        {
+            return Options.Select(x => x.Value).ToList();
+        }
     }
 
     public class GlobalEnumValue : INotifyPropertyChanged
@@ -159,6 +212,7 @@ namespace ConfigurationManager.Model
                 {
                     _value = value;
                     RaisePropertyChanged("Value");
+                    GlobalEnums.GetIntance().Dirty = false;
                 } 
             } 
         }
