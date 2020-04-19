@@ -32,6 +32,11 @@
                                     <StackPanel Orientation="Horizontal"></StackPanel>
                                 </ItemsPanelTemplate>
                             </ListView.ItemsPanel>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBox Text="{Binding Value}" BorderThickness="0"/>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
                         </ListView>
                         <TextBox Text="Add value..." Foreground="DimGray" VerticalAlignment="Center" LostFocus="TextBox_LostFocus" KeyDown="TextBox_KeyDown" GotFocus="TextBox_GotFocus"/>
                     </WrapPanel>

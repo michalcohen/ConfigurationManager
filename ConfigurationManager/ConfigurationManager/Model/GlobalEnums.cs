@@ -67,6 +67,11 @@ namespace ConfigurationManager.Model
             return instance.EnumsOptions.Any(x => x.Name.Equals(name));
         }
 
+        public static GlobalEnum GetGlobalEnum(string enumName)
+        {
+            return instance.EnumsOptions.Where(x => x.Name.Equals(enumName)).First();
+        }
+
         /// <summary>
         /// Checks if a given value is one of the option stated by the definition of enumName in EnumOption.
         /// </summary>
@@ -75,7 +80,7 @@ namespace ConfigurationManager.Model
         /// <returns></returns>
         public static bool ValidValue(string enumName, string value)
         {
-            return HasEnum(enumName) && instance.EnumsOptions.Where(x => x.Name.Equals(enumName)).First().Options.Contains(value);
+            return HasEnum(enumName) && GetGlobalEnum(enumName).ContainsValue(value);
         }
 
         public void RaisePropertyChanged(string property)
@@ -91,12 +96,12 @@ namespace ConfigurationManager.Model
     public class GlobalEnum: INotifyPropertyChanged{
 
         public string Name { get; set; }
-        public ObservableCollection<string> Options { get; set; }
+        public ObservableCollection<GlobalEnumValue> Options { get; set; }
 
         public GlobalEnum(string name, JArray values)
         {
             Name = name;
-            Options = new ObservableCollection<string>(values.Values<string>());
+            Options = new ObservableCollection<GlobalEnumValue>(values.Values<string>().Select(x => new GlobalEnumValue(x)).ToList());
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -112,8 +117,59 @@ namespace ConfigurationManager.Model
 
         internal void AddOption(string text)
         {
-            Options.Add(text);
+            Options.Add(new GlobalEnumValue(text));
             RaisePropertyChanged("Options");
+        }
+
+        internal bool ContainsValue(string value)
+        {
+            return Options.Contains(new GlobalEnumValue(value));
+        }
+    }
+
+    public class GlobalEnumValue : INotifyPropertyChanged
+    {
+        private string _value;
+        public string Value 
+        { 
+            get 
+            { 
+                return _value; 
+            } 
+            set 
+            { 
+                if (value != _value) 
+                {
+                    _value = value;
+                    RaisePropertyChanged("Value");
+                } 
+            } 
+        }
+
+        public GlobalEnumValue(string value)
+        {
+            _value = value;
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+
+
+        public void RaisePropertyChanged(string property)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(property));
+                //GlobalEnums.GetIntance().RaisePropertyChanged("Options");
+            }
+        }
+
+        public override bool Equals(object obj)
+        {
+            return (obj is string && (obj as string).Equals(_value)) || (obj is GlobalEnumValue && (obj as GlobalEnumValue)._value.Equals(_value));
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(_value);
         }
     }
 }
