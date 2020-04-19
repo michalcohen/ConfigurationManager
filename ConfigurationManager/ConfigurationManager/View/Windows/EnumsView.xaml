@@ -24,7 +24,14 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <WrapPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Center"/>
+                        <TextBox Text="{Binding Name}" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Center" BorderThickness="0" IsReadOnly="True" LostFocus="EditGlobalEnum_LostFocus">
+                            <TextBox.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Etid" Click="GlobalEnum_Edit"/>
+                                    <MenuItem Header="Delete" Click="GlobalEnum_Delete"/>
+                                </ContextMenu>
+                            </TextBox.ContextMenu>
+                        </TextBox>
                         <TextBlock Text=": " VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         <ListView ItemsSource="{Binding Options}" BorderThickness="0">
                             <ListView.ItemsPanel>
@@ -34,7 +41,13 @@
                             </ListView.ItemsPanel>
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBox Text="{Binding Value}" BorderThickness="0"/>
+                                    <TextBox Text="{Binding Value}" BorderThickness="0">
+                                        <TextBox.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Header="Delete" Click="GlobalEnumValue_Delete"/>
+                                            </ContextMenu>
+                                        </TextBox.ContextMenu>
+                                    </TextBox>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>

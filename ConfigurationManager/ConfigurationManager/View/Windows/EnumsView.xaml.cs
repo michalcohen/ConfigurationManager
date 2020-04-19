@@ -61,5 +61,32 @@ namespace ConfigurationManager.View.Windows
             (sender as TextBox).Text = "";
             (sender as TextBox).Foreground = Brushes.Black;
         }
+
+        private void GlobalEnumValue_Delete(object sender, RoutedEventArgs e)
+        {
+            ((sender as MenuItem).DataContext as GlobalEnumValue).Delete();
+        }
+
+
+        private void GlobalEnum_Delete(object sender, RoutedEventArgs e)
+        {
+            ((sender as MenuItem).DataContext as GlobalEnum).Delete();
+        }
+
+        private void GlobalEnum_Edit(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = (((sender as MenuItem).Parent as ContextMenu).PlacementTarget) as TextBox;
+            tb.IsReadOnly = false;
+            tb.Focus();
+            tb.CaretIndex = 0;
+        }
+
+        private void EditGlobalEnum_LostFocus(object sender, RoutedEventArgs e)
+        {
+            (sender as TextBox).IsReadOnly = true;
+        }
+
+        
+
     }
 }

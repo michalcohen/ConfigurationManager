@@ -30,9 +30,15 @@ namespace ConfigurationManager.Model
             EnumsOptions = new ObservableCollection<GlobalEnum>();
         }
 
-        private void AddEnum(string name, JArray values)
+        public void AddEnum(string name, JArray values)
         {
             EnumsOptions.Add(new GlobalEnum(name, values));
+        }
+
+        public static void RemoveEnum(GlobalEnum ge)
+        {
+            instance.EnumsOptions.Remove(ge);
+            instance.RaisePropertyChanged("EnumsOptions");
         }
 
         /// <summary>
@@ -98,10 +104,13 @@ namespace ConfigurationManager.Model
         public string Name { get; set; }
         public ObservableCollection<GlobalEnumValue> Options { get; set; }
 
-        public GlobalEnum(string name, JArray values)
+        public GlobalEnum(string name, JArray values = null)
         {
             Name = name;
-            Options = new ObservableCollection<GlobalEnumValue>(values.Values<string>().Select(x => new GlobalEnumValue(x)).ToList());
+            if (values != null)
+            {
+                Options = new ObservableCollection<GlobalEnumValue>(values.Values<string>().Select(x => new GlobalEnumValue(x, this)).ToList());
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -117,13 +126,18 @@ namespace ConfigurationManager.Model
 
         internal void AddOption(string text)
         {
-            Options.Add(new GlobalEnumValue(text));
+            Options.Add(new GlobalEnumValue(text, this));
             RaisePropertyChanged("Options");
         }
 
         internal bool ContainsValue(string value)
         {
-            return Options.Contains(new GlobalEnumValue(value));
+            return Options.Contains(new GlobalEnumValue(value, this));
+        }
+
+        internal void Delete()
+        {
+            GlobalEnums.RemoveEnum(this);
         }
     }
 
@@ -146,10 +160,14 @@ namespace ConfigurationManager.Model
             } 
         }
 
-        public GlobalEnumValue(string value)
+        private GlobalEnum ContainingGlobalEnum;
+
+        public GlobalEnumValue(string value, GlobalEnum ge)
         {
             _value = value;
+            ContainingGlobalEnum = ge;
         }
+        
         public event PropertyChangedEventHandler PropertyChanged;
 
 
@@ -170,6 +188,12 @@ namespace ConfigurationManager.Model
         public override int GetHashCode()
         {
             return HashCode.Combine(_value);
+        }
+
+        public void Delete()
+        {
+            ContainingGlobalEnum.Options.Remove(this);
+            ContainingGlobalEnum.RaisePropertyChanged("Options");
         }
     }
 }
