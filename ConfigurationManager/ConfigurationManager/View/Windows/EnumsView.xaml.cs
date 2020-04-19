@@ -25,38 +25,40 @@ namespace ConfigurationManager.View.Windows
             InitializeComponent();
         }
 
-        private static string default_string = "Add value...";
+        private static string default_value_string = "Add value...";
+        private static string default_enum_string = "Add enum...";
 
         private void AddEnumOption(object sender)
         {
             TextBox tb = sender as TextBox;
             string content = tb.Text;
-            if (!content.Equals("") && !content.Equals(default_string))
+            if (!content.Equals("") && !content.Equals(default_value_string))
             {
                 (tb.DataContext as GlobalEnum).AddOption(content);
                 UpdateLayout();
             }
-            tb.Text = default_string;
+            tb.Text = default_value_string;
         }
-        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+        
+        private void AddValue_LostFocus(object sender, RoutedEventArgs e)
         {
             AddEnumOption(sender);
             (sender as TextBox).Foreground = Brushes.DimGray;
         }
 
-        private void TextBox_KeyDown(object sender, KeyEventArgs e)
+        private void AddValue_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key.Equals(Key.Enter) && !((sender as TextBox).Text.Equals("") || (sender as TextBox).Text.Equals(default_string)))
+            if (e.Key.Equals(Key.Enter) && !((sender as TextBox).Text.Equals("") || (sender as TextBox).Text.Equals(default_value_string)))
             {
                 AddEnumOption(sender);
                 (sender as TextBox).Text = "";
-            } else if ((sender as TextBox).Text.Equals("") || (sender as TextBox).Text.Equals(default_string))
+            } else if ((sender as TextBox).Text.Equals("") || (sender as TextBox).Text.Equals(default_value_string))
             {
                 (sender as TextBox).Text = "";
             }
         }
 
-        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        private void AddValue_GotFocus(object sender, RoutedEventArgs e)
         {
             (sender as TextBox).Text = "";
             (sender as TextBox).Foreground = Brushes.Black;
@@ -66,7 +68,6 @@ namespace ConfigurationManager.View.Windows
         {
             ((sender as MenuItem).DataContext as GlobalEnumValue).Delete();
         }
-
 
         private void GlobalEnum_Delete(object sender, RoutedEventArgs e)
         {
@@ -86,7 +87,43 @@ namespace ConfigurationManager.View.Windows
             (sender as TextBox).IsReadOnly = true;
         }
 
-        
+        private void AddEnum(object sender)
+        {
+            TextBox tb = sender as TextBox;
+            string content = tb.Text;
+            if (!content.Equals("") && !content.Equals(default_enum_string))
+            {
+                GlobalEnums.GetIntance().AddEnum(content);
+                UpdateLayout();
+            }
+            tb.Text = default_enum_string;
+        }
+
+
+        private void AddEnum_LostFocus(object sender, RoutedEventArgs e)
+        {
+            AddEnum(sender);
+            (sender as TextBox).Foreground = Brushes.DimGray;
+        }
+
+        private void AddEnum_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key.Equals(Key.Enter) && !((sender as TextBox).Text.Equals("") || (sender as TextBox).Text.Equals(default_enum_string)))
+            {
+                AddEnum(sender);
+                (sender as TextBox).Text = "";
+            }
+            else if ((sender as TextBox).Text.Equals("") || (sender as TextBox).Text.Equals(default_value_string))
+            {
+                (sender as TextBox).Text = "";
+            }
+        }
+
+        private void AddEnum_GotFocus(object sender, RoutedEventArgs e)
+        {
+            (sender as TextBox).Text = "";
+            (sender as TextBox).Foreground = Brushes.Black;
+        }
 
     }
 }

@@ -51,13 +51,12 @@
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
-                        <TextBox Text="Add value..." Foreground="DimGray" VerticalAlignment="Center" LostFocus="TextBox_LostFocus" KeyDown="TextBox_KeyDown" GotFocus="TextBox_GotFocus"/>
+                        <TextBox Text="Add value..." Foreground="DimGray" VerticalAlignment="Center" LostFocus="AddValue_LostFocus" KeyDown="AddValue_KeyDown" GotFocus="AddValue_GotFocus"/>
                     </WrapPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-
-        <Button Name = "Add" Margin = "2" Grid.Row = "1">Add enum</Button>
-
+        <TextBox Margin = "2" Grid.Row = "1" x:Name="add_enum" Text="Add enum..." Foreground="DimGray" LostFocus="AddEnum_LostFocus" KeyDown="AddEnum_KeyDown" GotFocus="AddEnum_GotFocus"/>
+        
     </Grid>
 </Window>

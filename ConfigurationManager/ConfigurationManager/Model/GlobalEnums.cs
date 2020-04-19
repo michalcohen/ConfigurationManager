@@ -30,7 +30,7 @@ namespace ConfigurationManager.Model
             EnumsOptions = new ObservableCollection<GlobalEnum>();
         }
 
-        public void AddEnum(string name, JArray values)
+        public void AddEnum(string name, JArray values = null)
         {
             EnumsOptions.Add(new GlobalEnum(name, values));
         }
@@ -110,6 +110,9 @@ namespace ConfigurationManager.Model
             if (values != null)
             {
                 Options = new ObservableCollection<GlobalEnumValue>(values.Values<string>().Select(x => new GlobalEnumValue(x, this)).ToList());
+            } else
+            {
+                Options = new ObservableCollection<GlobalEnumValue>();
             }
         }
 
