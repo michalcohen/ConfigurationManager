@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Security.Policy;
@@ -16,7 +17,7 @@ namespace ConfigurationManager.Model.Types
         /// Containing subvariales for any composite configuration variable. like plain CompositeConfigurationVariable
         /// or ConfigurationList.
         /// </summary>
-        public List<ConfigurationVariable> Variables { get; set; }
+        public ObservableCollection<ConfigurationVariable> Variables { get; set; }
         
         /// <summary>
         /// True <=> any change was made to the configuration variable name or content that wasn't saved yet.
@@ -40,6 +41,23 @@ namespace ConfigurationManager.Model.Types
                     RaisePropertyChanged("LabelName");
                 }
             } }
+
+        internal void Delete()
+        {
+            if (Father is ConfigurationVariable)
+            {
+                (Father as ConfigurationVariable).DeleteSon(this);
+            } else
+            {
+                MessageBox.Show("cannot delete highmost hierarchy of json file", "Configuration manager", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void DeleteSon(ConfigurationVariable configurationVariable)
+        {
+            Variables.Remove(configurationVariable);
+            RaisePropertyChanged("Variables");
+        }
 
         /// <summary>
         /// The representation of the configuration variable name as the label of the content.
@@ -75,13 +93,16 @@ namespace ConfigurationManager.Model.Types
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public bool IsComposite { get; set; }
+
         protected ConfigurationVariable(Changable father = null, Brush font_color = null, string name = "", Window edit_window=null)
         {
             Father = father;
             FontColor = font_color;
             ConfigurationName = name;
-            Variables = new List<ConfigurationVariable>();
+            Variables = new ObservableCollection<ConfigurationVariable>();
             Dirty = false;
+            IsComposite = false;
         }
 
         /// <summary>
@@ -182,11 +203,11 @@ namespace ConfigurationManager.Model.Types
         /// <summary>
         /// If the variable is annonimous (like element in list), then its name isan't changeable.
         /// </summary>
-        public Visibility IsNameVisable
+        public bool IsNameVisable
         {
             get
             {
-                return ConfigurationName.Equals("") ? Visibility.Hidden : Visibility.Visible;
+                return !ConfigurationName.Equals("");
             }
         }
     }

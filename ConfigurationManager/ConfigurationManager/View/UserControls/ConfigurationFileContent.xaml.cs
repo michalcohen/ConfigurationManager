@@ -41,5 +41,22 @@ namespace ConfigurationManager.View.UserControls
         {
             (((TreeViewItem)sender).DataContext as ConfigurationVariable).OpenEditWindow();
         }
+
+        
+        private void ConfigurationVariable_Delete(object sender, RoutedEventArgs e)
+        {
+            ((sender as MenuItem).DataContext as ConfigurationVariable).Delete();
+        }
+
+        private void ConfigurationVariable_Edit(object sender, RoutedEventArgs e)
+        {
+            (((MenuItem)sender).DataContext as ConfigurationVariable).OpenEditWindow();
+        }
+
+        
+        private void ConfigurationVariable_Add(object sender, RoutedEventArgs e)
+        {
+            
+        }
     }
 }

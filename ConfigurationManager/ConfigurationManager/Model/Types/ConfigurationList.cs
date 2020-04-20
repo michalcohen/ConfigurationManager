@@ -15,8 +15,9 @@ namespace ConfigurationManager.Model.Types
         {
             foreach (JToken value in array)
             {
-                Variables.Add(ConfigurationVariable.ConvertJsonToConfiguration("", value, father));
+                Variables.Add(ConfigurationVariable.ConvertJsonToConfiguration("", value, this));
             }
+            IsComposite = true;
         }
 
         public static new ConfigurationVariable TryConvert(string name, JToken fromJson, Changable father)

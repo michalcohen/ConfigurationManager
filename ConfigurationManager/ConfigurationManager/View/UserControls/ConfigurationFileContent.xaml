@@ -7,6 +7,9 @@
              xmlns:model="clr-namespace:ConfigurationManager.Model.Types"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </UserControl.Resources>
     <Grid>
         <TreeView x:Name="configuration_folder_view" ItemsSource="{Binding Content.Content.Variables}" BorderThickness="0">
             <TreeView.ItemTemplate>
@@ -16,6 +19,13 @@
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="{Binding LabelName}"/>
                                 <TextBlock Text="{Binding TextRepresentation}" Foreground="{Binding FontColor}"/>
+                                <StackPanel.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Edit" Click="ConfigurationVariable_Edit"/>
+                                        <MenuItem Header="Delete" Click="ConfigurationVariable_Delete"/>
+                                        <MenuItem Header="Add configuration" Click="ConfigurationVariable_Add" Visibility ="{Binding IsComposite, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                    </ContextMenu>
+                                </StackPanel.ContextMenu>
                             </StackPanel>
                         </TreeViewItem.Header>
                     </TreeViewItem>

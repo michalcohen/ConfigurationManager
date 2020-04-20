@@ -27,7 +27,7 @@
                         <TextBox Text="{Binding Name}" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Center" BorderThickness="0" IsReadOnly="True" LostFocus="EditGlobalEnum_LostFocus">
                             <TextBox.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Header="Etid" Click="GlobalEnum_Edit"/>
+                                    <MenuItem Header="Edit" Click="GlobalEnum_Edit"/>
                                     <MenuItem Header="Delete" Click="GlobalEnum_Delete"/>
                                 </ContextMenu>
                             </TextBox.ContextMenu>

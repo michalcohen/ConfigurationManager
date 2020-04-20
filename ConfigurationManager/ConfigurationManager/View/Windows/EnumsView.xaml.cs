@@ -99,7 +99,6 @@ namespace ConfigurationManager.View.Windows
             tb.Text = default_enum_string;
         }
 
-
         private void AddEnum_LostFocus(object sender, RoutedEventArgs e)
         {
             AddEnum(sender);

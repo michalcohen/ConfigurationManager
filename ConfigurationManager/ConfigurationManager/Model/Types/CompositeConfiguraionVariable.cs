@@ -17,6 +17,7 @@ namespace ConfigurationManager.Model.Types
             {
                 Variables.Add(ConfigurationVariable.ConvertJsonToConfiguration(value.Key, value.Value, this));
             }
+            IsComposite = true;
         }
 
         public static new ConfigurationVariable TryConvert(string name, JToken fromJson, Changable father)
@@ -50,7 +51,7 @@ namespace ConfigurationManager.Model.Types
 
         public ConfigurationVariable this[string key]
         {
-            get => Variables.Find(x => x.ConfigurationName == key);
+            get => Variables.ToList().Find(x => x.ConfigurationName == key);
         }
     }
 }

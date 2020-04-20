@@ -7,6 +7,9 @@
         mc:Ignorable="d"
         Title="StringEdit" Height="450" Width="800"
         SizeToContent="WidthAndHeight">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height = "Auto" />
@@ -20,9 +23,9 @@
             <ColumnDefinition Width = "200" />
         </Grid.ColumnDefinitions>
 
-        <Label Name = "nameLabel" Margin = "2" Visibility="{Binding IsNameVisable}" >_Name:</Label>
+        <Label Name = "nameLabel" Margin = "2" Visibility="{Binding IsNameVisable, Converter={StaticResource BooleanToVisibilityConverter}}" >_Name:</Label>
 
-        <TextBox Name = "nameText" Grid.Column = "1" Margin = "2" Visibility="{Binding IsNameVisable}"
+        <TextBox Name = "nameText" Grid.Column = "1" Margin = "2" Visibility="{Binding IsNameVisable, Converter={StaticResource BooleanToVisibilityConverter}}"
          Text = "{Binding ConfigurationName, Mode=OneWay}"/>
 
         <Label Name = "valueLabel" Margin = "2" Grid.Row = "1">_Value:</Label>
