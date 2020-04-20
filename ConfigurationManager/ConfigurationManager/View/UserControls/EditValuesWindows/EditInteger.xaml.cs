@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConfigurationManager.Model.Types;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -18,14 +19,19 @@ namespace ConfigurationManager.View.UserControls.EditValuesWindows
     /// </summary>
     public partial class EditInteger : UserControl, EditUSerControl
     {
-        public EditInteger()
+        ConfigurationInteger CI { get; set; }
+
+        public EditInteger(ConfigurationInteger ci)
         {
+            CI = ci;
+            DataContext = ci;
             InitializeComponent();
         }
 
         public void SaveClick()
         {
-            throw new NotImplementedException();
+            CI.Update(int.Parse(valueText.Text), int.Parse(lowestText.Text),
+                int.Parse(highestText.Text));
         }
     }
 }

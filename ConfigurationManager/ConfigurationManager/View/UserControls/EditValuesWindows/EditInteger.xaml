@@ -7,6 +7,25 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height = "Auto" />
+            <RowDefinition Height = "Auto" />
+            <RowDefinition Height = "Auto" />
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Row = "0">
+            <Label Name = "valueLabel" Margin = "2">_Value:</Label>
+            <TextBox Name = "valueText" Grid.Column = "1" Margin = "2" 
+         Text = "{Binding Value.Value, Mode=OneWay}"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="1">
+            <Label Name = "lowestLabel" Margin = "2">_Lowest Value:</Label>
+            <TextBox Name = "lowestText" Grid.Column = "1" Margin = "2" 
+         Text = "{Binding Value.LowestValue, Mode=OneWay}"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="2">
+            <Label Name = "highestLabel" Margin = "2">_Highest Value:</Label>
+            <TextBox Name = "highestText" Grid.Column = "1" Margin = "2" 
+         Text = "{Binding Value.HighestValue, Mode=OneWay}"/>
+        </StackPanel>
     </Grid>
 </UserControl>

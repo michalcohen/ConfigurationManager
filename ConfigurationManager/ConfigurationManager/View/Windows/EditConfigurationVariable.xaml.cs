@@ -25,7 +25,6 @@ namespace ConfigurationManager.View.Windows
             CV = cv;
             DataContext = cv;
             InitializeComponent();
-
         }
 
         private void SaveClick(object sender, RoutedEventArgs e)

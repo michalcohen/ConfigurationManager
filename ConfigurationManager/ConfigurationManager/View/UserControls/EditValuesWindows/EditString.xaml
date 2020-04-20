@@ -11,8 +11,9 @@
         <StackPanel Orientation="Horizontal">
             <Label Name = "valueLabel" Margin = "2" Grid.Row = "1">_Value:</Label>
 
-            <TextBox Name = "valeText" Grid.Column = "1" Grid.Row = "1" Margin = "2" 
+            <TextBox Name = "valueText" Grid.Column = "1" Grid.Row = "1" Margin = "2" 
          Text = "{Binding Value.Value, Mode=OneWay}"/>
+            
         </StackPanel>
     </Grid>
 </UserControl>

@@ -27,10 +27,9 @@ namespace ConfigurationManager.View.UserControls.EditValuesWindows
             InitializeComponent();
         }
 
-
         void EditUSerControl.SaveClick()
         {
-            CS.Update(valeText.Text);
+            CS.Update(valueText.Text);
         }
     }
 }
