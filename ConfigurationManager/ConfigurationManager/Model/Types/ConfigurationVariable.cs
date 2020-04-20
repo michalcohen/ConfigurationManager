@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using ConfigurationManager.View.Windows;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -6,6 +7,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Security.Policy;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace ConfigurationManager.Model.Types
@@ -18,7 +20,12 @@ namespace ConfigurationManager.Model.Types
         /// or ConfigurationList.
         /// </summary>
         public ObservableCollection<ConfigurationVariable> Variables { get; set; }
-        
+
+        public virtual UserControl GetEditView()
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// True <=> any change was made to the configuration variable name or content that wasn't saved yet.
         /// </summary>
@@ -103,6 +110,8 @@ namespace ConfigurationManager.Model.Types
             Variables = new ObservableCollection<ConfigurationVariable>();
             Dirty = false;
             IsComposite = false;
+            is_explicit = false;
+            IsExplicitnessChangeable = false;
         }
 
         /// <summary>
@@ -111,9 +120,17 @@ namespace ConfigurationManager.Model.Types
         /// This function is momentary virtual until each configuration variable will implement it, then we will
         /// change this function to abstract, forcing future configuration variables to implement it.
         /// </summary>
-        public virtual void OpenEditWindow()
+        public void OpenEditWindow()
         {
-            new Window();
+            (new EditConfigurationVariable(this)).Show();
+        }
+
+        public UserControl EditWindow
+        {
+            get
+            {
+                return GetEditView();
+            }
         }
 
         /// <summary>
@@ -210,27 +227,21 @@ namespace ConfigurationManager.Model.Types
                 return !ConfigurationName.Equals("");
             }
         }
-    }
 
-    abstract public class ConfigurationVariable<T> : ConfigurationVariable
-    {
-        /// <summary>
-        /// The innert type containing the value read from the variable in the file.
-        /// </summary>
-        public InnerType<T> Value { get; set; }
-
-        private bool is_explicit;
+        protected bool is_explicit;
         /// <summary>
         /// True <=> the value was read as explicit type, or the user changed it to be explicit.
         /// </summary>
-        public bool IsExplicit {
+        public bool IsExplicit
+        {
             get { return is_explicit; }
-            set { 
+            set
+            {
                 if (value != is_explicit)
                 {
                     is_explicit = value;
                 }
-            } 
+            }
         }
 
         public bool IsImplicit
@@ -241,9 +252,20 @@ namespace ConfigurationManager.Model.Types
             }
         }
 
+        public bool IsExplicitnessChangeable { get; set; }
+    }
+
+    abstract public class ConfigurationVariable<T> : ConfigurationVariable
+    {
+        /// <summary>
+        /// The innert type containing the value read from the variable in the file.
+        /// </summary>
+        public InnerType<T> Value { get; set; }
+
         protected ConfigurationVariable(Changable father= null, Brush font_color = null, string name = "", bool is_explicit = false): base(father, font_color, name)
         {
-            is_explicit = is_explicit;
+            this.is_explicit = is_explicit;
+            IsExplicitnessChangeable = true;
         }
 
         public static new ConfigurationVariable<T> TryConvert(string name, JToken fromJson, Changable father) => throw new NotImplementedException();

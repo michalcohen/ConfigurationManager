@@ -1,4 +1,4 @@
-﻿using ConfigurationManager.GUIComponents.EditValuesWindows;
+﻿using ConfigurationManager.View.UserControls.EditValuesWindows;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -23,11 +23,11 @@ namespace ConfigurationManager.Model.Types
             Value = new StringType(val, is_explicit);
         }
 
-        public override void OpenEditWindow()
+        public override UserControl GetEditView()
         {
-            (new StringEdit(this)).Show();
+            return new EditString(this);
         }
-        
+
         public static new ConfigurationString TryConvert(string name, JToken fromJson, Changable father)
         {
             if (IsImplicitType(fromJson))

@@ -9,29 +9,28 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ConfigurationManager.GUIComponents.EditValuesWindows
+namespace ConfigurationManager.View.UserControls.EditValuesWindows
 {
     /// <summary>
-    /// Interaction logic for StringEdit.xaml
+    /// Interaction logic for EditString.xaml
     /// </summary>
-    public partial class StringEdit : Window
+    public partial class EditString : UserControl, EditUSerControl
     {
-        ConfigurationString CS;
-        public StringEdit(ConfigurationString cs)
+        ConfigurationString CS { get; set; }
+        public EditString(ConfigurationString cs)
         {
             CS = cs;
             DataContext = cs;
             InitializeComponent();
         }
 
-        private void SaveClick(object sender, RoutedEventArgs e)
+
+        void EditUSerControl.SaveClick()
         {
-            CS.ConfigurationName = nameText.Text;
             CS.Update(valeText.Text);
-            CS.IsExplicit = IsExplicit.IsChecked.Value;
-            Close();
         }
     }
 }

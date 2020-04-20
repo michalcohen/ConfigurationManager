@@ -1,5 +1,4 @@
-﻿using ConfigurationManager.GUIComponents;
-using ConfigurationManager.Model;
+﻿using ConfigurationManager.Model;
 using ConfigurationManager.ViewModel;
 using System;
 using System.Collections.Generic;

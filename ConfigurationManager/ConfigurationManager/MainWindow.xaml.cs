@@ -7,7 +7,6 @@ using System.Windows.Input;
 using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using ConfigurationManager.GUIComponents;
 using ConfigurationManager.ViewModel;
 using ConfigurationManager.Model;
 using ConfigurationManager.View.Windows;
