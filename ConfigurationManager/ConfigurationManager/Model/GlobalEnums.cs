@@ -181,7 +181,7 @@ namespace ConfigurationManager.Model
             RaisePropertyChanged("Options");
         }
 
-        internal bool ContainsValue(string value)
+        public bool ContainsValue(string value)
         {
             return Options.Contains(new GlobalEnumValue(value, this));
         }

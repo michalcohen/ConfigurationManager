@@ -7,6 +7,7 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using ConfigurationManager.Model.Types;
+using ConfigurationManager.Model;
 
 namespace ConfigurationManager.Tests
 {
@@ -22,8 +23,8 @@ namespace ConfigurationManager.Tests
         [TestMethod()]
         public void ExampleTest()
         {
-            Enums.LoadEnums("Configurations");
-            using StreamReader r = new StreamReader("Configurations\\Example.json");
+            GlobalEnums.LoadEnums("Resources\\ConfigurationsForExample");
+            using StreamReader r = new StreamReader("Resources\\ConfigurationsForExample\\Example.json");
             string json = r.ReadToEnd();
             JObject array = (JObject)JsonConvert.DeserializeObject(json);
             ConfigurationFile c = new ConfigurationFile(array);
@@ -49,9 +50,9 @@ namespace ConfigurationManager.Tests
             Assert.IsInstanceOfType(c.Content["try_enum_global"], typeof(ConfigurationEnumeration));
 
 
-            Assert.AreEqual(((ConfigurationBool)((CompositeConfiguraionVariable)c.Content["use_bloop"])["first"]).Value, true);
-            Assert.AreEqual(((ConfigurationBool)((CompositeConfiguraionVariable)c.Content["use_bloop"])["second"]).Value, true);
-            Assert.AreEqual(((ConfigurationBool)((CompositeConfiguraionVariable)c.Content["use_bloop"])["third"]).Value, false);
+            Assert.AreEqual(((ConfigurationBool)((CompositeConfiguraionVariable)c.Content["use_bloop"])["first"]).Value.Value, true);
+            Assert.AreEqual(((ConfigurationBool)((CompositeConfiguraionVariable)c.Content["use_bloop"])["second"]).Value.Value, true);
+            Assert.AreEqual(((ConfigurationBool)((CompositeConfiguraionVariable)c.Content["use_bloop"])["third"]).Value.Value, false);
 
             Assert.AreEqual(((ConfigurationString)c.Content["folder"]).Value.Value, "C:\\Users\\Trumpy\\Documents");
             Assert.AreEqual(((ConfigurationInteger)c.Content["index"]).Value.Value, 3);
@@ -62,22 +63,22 @@ namespace ConfigurationManager.Tests
             Assert.AreEqual(((ConfigurationBool)c.Content["try_bool"]).Value.Value, true);
             Assert.AreEqual(((ConfigurationInteger)c.Content["try_int"]).Value.Value, 5);
             Assert.AreEqual(((ConfigurationFloat)c.Content["try_float"]).Value.Value, 5.7, 0.00001);
-            Assert.AreEqual(((ConfigurationFloat)c.Content["try_float_both_bounds"]).Value.LowestValue, 4.8, 0.00001);
-            Assert.AreEqual(((ConfigurationFloat)c.Content["try_float_both_bounds"]).Value.HighestValue, 7.0, 0.00001);
+            Assert.AreEqual((((ConfigurationFloat)c.Content["try_float_both_bounds"]).Value as FloatType).LowestValue, 4.8, 0.00001);
+            Assert.AreEqual((((ConfigurationFloat)c.Content["try_float_both_bounds"]).Value as FloatType).HighestValue, 7.0, 0.00001);
             Assert.AreEqual(((ConfigurationString)c.Content["try_string"]).Value.Value, "bananana");
             
             Assert.AreEqual(((ConfigurationEnumeration)c.Content["try_enum_inplace"]).Value.Value, "dummy_method");
-            Assert.AreEqual(((ConfigurationEnumeration)c.Content["try_enum_inplace"]).Value.IsGlobalEnum, false);
-            Assert.AreEqual(((ConfigurationEnumeration)c.Content["try_enum_inplace"]).Value.EnumValues.Count, 3);
-            Assert.AreEqual(((ConfigurationEnumeration)c.Content["try_enum_inplace"]).Value.EnumValues[0], "dummy_method");
-            Assert.AreEqual(((ConfigurationEnumeration)c.Content["try_enum_inplace"]).Value.EnumValues[1], "parallel_method");
-            Assert.AreEqual(((ConfigurationEnumeration)c.Content["try_enum_inplace"]).Value.EnumValues[2], "serial_method");
+            Assert.AreEqual((((ConfigurationEnumeration)c.Content["try_enum_inplace"]).Value as EnumType).IsGlobalEnum, false);
+            Assert.AreEqual((((ConfigurationEnumeration)c.Content["try_enum_inplace"]).Value as EnumType).EnumValues.Count, 3);
+            Assert.AreEqual((((ConfigurationEnumeration)c.Content["try_enum_inplace"]).Value as EnumType).EnumValues[0], "dummy_method");
+            Assert.AreEqual((((ConfigurationEnumeration)c.Content["try_enum_inplace"]).Value as EnumType).EnumValues[1], "parallel_method");
+            Assert.AreEqual((((ConfigurationEnumeration)c.Content["try_enum_inplace"]).Value as EnumType).EnumValues[2], "serial_method");
 
 
             Assert.AreEqual(((ConfigurationEnumeration)c.Content["try_enum_global"]).Value.Value, "Blue");
-            Assert.AreEqual(((ConfigurationEnumeration)c.Content["try_enum_global"]).Value.IsGlobalEnum, true);
-            Assert.AreEqual(((ConfigurationEnumeration)c.Content["try_enum_global"]).Value.EnumName, "Colors");
-            Assert.IsTrue(Enums.EnumsOptions["Colors"].Contains("Blue"));
+            Assert.AreEqual((((ConfigurationEnumeration)c.Content["try_enum_global"]).Value as EnumType).IsGlobalEnum, true);
+            Assert.AreEqual((((ConfigurationEnumeration)c.Content["try_enum_global"]).Value as EnumType).EnumName, "Colors");
+            Assert.IsTrue(GlobalEnums.GetGlobalEnum("Colors").ContainsValue("Blue"));
         }
     }
 }
