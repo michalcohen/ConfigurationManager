@@ -67,9 +67,17 @@ namespace ConfigurationManager
             MessageBoxButton button = MessageBoxButton.YesNo;
             MessageBoxImage icon = MessageBoxImage.Warning;
             MessageBoxResult result = MessageBox.Show(messageBoxText, caption, button, icon);
-            if (result != MessageBoxResult.Yes)
+            if (result == MessageBoxResult.Yes)
             {
-                PVM.Save();
+                try
+                {
+                    PVM.Save();
+                    MessageBox.Show("Configuration successfuly saved!");
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("something went wrong while saving...");
+                }
             }
         }
 
