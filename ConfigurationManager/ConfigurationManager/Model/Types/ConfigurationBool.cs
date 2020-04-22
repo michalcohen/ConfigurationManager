@@ -13,7 +13,7 @@ namespace ConfigurationManager.Model.Types
         public BoolType(bool value, bool is_explicit) : base(value, is_explicit)
         {}
     }
-    public class ConfigurationBool : ConfigurationVariable<bool>
+    public class ConfigurationBool : ConfigurationVariable<BoolType, bool>
     {
         public ConfigurationBool(bool value, Changable father = null, bool is_explicit = false, string name="") : base(father, Brushes.Magenta, name, is_explicit)
         {

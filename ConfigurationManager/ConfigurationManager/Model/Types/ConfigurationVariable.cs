@@ -255,12 +255,12 @@ namespace ConfigurationManager.Model.Types
         public bool IsExplicitnessChangeable { get; set; }
     }
 
-    abstract public class ConfigurationVariable<T> : ConfigurationVariable
+    abstract public class ConfigurationVariable<T, G> : ConfigurationVariable where T : InnerType<G>
     {
         /// <summary>
         /// The innert type containing the value read from the variable in the file.
         /// </summary>
-        public InnerType<T> Value { get; set; }
+        public T Value { get; set; }
 
         protected ConfigurationVariable(Changable father= null, Brush font_color = null, string name = "", bool is_explicit = false): base(father, font_color, name)
         {
@@ -268,13 +268,13 @@ namespace ConfigurationManager.Model.Types
             IsExplicitnessChangeable = true;
         }
 
-        public static new ConfigurationVariable<T> TryConvert(string name, JToken fromJson, Changable father) => throw new NotImplementedException();
+        public static new ConfigurationVariable<T, G> TryConvert(string name, JToken fromJson, Changable father) => throw new NotImplementedException();
 
         /// <summary>
         /// Updates the value when the view changes. Still needs to be worked on since bounded inner types are not supported.
         /// </summary>
         /// <param name="new_value"></param>
-        public virtual void Update(T new_value)
+        public virtual void Update(G new_value)
         {
             if (!new_value.Equals(Value.Value))
             {

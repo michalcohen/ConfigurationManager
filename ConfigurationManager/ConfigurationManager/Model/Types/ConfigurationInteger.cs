@@ -14,7 +14,7 @@ namespace ConfigurationManager.Model.Types
         public IntegerType(int value, int lowest, int highest, bool is_explicit) : base(value, lowest, highest, is_explicit)
         {}
     }
-    public class ConfigurationInteger: ConfigurationVariable<int>
+    public class ConfigurationInteger: ConfigurationVariable<IntegerType, int>
     {
         public ConfigurationInteger(int val, Changable father = null, bool is_explicit = false, int lowest=int.MinValue, int highest = int.MaxValue, string name="") : base(father, Brushes.Green, name, is_explicit)
         {

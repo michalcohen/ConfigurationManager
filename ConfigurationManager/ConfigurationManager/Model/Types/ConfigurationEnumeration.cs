@@ -57,7 +57,7 @@ namespace ConfigurationManager.Model.Types
 
     }
     
-    public class ConfigurationEnumeration: ConfigurationVariable<string>
+    public class ConfigurationEnumeration: ConfigurationVariable<EnumType, string>
     {
         public ConfigurationEnumeration(string value, Changable father = null, string enum_name = "", string name="") : base(father, Brushes.DarkGoldenrod, name, true)
         {

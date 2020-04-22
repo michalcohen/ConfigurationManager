@@ -13,7 +13,7 @@ namespace ConfigurationManager.Model.Types
         public FloatType(float value, float lowest, float highest, bool is_explicit) : base(value, lowest, highest, is_explicit)
         {}
     }
-    public class ConfigurationFloat: ConfigurationVariable<float>
+    public class ConfigurationFloat: ConfigurationVariable<FloatType, float>
     {
         public ConfigurationFloat(float val, Changable father = null, bool is_explicit = false, float lowest=float.MinValue, float highest=float.MaxValue, string name="") : base(father, Brushes.BlueViolet, name, is_explicit)
         {

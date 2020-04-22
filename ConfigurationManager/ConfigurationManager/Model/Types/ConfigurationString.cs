@@ -16,7 +16,7 @@ namespace ConfigurationManager.Model.Types
         {}
     }
     
-    public class ConfigurationString: ConfigurationVariable<string>
+    public class ConfigurationString: ConfigurationVariable<StringType, string>
     {
         public ConfigurationString(string val, Changable father = null, bool is_explicit = false, string name=""): base(father, Brushes.DarkKhaki, name, is_explicit)
         {
