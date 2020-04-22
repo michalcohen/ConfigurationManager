@@ -61,5 +61,10 @@ namespace ConfigurationManager.Model.Types
         {
             get => Variables.ToList().Find(x => x.ConfigurationName == key);
         }
+
+        public override bool CheckDirty()
+        {
+            return Variables.Any(x => x.Dirty);
+        }
     }
 }

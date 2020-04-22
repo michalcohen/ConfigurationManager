@@ -64,5 +64,10 @@ namespace ConfigurationManager.Model.Types
         {
             return new ConfigurationFloat(this);
         }
+
+        public override UserControl GetEditView()
+        {
+            return new EditFloat(this);
+        }
     }
 }

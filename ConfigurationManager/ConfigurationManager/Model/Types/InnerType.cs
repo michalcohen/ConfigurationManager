@@ -27,9 +27,12 @@ namespace ConfigurationManager.Model.Types
                     value_field = value;
                     RaisePropertyChanged("TextRepresentation");
                     Father.Changed("TextRepresentation");
+                    Dirty = true;
                 }
             }
         }
+
+        public bool Dirty { get; set; }
 
         public bool IsExplicit { get; set; }
 
@@ -37,12 +40,14 @@ namespace ConfigurationManager.Model.Types
         {
             Father = father;
             Value = value;
+            Dirty = false;
         }
 
         public InnerType(InnerType<T> other)
         {
             Father = other.Father;
             Value = other.Value;
+            Dirty = other.Dirty;
         }
 
         public ConfigurationVariable Father;
@@ -78,6 +83,11 @@ namespace ConfigurationManager.Model.Types
         }
 
         public abstract InnerType<T> Clone();
+
+        public void Saved()
+        {
+            Dirty = false;
+        }
     }
 
     public abstract class BoundedInnerType<T> : InnerType<T> where T : IComparable
@@ -100,16 +110,50 @@ namespace ConfigurationManager.Model.Types
             maxValue = other.maxValue;
         }
 
-        public void UpdateBy(BoundedInnerType<T> other)
+        public override void UpdateBy(InnerType<T> other)
         {
-            base.UpdateBy(other);
-            LowestValue = other.LowestValue;
-            HighestValue = other.HighestValue;
+            BoundedInnerType<T> o = other as BoundedInnerType<T>;
+            base.UpdateBy(o);
+            LowestValue = o.LowestValue;
+            HighestValue = o.HighestValue;
         }
 
-        public T LowestValue { get; set; }
+        private T _lowest_value;
+        public T LowestValue 
+        {
+            get
+            {
+                return _lowest_value;
+            }
+            set 
+            { 
+                if (!value.Equals(_lowest_value))
+                {
+                    _lowest_value = value;
+                    RaisePropertyChanged("TextRepresentation");
+                    Father.Changed("TextRepresentation");
+                    Dirty = true;
+                }
+            } 
+        }
 
-        public T HighestValue { get; set; }
+        private T _highest_value;
+        public T HighestValue 
+        {
+            get 
+            {
+                return _highest_value;
+            } 
+            set 
+            { 
+                if (!value.Equals(_highest_value))
+                {
+                    _highest_value = value;
+                    RaisePropertyChanged("TextRepresentation");
+                    Father.Changed("TextRepresentation");
+                    Dirty = true;
+                }
+            } }
 
         public override string ToString()
         {

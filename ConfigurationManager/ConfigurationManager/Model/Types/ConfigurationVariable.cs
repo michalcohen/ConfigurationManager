@@ -27,7 +27,22 @@ namespace ConfigurationManager.Model.Types
         /// <summary>
         /// True <=> any change was made to the configuration variable name or content that wasn't saved yet.
         /// </summary>
-        public bool Dirty { get; set; }
+
+        protected bool dirty;
+        public bool Dirty 
+        { 
+            get 
+            {
+                return CheckDirty();
+            }
+            set 
+            {
+                if (value != dirty)
+                {
+                    dirty = value;
+                }
+            } 
+        }
 
         private string configuration_name;
         
@@ -293,6 +308,11 @@ namespace ConfigurationManager.Model.Types
         }
 
         public abstract ConfigurationVariable Clone();
+
+        public virtual bool CheckDirty()
+        {
+            return dirty;
+        }
         #endregion
 
     }
@@ -345,6 +365,11 @@ namespace ConfigurationManager.Model.Types
         public override string ToString()
         {
             return Value.ToString();
+        }
+
+        public override bool CheckDirty()
+        {
+            return dirty || Value.Dirty;
         }
 
     }

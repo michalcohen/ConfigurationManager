@@ -47,5 +47,10 @@ namespace ConfigurationManager.Model.Types
             return "";
         }
 
+        public override bool CheckDirty()
+        {
+            return Variables.Any(x => x.Dirty);
+        }
+
     }
 }

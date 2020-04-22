@@ -31,31 +31,7 @@ namespace ConfigurationManager.Model.Types
         public ConfigurationInteger(ConfigurationInteger other): base(other)
         {}
 
-        public void Update(int newValue, int newLowest, int newHighest)
-        {
-            IntegerType toUpdate = Value as IntegerType;
-
-            if (!newValue.Equals(toUpdate.Value))
-            {
-                toUpdate.Value = newValue;
-                Dirty = true;
-            }
-            if (!newLowest.Equals(toUpdate.LowestValue))
-            {
-                toUpdate.LowestValue = newLowest;
-                Dirty = true;
-            }
-            if (!newHighest.Equals(toUpdate.HighestValue))
-            {
-                toUpdate.HighestValue = newHighest;
-                Dirty = true;
-            }
-
-            if (Dirty)
-            {
-                RaisePropertyChanged("TextRepresentation");
-            }
-        }
+        
 
         public override UserControl GetEditView()
         {

@@ -24,6 +24,7 @@ namespace ConfigurationManager.Model.Types
                 {
                     _is_global_enum = value;
                     RaisePropertyChanged("IsGlobalEnum");
+                    Dirty = true;
                 }
             }
         }
@@ -51,6 +52,7 @@ namespace ConfigurationManager.Model.Types
                     Father.Changed("TextRepresentation");
                     RaisePropertyChanged("Options");
                     Father.Changed("Value.Options");
+                    Dirty = true;
                 }
             }
         }
