@@ -20,6 +20,9 @@ namespace ConfigurationManager.Model.Types
             IsComposite = true;
         }
 
+        public CompositeConfiguraionVariable(CompositeConfiguraionVariable other): base(other)
+        {}
+
         public static new ConfigurationVariable TryConvert(string name, JToken fromJson, Changable father)
         {
             if (IsRelevantType(fromJson))
@@ -47,6 +50,11 @@ namespace ConfigurationManager.Model.Types
         public override string ToString()
         {
             return "";
+        }
+
+        public override ConfigurationVariable Clone()
+        {
+            return new CompositeConfiguraionVariable(this);
         }
 
         public ConfigurationVariable this[string key]

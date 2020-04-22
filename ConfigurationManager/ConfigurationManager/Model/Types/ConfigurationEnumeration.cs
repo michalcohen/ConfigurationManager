@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using ConfigurationManager.View.UserControls.EditValuesWindows;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,25 +11,85 @@ namespace ConfigurationManager.Model.Types
 {
     public class EnumType: InnerType<string>
     {
-        public bool IsGlobalEnum { get; }
-
-        public string EnumName { get; }
-
-        public List<string> EnumValues { get; }
-
-        public EnumType(string value, string enum_name): base(value, true)
-        {
-            EnumName = enum_name;
-            IsGlobalEnum = true;
+        private bool _is_global_enum;
+        public bool IsGlobalEnum 
+        { 
+            get
+            {
+                return _is_global_enum;
+            }
+            set
+            {
+                if (value != _is_global_enum)
+                {
+                    _is_global_enum = value;
+                    RaisePropertyChanged("IsGlobalEnum");
+                }
+            }
         }
 
-        public EnumType(string value, List<string> enum_values): base(value, true)
+        public bool IsLocalEnum
+        {
+            get
+            {
+                return !_is_global_enum;
+            }
+        }
+
+        private string _enum_name;
+        public string EnumName 
+        { get 
+            { 
+                return _enum_name; 
+            } 
+          set
+            {
+                if (value != _enum_name)
+                {
+                    _enum_name = value;
+                    RaisePropertyChanged("TextRepresentation");
+                    Father.Changed("TextRepresentation");
+                    RaisePropertyChanged("Options");
+                    Father.Changed("Value.Options");
+                }
+            }
+        }
+
+        public List<string> EnumValues { get; set; }
+
+        public List<string> Options
+        {
+            get
+            {
+                if (IsGlobalEnum)
+                {
+                    return GlobalEnums.GetGlobalEnum(EnumName).Values;
+                }
+                return EnumValues;
+            }
+        }
+        
+        public EnumType(ConfigurationEnumeration father, string value, string enum_name): base(father, value, true)
+        {
+            _enum_name = enum_name;
+            _is_global_enum = true;
+            EnumValues = new List<string>();
+        }
+
+        public EnumType(ConfigurationEnumeration father, string value, List<string> enum_values): base(father, value, true)
         {
             EnumValues = enum_values;
-            IsGlobalEnum = false;
+            _is_global_enum = false;
         }
 
-        public object GetDictionary()
+        public EnumType(EnumType other): base(other)
+        {
+            _is_global_enum = other._is_global_enum;
+            _enum_name = other._enum_name;
+            EnumValues = new List<string>(other.EnumValues);
+        }
+
+        public override object GetDictionary()
         {
             if (IsGlobalEnum)
             {
@@ -55,20 +116,38 @@ namespace ConfigurationManager.Model.Types
             return Value.ToString();
         }
 
+        public override InnerType<string> Clone()
+        {
+            return new EnumType(this);
+        }
+
+        public override void UpdateBy(InnerType<string> other)
+        {
+            EnumType o = other as EnumType;
+            base.UpdateBy(o);
+            IsGlobalEnum = o.IsGlobalEnum;
+            EnumName = o.EnumName;
+            EnumValues = o.EnumValues;
+
+        }
     }
     
     public class ConfigurationEnumeration: ConfigurationVariable<EnumType, string>
     {
         public ConfigurationEnumeration(string value, Changable father = null, string enum_name = "", string name="") : base(father, Brushes.DarkGoldenrod, name, true)
         {
-            Value = new EnumType(value, enum_name);
+            Value = new EnumType(this, value, enum_name);
+            IsExplicitnessChangeable = false;
         }
 
-        public ConfigurationEnumeration(string value, Changable father = null, List<string> enum_values = null, string name="") : base(father, Brushes.DarkKhaki, name, true)
+        public ConfigurationEnumeration(string value, Changable father = null, List<string> enum_values = null, string name="") : base(father, Brushes.DarkGoldenrod, name, true)
         {
-            Value = new EnumType(value, enum_values);
+            Value = new EnumType(this, value, enum_values);
+            IsExplicitnessChangeable = false;
         }
 
+        public ConfigurationEnumeration(ConfigurationEnumeration other): base(other)
+        {}
         public static new ConfigurationVariable TryConvert(string name, JToken fromJson, Changable father)
         {
             if (fromJson.Type != JTokenType.Object)
@@ -106,5 +185,19 @@ namespace ConfigurationManager.Model.Types
             return null;
         }
 
+        public override UserControl GetEditView()
+        {
+            return new EditEnum(this);
+        }
+
+        public override ConfigurationVariable Clone()
+        {
+            return new ConfigurationEnumeration(this);
+        }
+
+        public void UpdateBy(ConfigurationEnumeration other)
+        {
+            base.UpdateBy(other);
+        }
     }
 }

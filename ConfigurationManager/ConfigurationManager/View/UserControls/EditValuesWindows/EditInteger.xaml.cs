@@ -17,21 +17,13 @@ namespace ConfigurationManager.View.UserControls.EditValuesWindows
     /// <summary>
     /// Interaction logic for EditInteger.xaml
     /// </summary>
-    public partial class EditInteger : UserControl, EditUSerControl
+    public partial class EditInteger : UserControl
     {
-        ConfigurationInteger CI { get; set; }
 
         public EditInteger(ConfigurationInteger ci)
         {
-            CI = ci;
             DataContext = ci;
             InitializeComponent();
-        }
-
-        public void SaveClick()
-        {
-            CI.Update(int.Parse(valueText.Text), int.Parse(lowestText.Text),
-                int.Parse(highestText.Text));
         }
     }
 }

@@ -12,16 +12,26 @@ namespace ConfigurationManager.Model.Types
 {
     public class StringType: InnerType<string>
     {
-        public StringType(string value, bool is_explicit) : base(value, is_explicit)
+        public StringType(ConfigurationString father, string value, bool is_explicit) : base(father, value, is_explicit)
         {}
+
+        public StringType(StringType other): base(other) { }
+
+        public override InnerType<string> Clone()
+        {
+            return new StringType(this);
+        }
     }
     
     public class ConfigurationString: ConfigurationVariable<StringType, string>
     {
         public ConfigurationString(string val, Changable father = null, bool is_explicit = false, string name=""): base(father, Brushes.DarkKhaki, name, is_explicit)
         {
-            Value = new StringType(val, is_explicit);
+            Value = new StringType(this, val, is_explicit);
         }
+
+        public ConfigurationString(ConfigurationString other): base(other)
+        {}
 
         public override UserControl GetEditView()
         {
@@ -50,5 +60,9 @@ namespace ConfigurationManager.Model.Types
             return fromJson.Type == JTokenType.Object && ((JObject)fromJson)["type"].ToString().Equals("string");
         }
 
+        public override ConfigurationVariable Clone()
+        {
+            return new ConfigurationString(this);
+        }
     }
 }

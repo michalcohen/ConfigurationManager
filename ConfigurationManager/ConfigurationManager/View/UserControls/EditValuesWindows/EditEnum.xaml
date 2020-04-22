@@ -1,0 +1,60 @@
+﻿<UserControl x:Class="ConfigurationManager.View.UserControls.EditValuesWindows.EditEnum"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ConfigurationManager.View.UserControls.EditValuesWindows"
+             xmlns:models="clr-namespace:ConfigurationManager.Model"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height = "Auto" />
+            <RowDefinition Height = "Auto" />
+            <RowDefinition Height = "Auto" />
+        </Grid.RowDefinitions>
+
+        <CheckBox x:Name="is_explicit_checkbox" IsChecked="{Binding Value.IsGlobalEnum}" Grid.ColumnSpan="2" Margin = "2" Grid.Row = "0">Is global enum</CheckBox>
+        
+        <StackPanel x:Name="global_representation" Orientation="Horizontal" Grid.Row = "1" Visibility="{Binding Value.IsGlobalEnum, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Label Name = "global_enumsLabel" Margin = "2">Global Enums:</Label>
+            <ComboBox Name="global_enums" ItemsSource="{Binding Source={x:Static models:GlobalEnums.EnumsNames}}" SelectedItem="{Binding Value.EnumName}"/>
+        </StackPanel>
+
+        <StackPanel Name="local_representation" Orientation="Horizontal" Grid.Row = "1" Visibility="{Binding Value.IsLocalEnum, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Label Name = "enum_options_Label" Margin = "2">Options:</Label>
+
+            <ListView x:Name="local_enum_values" ItemsSource="{Binding Value.EnumValues}" BorderThickness="0">
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"></StackPanel>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBox Text="{Binding }" BorderThickness="0">
+                            <TextBox.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Delete" Click="local_enum_option_delete_Click"/>
+                                </ContextMenu>
+                            </TextBox.ContextMenu>
+                        </TextBox>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <TextBox x:Name="add_enum_value" Text="Add option..." Foreground="DimGray" VerticalAlignment="Center" MouseDown="add_enum_value_MouseDown" LostFocus="add_enum_value_LostFocus" KeyDown="add_enum_value_KeyDown"/>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row = "2">
+            <Label Name = "valueLabel" Margin = "2">_Value:</Label>
+            <ComboBox Name = "valueText" Grid.Column = "1" Margin = "2" ItemsSource="{Binding Value.Options}"  SelectedValue="{Binding Value.Value}">
+                
+            </ComboBox>
+        </StackPanel>
+        
+        
+    </Grid>
+</UserControl>

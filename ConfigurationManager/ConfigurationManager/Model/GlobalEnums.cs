@@ -130,6 +130,14 @@ namespace ConfigurationManager.Model
                 GlobalEnums.Saved();
             }
         }
+
+        public static List<string> EnumsNames
+        {
+            get
+            {
+                return instance.EnumsOptions.Select(x => x.Name).ToList();
+            }
+        }
     }
 
     public class GlobalEnum: INotifyPropertyChanged{
@@ -151,6 +159,14 @@ namespace ConfigurationManager.Model
             } 
         }
         public ObservableCollection<GlobalEnumValue> Options { get; set; }
+
+        public List<string> Values
+        {
+            get
+            {
+                return Options.Select(x => x.Value).ToList();
+            }
+        }
 
         public GlobalEnum(string name, JArray values = null)
         {

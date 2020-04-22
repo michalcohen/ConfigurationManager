@@ -20,6 +20,9 @@ namespace ConfigurationManager.Model.Types
             IsComposite = true;
         }
 
+        public ConfigurationList(ConfigurationList other): base(other)
+        {}
+
         public static new ConfigurationVariable TryConvert(string name, JToken fromJson, Changable father)
         {
             if (fromJson.Type == JTokenType.Array)
@@ -27,6 +30,11 @@ namespace ConfigurationManager.Model.Types
                 return new ConfigurationList((JArray)fromJson, father, name);
             }
             return null;
+        }
+
+        public override ConfigurationVariable Clone()
+        {
+            return new ConfigurationList(this);
         }
 
         public override object GetDictionary()

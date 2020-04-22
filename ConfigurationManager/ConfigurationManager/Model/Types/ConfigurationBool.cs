@@ -10,15 +10,23 @@ namespace ConfigurationManager.Model.Types
 {
     public class BoolType: InnerType<bool>
     {
-        public BoolType(bool value, bool is_explicit) : base(value, is_explicit)
+        public BoolType(ConfigurationBool father, bool value, bool is_explicit) : base(father, value, is_explicit)
         {}
+
+        public BoolType(BoolType other): base(other) { }
+        public override InnerType<bool> Clone()
+        {
+            return new BoolType(this);
+        }
     }
     public class ConfigurationBool : ConfigurationVariable<BoolType, bool>
     {
         public ConfigurationBool(bool value, Changable father = null, bool is_explicit = false, string name="") : base(father, Brushes.Magenta, name, is_explicit)
         {
-            Value = new BoolType(value, is_explicit);
+            Value = new BoolType(this, value, is_explicit);
         }
+
+        public ConfigurationBool(ConfigurationBool other): base(other) { }
 
         public static new ConfigurationVariable TryConvert(string name, JToken fromJson, Changable father)
         {
@@ -40,6 +48,11 @@ namespace ConfigurationManager.Model.Types
         public static new bool IsExplicitType(JToken fromJson)
         {
             return fromJson.Type == JTokenType.Object && ((JObject)fromJson)["type"].ToString().Equals("bool");
+        }
+
+        public override ConfigurationVariable Clone()
+        {
+            return new ConfigurationBool(this);
         }
     }
 }

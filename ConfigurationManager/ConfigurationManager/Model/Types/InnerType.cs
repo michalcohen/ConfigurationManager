@@ -7,7 +7,7 @@ using System.Text;
 
 namespace ConfigurationManager.Model.Types
 {
-    public class InnerType<T> : INotifyPropertyChanged
+    public abstract class InnerType<T> : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -22,19 +22,34 @@ namespace ConfigurationManager.Model.Types
 
             set
             {
-                if (!value.Equals(value_field))
+                if (value != null && !value.Equals(value_field))
                 {
                     value_field = value;
                     RaisePropertyChanged("TextRepresentation");
+                    Father.Changed("TextRepresentation");
                 }
             }
         }
 
         public bool IsExplicit { get; set; }
 
-        public InnerType(T value, bool is_explicit = false)
+        public InnerType(ConfigurationVariable father, T value, bool is_explicit = false)
         {
+            Father = father;
             Value = value;
+        }
+
+        public InnerType(InnerType<T> other)
+        {
+            Father = other.Father;
+            Value = other.Value;
+        }
+
+        public ConfigurationVariable Father;
+
+        public virtual void UpdateBy(InnerType<T> other)
+        {
+            Value = other.value_field;
         }
 
         public void RaisePropertyChanged(string property)
@@ -61,20 +76,35 @@ namespace ConfigurationManager.Model.Types
             }
             return Value;
         }
+
+        public abstract InnerType<T> Clone();
     }
 
-    public class BoundedInnerType<T> : InnerType<T> where T : IComparable
+    public abstract class BoundedInnerType<T> : InnerType<T> where T : IComparable
     {
         T minValue;
         T maxValue;
-        public BoundedInnerType(T value, T lower_bound, T higher_bound, bool is_explicit = false) : base(value, is_explicit)
+        public BoundedInnerType(ConfigurationVariable father, T value, T lower_bound, T higher_bound, bool is_explicit = false) : base(father, value, is_explicit)
         {
             LowestValue = lower_bound;
             HighestValue = higher_bound;
             maxValue = (T)(typeof(T).GetField("MaxValue", BindingFlags.Public | BindingFlags.Static)).GetValue(null);
             minValue = (T)(typeof(T).GetField("MinValue", BindingFlags.Public | BindingFlags.Static)).GetValue(null);
+        }
 
+        public BoundedInnerType(BoundedInnerType<T> other): base(other)
+        {
+            LowestValue = other.LowestValue;
+            HighestValue = other.HighestValue;
+            minValue = other.minValue;
+            maxValue = other.maxValue;
+        }
 
+        public void UpdateBy(BoundedInnerType<T> other)
+        {
+            base.UpdateBy(other);
+            LowestValue = other.LowestValue;
+            HighestValue = other.HighestValue;
         }
 
         public T LowestValue { get; set; }

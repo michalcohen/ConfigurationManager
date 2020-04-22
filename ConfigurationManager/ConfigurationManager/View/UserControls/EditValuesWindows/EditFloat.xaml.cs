@@ -16,16 +16,12 @@ namespace ConfigurationManager.View.UserControls.EditValuesWindows
     /// <summary>
     /// Interaction logic for EditFloat.xaml
     /// </summary>
-    public partial class EditFloat : UserControl, EditUSerControl
+    public partial class EditFloat : UserControl
     {
         public EditFloat()
         {
             InitializeComponent();
         }
 
-        public void SaveClick()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

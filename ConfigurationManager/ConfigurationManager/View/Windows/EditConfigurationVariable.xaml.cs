@@ -19,19 +19,19 @@ namespace ConfigurationManager.View.Windows
     /// </summary>
     public partial class EditConfigurationVariable : Window
     {
-        ConfigurationVariable CV;
+        ConfigurationVariable original_CV;
+        ConfigurationVariable copy_CV;
         public EditConfigurationVariable(ConfigurationVariable cv)
         {
-            CV = cv;
-            DataContext = cv;
+            original_CV = cv;
+            copy_CV = cv.Clone();
+            DataContext = copy_CV;
             InitializeComponent();
         }
 
         private void SaveClick(object sender, RoutedEventArgs e)
         {
-            CV.ConfigurationName = nameText.Text;
-            CV.IsExplicit = IsExplicit.IsChecked.Value;
-            (ContentControl.Content as EditUSerControl).SaveClick();
+            original_CV.UpdateBy(copy_CV);
             Close();
         }
 

@@ -10,8 +10,15 @@ namespace ConfigurationManager.Model.Types
 {
     public class FloatType: BoundedInnerType<float>
     {
-        public FloatType(float value, float lowest, float highest, bool is_explicit) : base(value, lowest, highest, is_explicit)
+        public FloatType(ConfigurationFloat father, float value, float lowest, float highest, bool is_explicit) : base(father, value, lowest, highest, is_explicit)
         {}
+
+        public FloatType(FloatType other): base(other) { }
+
+        public override InnerType<float> Clone()
+        {
+            return new FloatType(this);
+        }
     }
     public class ConfigurationFloat: ConfigurationVariable<FloatType, float>
     {
@@ -21,8 +28,11 @@ namespace ConfigurationManager.Model.Types
             {
                 throw new Exception("Invlid bounderies");
             }
-            Value = new FloatType(val, lowest, highest, is_explicit);
+            Value = new FloatType(this, val, lowest, highest, is_explicit);
         }
+
+        public ConfigurationFloat(ConfigurationFloat other): base(other)
+        {}
 
         public static new ConfigurationVariable TryConvert(string name, JToken fromJson, Changable father)
         {
@@ -47,6 +57,11 @@ namespace ConfigurationManager.Model.Types
         public static new bool IsExplicitType(JToken fromJson)
         {
             return fromJson.Type == JTokenType.Object && ((JObject)fromJson)["type"].ToString().Equals("float");
+        }
+
+        public override ConfigurationVariable Clone()
+        {
+            return new ConfigurationFloat(this);
         }
     }
 }

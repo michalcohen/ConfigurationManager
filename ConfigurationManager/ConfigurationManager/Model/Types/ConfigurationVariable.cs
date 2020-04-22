@@ -15,16 +15,14 @@ namespace ConfigurationManager.Model.Types
 
     abstract public class ConfigurationVariable: INotifyPropertyChanged, Changable
     {
+
+        #region ConfigurationVariable Properties
+
         /// <summary>
         /// Containing subvariales for any composite configuration variable. like plain CompositeConfigurationVariable
         /// or ConfigurationList.
         /// </summary>
         public ObservableCollection<ConfigurationVariable> Variables { get; set; }
-
-        public virtual UserControl GetEditView()
-        {
-            throw new NotImplementedException();
-        }
 
         /// <summary>
         /// True <=> any change was made to the configuration variable name or content that wasn't saved yet.
@@ -48,23 +46,6 @@ namespace ConfigurationManager.Model.Types
                     RaisePropertyChanged("LabelName");
                 }
             } }
-
-        internal void Delete()
-        {
-            if (Father is ConfigurationVariable)
-            {
-                (Father as ConfigurationVariable).DeleteSon(this);
-            } else
-            {
-                MessageBox.Show("cannot delete highmost hierarchy of json file", "Configuration manager", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        private void DeleteSon(ConfigurationVariable configurationVariable)
-        {
-            Variables.Remove(configurationVariable);
-            RaisePropertyChanged("Variables");
-        }
 
         /// <summary>
         /// The representation of the configuration variable name as the label of the content.
@@ -102,6 +83,55 @@ namespace ConfigurationManager.Model.Types
 
         public bool IsComposite { get; set; }
 
+        public UserControl EditWindow
+        {
+            get
+            {
+                return GetEditView();
+            }
+        }
+
+        /// <summary>
+        /// If the variable is annonimous (like element in list), then its name isan't changeable.
+        /// </summary>
+        public bool IsNameVisable
+        {
+            get
+            {
+                return !ConfigurationName.Equals("");
+            }
+        }
+
+        protected bool is_explicit;
+        /// <summary>
+        /// True <=> the value was read as explicit type, or the user changed it to be explicit.
+        /// </summary>
+        public bool IsExplicit
+        {
+            get { return is_explicit; }
+            set
+            {
+                if (value != is_explicit)
+                {
+                    is_explicit = value;
+                }
+            }
+        }
+
+        public bool IsImplicit
+        {
+            get
+            {
+                return !is_explicit;
+            }
+        }
+
+        public bool IsExplicitnessChangeable { get; set; }
+
+        #endregion
+
+
+        #region ConfigurationVariable Constructors
         protected ConfigurationVariable(Changable father = null, Brush font_color = null, string name = "", Window edit_window=null)
         {
             Father = father;
@@ -112,6 +142,35 @@ namespace ConfigurationManager.Model.Types
             IsComposite = false;
             is_explicit = false;
             IsExplicitnessChangeable = false;
+        }
+
+        protected ConfigurationVariable(ConfigurationVariable other)
+        {
+            Father = new EmptyFather();
+            UpdateBy(other);
+        }
+
+        class EmptyFather : Changable
+        {
+            public void Changed(string property)
+            {
+            }
+        }
+        #endregion
+
+
+        #region ConfigurationVariable Methods
+
+        public virtual void UpdateBy(ConfigurationVariable other)
+        {
+            IsExplicitnessChangeable = other.IsExplicitnessChangeable;
+            IsExplicit = other.IsExplicit;
+            IsComposite = other.IsComposite;
+            PropertyChanged = other.PropertyChanged;
+            FontColor = other.FontColor;
+            ConfigurationName = other.ConfigurationName;
+            Dirty = other.Dirty;
+            Variables = new ObservableCollection<ConfigurationVariable>(other.Variables.Select(x => x.Clone()).ToList());
         }
 
         /// <summary>
@@ -125,12 +184,27 @@ namespace ConfigurationManager.Model.Types
             (new EditConfigurationVariable(this)).Show();
         }
 
-        public UserControl EditWindow
+        public virtual UserControl GetEditView()
         {
-            get
+            throw new NotImplementedException();
+        }
+
+        internal void Delete()
+        {
+            if (Father is ConfigurationVariable)
             {
-                return GetEditView();
+                (Father as ConfigurationVariable).DeleteSon(this);
             }
+            else
+            {
+                MessageBox.Show("cannot delete highmost hierarchy of json file", "Configuration manager", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void DeleteSon(ConfigurationVariable configurationVariable)
+        {
+            Variables.Remove(configurationVariable);
+            RaisePropertyChanged("Variables");
         }
 
         /// <summary>
@@ -214,45 +288,13 @@ namespace ConfigurationManager.Model.Types
         /// <param name="property"></param>
         public void Changed(string property)
         {
+            RaisePropertyChanged(property);
             Father.Changed(property);
         }
 
-        /// <summary>
-        /// If the variable is annonimous (like element in list), then its name isan't changeable.
-        /// </summary>
-        public bool IsNameVisable
-        {
-            get
-            {
-                return !ConfigurationName.Equals("");
-            }
-        }
+        public abstract ConfigurationVariable Clone();
+        #endregion
 
-        protected bool is_explicit;
-        /// <summary>
-        /// True <=> the value was read as explicit type, or the user changed it to be explicit.
-        /// </summary>
-        public bool IsExplicit
-        {
-            get { return is_explicit; }
-            set
-            {
-                if (value != is_explicit)
-                {
-                    is_explicit = value;
-                }
-            }
-        }
-
-        public bool IsImplicit
-        {
-            get
-            {
-                return !is_explicit;
-            }
-        }
-
-        public bool IsExplicitnessChangeable { get; set; }
     }
 
     abstract public class ConfigurationVariable<T, G> : ConfigurationVariable where T : InnerType<G>
@@ -268,22 +310,33 @@ namespace ConfigurationManager.Model.Types
             IsExplicitnessChangeable = true;
         }
 
+        protected ConfigurationVariable(ConfigurationVariable<T, G> other): base(other)
+        {
+            UpdateBy(other);
+        }
+
+        public override void UpdateBy(ConfigurationVariable other)
+        {
+            ConfigurationVariable<T, G> o = other as ConfigurationVariable<T, G>;
+              base.UpdateBy(o);
+            if (Value != null)
+            {
+                Value.UpdateBy(o.Value);
+            } else
+            {
+                Value = o.Value.Clone() as T;
+            }
+            
+
+        }
+
         public static new ConfigurationVariable<T, G> TryConvert(string name, JToken fromJson, Changable father) => throw new NotImplementedException();
 
         /// <summary>
         /// Updates the value when the view changes. Still needs to be worked on since bounded inner types are not supported.
         /// </summary>
         /// <param name="new_value"></param>
-        public virtual void Update(G new_value)
-        {
-            if (!new_value.Equals(Value.Value))
-            {
-                Dirty = true;
-                Value.Value = new_value;
-                RaisePropertyChanged("TextRepresentation");
-            }
-        }
-
+        
         public override object GetDictionary()
         {
             return Value.GetDictionary();

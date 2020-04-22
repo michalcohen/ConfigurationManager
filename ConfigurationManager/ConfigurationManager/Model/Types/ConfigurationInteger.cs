@@ -11,15 +11,25 @@ namespace ConfigurationManager.Model.Types
 {
     public class IntegerType: BoundedInnerType<int>
     {
-        public IntegerType(int value, int lowest, int highest, bool is_explicit) : base(value, lowest, highest, is_explicit)
+        public IntegerType(ConfigurationInteger father, int value, int lowest, int highest, bool is_explicit) : base(father, value, lowest, highest, is_explicit)
         {}
+
+        public IntegerType(IntegerType other): base(other) { }
+
+        public override InnerType<int> Clone()
+        {
+            return new IntegerType(this);
+        }
     }
     public class ConfigurationInteger: ConfigurationVariable<IntegerType, int>
     {
         public ConfigurationInteger(int val, Changable father = null, bool is_explicit = false, int lowest=int.MinValue, int highest = int.MaxValue, string name="") : base(father, Brushes.Green, name, is_explicit)
         {
-            Value = new IntegerType(val, lowest, highest, is_explicit);
+            Value = new IntegerType(this, val, lowest, highest, is_explicit);
         }
+
+        public ConfigurationInteger(ConfigurationInteger other): base(other)
+        {}
 
         public void Update(int newValue, int newLowest, int newHighest)
         {
@@ -79,5 +89,9 @@ namespace ConfigurationManager.Model.Types
             return fromJson.Type == JTokenType.Object && ((JObject)fromJson)["type"].ToString().Equals("int");
         }
 
+        public override ConfigurationVariable Clone()
+        {
+            return new ConfigurationInteger(this);
+        }
     }
 }

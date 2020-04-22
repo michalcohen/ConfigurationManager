@@ -17,19 +17,12 @@ namespace ConfigurationManager.View.UserControls.EditValuesWindows
     /// <summary>
     /// Interaction logic for EditString.xaml
     /// </summary>
-    public partial class EditString : UserControl, EditUSerControl
+    public partial class EditString : UserControl
     {
-        ConfigurationString CS { get; set; }
         public EditString(ConfigurationString cs)
         {
-            CS = cs;
-            DataContext = cs;
-            InitializeComponent();
-        }
-
-        void EditUSerControl.SaveClick()
-        {
-            CS.Update(valueText.Text);
+           DataContext = cs;
+           InitializeComponent();
         }
     }
 }
