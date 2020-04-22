@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConfigurationManager.Model.Types;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -18,14 +19,19 @@ namespace ConfigurationManager.View.UserControls.EditValuesWindows
     /// </summary>
     public partial class EditFloat : UserControl, EditUSerControl
     {
-        public EditFloat()
+        ConfigurationFloat CF { get; set; }
+
+        public EditFloat(ConfigurationFloat cf)
         {
+            CF = cf;
+            DataContext = cf;
             InitializeComponent();
         }
 
         public void SaveClick()
         {
-            throw new NotImplementedException();
+            CF.Update(float.Parse(valueText.Text), float.Parse(lowestText.Text),
+                float.Parse(highestText.Text));
         }
     }
 }

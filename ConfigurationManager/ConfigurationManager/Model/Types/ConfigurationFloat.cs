@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using ConfigurationManager.View.UserControls.EditValuesWindows;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -24,6 +25,36 @@ namespace ConfigurationManager.Model.Types
             Value = new FloatType(val, lowest, highest, is_explicit);
         }
 
+        public void Update(float newValue, float newLowest, float newHighest)
+        {
+            FloatType toUpdate = Value as FloatType;
+
+            if (!newValue.Equals(toUpdate.Value))
+            {
+                toUpdate.Value = newValue;
+                Dirty = true;
+            }
+            if (!newLowest.Equals(toUpdate.LowestValue))
+            {
+                toUpdate.LowestValue = newLowest;
+                Dirty = true;
+            }
+            if (!newHighest.Equals(toUpdate.HighestValue))
+            {
+                toUpdate.HighestValue = newHighest;
+                Dirty = true;
+            }
+
+            if (Dirty)
+            {
+                RaisePropertyChanged("TextRepresentation");
+            }
+        }
+
+        public override UserControl GetEditView()
+        {
+            return new EditFloat(this);
+        }
         public static new ConfigurationVariable TryConvert(string name, JToken fromJson, Changable father)
         {
             if (IsImplicitType(fromJson))
