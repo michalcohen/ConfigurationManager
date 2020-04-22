@@ -34,27 +34,25 @@ namespace ConfigurationManager.Model.Types
         public void Update(int newValue, int newLowest, int newHighest)
         {
             IntegerType toUpdate = Value as IntegerType;
-            bool isPropertyChagned = false;
 
             if (!newValue.Equals(toUpdate.Value))
             {
                 toUpdate.Value = newValue;
-                isPropertyChagned = true;
+                Dirty = true;
             }
             if (!newLowest.Equals(toUpdate.LowestValue))
             {
                 toUpdate.LowestValue = newLowest;
-                isPropertyChagned = true;
+                Dirty = true;
             }
             if (!newHighest.Equals(toUpdate.HighestValue))
             {
                 toUpdate.HighestValue = newHighest;
-                isPropertyChagned = true;
+                Dirty = true;
             }
 
-            if (isPropertyChagned)
+            if (Dirty)
             {
-                Dirty = true;
                 RaisePropertyChanged("TextRepresentation");
             }
         }
