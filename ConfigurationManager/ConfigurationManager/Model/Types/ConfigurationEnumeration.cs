@@ -34,7 +34,6 @@ namespace ConfigurationManager.Model.Types
                 }
             }
         }
-
         public bool IsLocalEnum
         {
             get
@@ -215,7 +214,7 @@ namespace ConfigurationManager.Model.Types
 
         public override UserControl GetEditView()
         {
-            return new EditEnum(this);
+            return new EditEnum(Value);
         }
 
         public override ConfigurationVariable Clone()

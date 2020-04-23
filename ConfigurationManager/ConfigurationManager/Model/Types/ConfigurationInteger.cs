@@ -31,11 +31,9 @@ namespace ConfigurationManager.Model.Types
         public ConfigurationInteger(ConfigurationInteger other): base(other)
         {}
 
-        
-
         public override UserControl GetEditView()
         {
-            return new EditInteger(this);
+            return new EditInteger(Value);
         }
 
         public static new ConfigurationInteger TryConvert(string name, JToken fromJson, Changable father)

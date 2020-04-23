@@ -19,7 +19,7 @@ namespace ConfigurationManager.View.UserControls.EditValuesWindows
     /// </summary>
     public partial class EditString : UserControl
     {
-        public EditString(ConfigurationString cs)
+        public EditString(StringType cs)
         {
            DataContext = cs;
            InitializeComponent();

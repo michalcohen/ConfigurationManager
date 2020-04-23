@@ -19,7 +19,7 @@ namespace ConfigurationManager.View.UserControls.EditValuesWindows
     /// </summary>
     public partial class EditFloat : UserControl
     {
-        public EditFloat(ConfigurationFloat cf)
+        public EditFloat(FloatType cf)
         {
             DataContext = cf;
             InitializeComponent();

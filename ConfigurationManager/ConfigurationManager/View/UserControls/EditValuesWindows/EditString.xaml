@@ -12,7 +12,7 @@
             <Label Name = "valueLabel" Margin = "2" Grid.Row = "1">_Value:</Label>
 
             <TextBox Name = "valueText" Grid.Column = "1" Grid.Row = "1" Margin = "2" 
-         Text = "{Binding Value.Value}"/>
+         Text = "{Binding Value}"/>
             
         </StackPanel>
     </Grid>

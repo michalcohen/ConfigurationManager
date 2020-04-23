@@ -17,17 +17,17 @@
             <RowDefinition Height = "Auto" />
         </Grid.RowDefinitions>
 
-        <CheckBox x:Name="is_explicit_checkbox" IsChecked="{Binding Value.IsGlobalEnum}" Grid.ColumnSpan="2" Margin = "2" Grid.Row = "0">Is global enum</CheckBox>
+        <CheckBox x:Name="is_explicit_checkbox" IsChecked="{Binding IsGlobalEnum}" Grid.ColumnSpan="2" Margin = "2" Grid.Row = "0">Is global enum</CheckBox>
         
-        <StackPanel x:Name="global_representation" Orientation="Horizontal" Grid.Row = "1" Visibility="{Binding Value.IsGlobalEnum, Converter={StaticResource BooleanToVisibilityConverter}}">
+        <StackPanel x:Name="global_representation" Orientation="Horizontal" Grid.Row = "1" Visibility="{Binding IsGlobalEnum, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Label Name = "global_enumsLabel" Margin = "2">Global Enums:</Label>
-            <ComboBox Name="global_enums" ItemsSource="{Binding Source={x:Static models:GlobalEnums.EnumsNames}}" SelectedItem="{Binding Value.EnumName}"/>
+            <ComboBox Name="global_enums" ItemsSource="{Binding Source={x:Static models:GlobalEnums.EnumsNames}}" SelectedItem="{Binding EnumName}"/>
         </StackPanel>
 
-        <StackPanel Name="local_representation" Orientation="Horizontal" Grid.Row = "1" Visibility="{Binding Value.IsLocalEnum, Converter={StaticResource BooleanToVisibilityConverter}}">
+        <StackPanel Name="local_representation" Orientation="Horizontal" Grid.Row = "1" Visibility="{Binding IsLocalEnum, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Label Name = "enum_options_Label" Margin = "2">Options:</Label>
 
-            <ListView x:Name="local_enum_values" ItemsSource="{Binding Value.EnumValues}" BorderThickness="0">
+            <ListView x:Name="local_enum_values" ItemsSource="{Binding EnumValues}" BorderThickness="0">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Horizontal"></StackPanel>
@@ -50,7 +50,7 @@
 
         <StackPanel Orientation="Horizontal" Grid.Row = "2">
             <Label Name = "valueLabel" Margin = "2">_Value:</Label>
-            <ComboBox Name = "valueText" Grid.Column = "1" Margin = "2" ItemsSource="{Binding Value.Options}"  SelectedValue="{Binding Value.Value}">
+            <ComboBox Name = "valueText" Grid.Column = "1" Margin = "2" ItemsSource="{Binding Options}"  SelectedValue="{Binding Value}">
                 
             </ComboBox>
         </StackPanel>

@@ -15,17 +15,17 @@
         <StackPanel Orientation="Horizontal" Grid.Row = "0">
             <Label Name = "valueLabel" Margin = "2">_Value:</Label>
             <TextBox Name = "valueText" Grid.Column = "1" Margin = "2" 
-         Text = "{Binding Value.Value}"/>
+         Text = "{Binding Value}"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="1">
             <Label Name = "lowestLabel" Margin = "2">_Lowest Value:</Label>
             <TextBox Name = "lowestText" Grid.Column = "1" Margin = "2" 
-         Text = "{Binding Value.LowestValue}"/>
+         Text = "{Binding LowestValue}"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="2">
             <Label Name = "highestLabel" Margin = "2">_Highest Value:</Label>
             <TextBox Name = "highestText" Grid.Column = "1" Margin = "2" 
-         Text = "{Binding Value.HighestValue}"/>
+         Text = "{Binding HighestValue}"/>
         </StackPanel>
     </Grid>
 </UserControl>

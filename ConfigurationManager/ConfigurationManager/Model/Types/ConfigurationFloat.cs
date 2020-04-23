@@ -21,6 +21,7 @@ namespace ConfigurationManager.Model.Types
             return new FloatType(this);
         }
     }
+    
     public class ConfigurationFloat: ConfigurationVariable<FloatType, float>
     {
         public ConfigurationFloat(float val, Changable father = null, bool is_explicit = false, float lowest=float.MinValue, float highest=float.MaxValue, string name="") : base(father, Brushes.BlueViolet, name, is_explicit)
@@ -67,7 +68,7 @@ namespace ConfigurationManager.Model.Types
 
         public override UserControl GetEditView()
         {
-            return new EditFloat(this);
+            return new EditFloat(Value);
         }
     }
 }

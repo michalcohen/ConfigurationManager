@@ -35,7 +35,7 @@ namespace ConfigurationManager.Model.Types
 
         public override UserControl GetEditView()
         {
-            return new EditString(this);
+            return new EditString(Value);
         }
 
         public static new ConfigurationString TryConvert(string name, JToken fromJson, Changable father)

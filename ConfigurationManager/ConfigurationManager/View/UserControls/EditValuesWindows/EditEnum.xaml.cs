@@ -21,10 +21,8 @@ namespace ConfigurationManager.View.UserControls.EditValuesWindows
     {
         private static string default_string = "Add option...";
 
-        ConfigurationEnumeration CE;
-        public EditEnum(ConfigurationEnumeration ce)
+        public EditEnum(EnumType ce)
         {
-            CE = ce;
             DataContext = ce;
             InitializeComponent();
         }
