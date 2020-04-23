@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using ConfigurationManager.View.UserControls.EditValuesWindows;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -53,6 +54,11 @@ namespace ConfigurationManager.Model.Types
         public override ConfigurationVariable Clone()
         {
             return new ConfigurationBool(this);
+        }
+
+        public override UserControl GetEditView()
+        {
+            return new EditBool(Value);
         }
     }
 }

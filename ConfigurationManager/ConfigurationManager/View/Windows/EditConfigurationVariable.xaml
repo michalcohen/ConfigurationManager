@@ -23,7 +23,7 @@
             <ColumnDefinition Width = "200" />
         </Grid.ColumnDefinitions>
             <Label Name = "nameLabel" Margin = "2" Visibility="{Binding IsNameVisable, Converter={StaticResource BooleanToVisibilityConverter}}" >_Name:</Label>
-            <TextBox Name = "nameText" Grid.Column = "1" Margin = "2" Visibility="{Binding IsNameVisable, Converter={StaticResource BooleanToVisibilityConverter}}" Text = "{Binding ConfigurationName}"/>
+            <TextBox Name = "nameText" Grid.Column = "1" Margin = "2" VerticalAlignment="Center" Visibility="{Binding IsNameVisable, Converter={StaticResource BooleanToVisibilityConverter}}" Text = "{Binding ConfigurationName}"/>
 
         <ContentControl x:Name="ContentControl" Content="{Binding EditWindow}" Margin = "2" Grid.ColumnSpan="2" Grid.Row = "1"/>
 
