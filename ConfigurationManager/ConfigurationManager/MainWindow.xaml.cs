@@ -118,8 +118,16 @@ namespace ConfigurationManager
         {
             try
             {
-                PVM.Save();
-                MessageBox.Show("Configuration successfuly saved!");
+                if (PVM.IsDirty())
+                {
+                    PVM.Save();
+                    MessageBox.Show("Configuration successfuly saved!");
+                } else
+                {
+                    MessageBox.Show("No changes detected!");
+                }
+                
+                
             } catch (Exception)
             {
                 MessageBox.Show("something went wrong while saving...");

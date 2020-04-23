@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -24,6 +25,11 @@ namespace ConfigurationManager.Model.Types
                 {
                     _is_global_enum = value;
                     RaisePropertyChanged("IsGlobalEnum");
+                    RaisePropertyChanged("IsLocalEnum");
+                    RaisePropertyChanged("Options");
+                    Father.Changed("IsGlobalEnum");
+                    Father.Changed("IsLocalEnum");
+                    Father.Changed("Options");
                     Dirty = true;
                 }
             }
@@ -57,7 +63,7 @@ namespace ConfigurationManager.Model.Types
             }
         }
 
-        public List<string> EnumValues { get; set; }
+        public ObservableCollection<string> EnumValues { get; set; }
 
         public List<string> Options
         {
@@ -67,7 +73,7 @@ namespace ConfigurationManager.Model.Types
                 {
                     return GlobalEnums.GetGlobalEnum(EnumName).Values;
                 }
-                return EnumValues;
+                return new List<string>(EnumValues);
             }
         }
         
@@ -75,12 +81,12 @@ namespace ConfigurationManager.Model.Types
         {
             _enum_name = enum_name;
             _is_global_enum = true;
-            EnumValues = new List<string>();
+            EnumValues = new ObservableCollection<string>();
         }
 
         public EnumType(ConfigurationEnumeration father, string value, List<string> enum_values): base(father, value, true)
         {
-            EnumValues = enum_values;
+            EnumValues = new ObservableCollection<string>(enum_values);
             _is_global_enum = false;
         }
 
@@ -88,7 +94,7 @@ namespace ConfigurationManager.Model.Types
         {
             _is_global_enum = other._is_global_enum;
             _enum_name = other._enum_name;
-            EnumValues = new List<string>(other.EnumValues);
+            EnumValues = new ObservableCollection<string>(other.EnumValues);
         }
 
         public override object GetDictionary()
@@ -131,6 +137,26 @@ namespace ConfigurationManager.Model.Types
             EnumName = o.EnumName;
             EnumValues = o.EnumValues;
 
+        }
+
+        public void AddLocalEnumOption(string new_option)
+        {
+            EnumValues.Add(new_option);
+            RaisePropertyChanged("EnumValues");
+            RaisePropertyChanged("Options");
+            Father.Changed("EnumValues");
+            Father.Changed("Options");
+            Dirty = true;
+        }
+
+        public void RemoveLocalEnumOption(string new_option)
+        {
+            EnumValues.Remove(new_option);
+            RaisePropertyChanged("EnumValues");
+            RaisePropertyChanged("Options");
+            Father.Changed("EnumValues");
+            Father.Changed("Options");
+            Dirty = true;
         }
     }
     

@@ -19,7 +19,7 @@ namespace ConfigurationManager.ViewModel
 
         public bool IsDirty()
         {
-            return PM.GetAllProjectExplorerItems().Any(pei => pei.IsDirty) || GlobalEnums.IsDirty();     
+            return PM.IsDirty();
         }
 
         internal void Save()

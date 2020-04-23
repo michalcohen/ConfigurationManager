@@ -29,7 +29,6 @@ namespace ConfigurationManager.View.UserControls.EditValuesWindows
             InitializeComponent();
         }
 
-
         private void add_enum_value_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (add_enum_value.Text.Equals(default_string))
@@ -38,9 +37,9 @@ namespace ConfigurationManager.View.UserControls.EditValuesWindows
             }
         }
 
-        private void add_local_enum_option(object sender)
+        private void add_local_enum_option()
         {
-            ((sender as TextBox).DataContext as ConfigurationEnumeration).Value.Options.Add(add_enum_value.Text);
+            (DataContext as ConfigurationEnumeration).Value.AddLocalEnumOption(add_enum_value.Text);
         }
 
         private bool add_enum_value_has_value()
@@ -52,22 +51,24 @@ namespace ConfigurationManager.View.UserControls.EditValuesWindows
         {
             if (add_enum_value_has_value())
             {
-                add_local_enum_option(sender);
+                add_local_enum_option();
             }
+            add_enum_value.Text = default_string;
         }
 
         private void add_enum_value_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key.Equals(Key.Enter) && add_enum_value_has_value())
             {
-                add_local_enum_option(sender);
-                add_enum_value.Text = default_string;
+                add_local_enum_option();
+                add_enum_value.Text = "";
             }
         }
 
         private void local_enum_option_delete_Click(object sender, RoutedEventArgs e)
         {
-
+            string name = (sender as MenuItem).DataContext as string;
+            (DataContext as ConfigurationEnumeration).Value.RemoveLocalEnumOption(name);
         }
     }
 }

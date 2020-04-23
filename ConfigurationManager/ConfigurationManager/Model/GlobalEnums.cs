@@ -79,6 +79,10 @@ namespace ConfigurationManager.Model
 
         public static GlobalEnum GetGlobalEnum(string enumName)
         {
+            if (enumName == null)
+            {
+                return instance.EnumsOptions.First();
+            }
             return instance.EnumsOptions.Where(x => x.Name.Equals(enumName)).First();
         }
 

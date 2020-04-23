@@ -103,6 +103,11 @@ namespace ConfigurationManager.Model
             GlobalEnums.Save(RootPath);
         }
 
+        public bool IsDirty()
+        {
+            return GetAllProjectExplorerItems().Any(pei => pei.IsDirty) || GlobalEnums.IsDirty();
+        }
+
         /// <summary>
         /// Return a list of all the files that are opened to view in the tab control section.
         /// </summary>

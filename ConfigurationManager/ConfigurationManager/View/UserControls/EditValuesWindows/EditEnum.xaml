@@ -35,7 +35,7 @@
                 </ListView.ItemsPanel>
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <TextBox Text="{Binding }" BorderThickness="0">
+                        <TextBox Text="{Binding Path=.}" BorderThickness="0">
                             <TextBox.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Header="Delete" Click="local_enum_option_delete_Click"/>
@@ -45,7 +45,7 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <TextBox x:Name="add_enum_value" Text="Add option..." Foreground="DimGray" VerticalAlignment="Center" MouseDown="add_enum_value_MouseDown" LostFocus="add_enum_value_LostFocus" KeyDown="add_enum_value_KeyDown"/>
+            <TextBox x:Name="add_enum_value" Text="Add option..." Foreground="DimGray" VerticalAlignment="Center" PreviewMouseLeftButtonDown="add_enum_value_MouseDown" LostFocus="add_enum_value_LostFocus" KeyDown="add_enum_value_KeyDown"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Grid.Row = "2">

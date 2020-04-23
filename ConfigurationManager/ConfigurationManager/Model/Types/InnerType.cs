@@ -96,16 +96,16 @@ namespace ConfigurationManager.Model.Types
         T maxValue;
         public BoundedInnerType(ConfigurationVariable father, T value, T lower_bound, T higher_bound, bool is_explicit = false) : base(father, value, is_explicit)
         {
-            LowestValue = lower_bound;
-            HighestValue = higher_bound;
+            _lowest_value = lower_bound;
+            _highest_value = higher_bound;
             maxValue = (T)(typeof(T).GetField("MaxValue", BindingFlags.Public | BindingFlags.Static)).GetValue(null);
             minValue = (T)(typeof(T).GetField("MinValue", BindingFlags.Public | BindingFlags.Static)).GetValue(null);
         }
 
         public BoundedInnerType(BoundedInnerType<T> other): base(other)
         {
-            LowestValue = other.LowestValue;
-            HighestValue = other.HighestValue;
+            _lowest_value = other._lowest_value;
+            _highest_value = other._highest_value;
             minValue = other.minValue;
             maxValue = other.maxValue;
         }

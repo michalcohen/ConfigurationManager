@@ -309,10 +309,7 @@ namespace ConfigurationManager.Model.Types
 
         public abstract ConfigurationVariable Clone();
 
-        public virtual bool CheckDirty()
-        {
-            return dirty;
-        }
+        public abstract bool CheckDirty();
         #endregion
 
     }
