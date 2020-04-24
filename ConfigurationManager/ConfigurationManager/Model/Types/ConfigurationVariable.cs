@@ -192,7 +192,8 @@ namespace ConfigurationManager.Model.Types
             ConfigurationName = other.ConfigurationName;
             Dirty = other.Dirty;
             Variables = new ObservableCollection<ConfigurationVariable>(other.Variables.Select(x => x.Clone(this)).ToList());
-            if (Variables.Any(x => x.Dirty))
+            
+            if (Dirty)
             {
                 RaisePropertyChanged("Variables");
                 RaisePropertyChanged("TextRepresentation");
@@ -231,6 +232,7 @@ namespace ConfigurationManager.Model.Types
         {
             Variables.Remove(configurationVariable);
             RaisePropertyChanged("Variables");
+            Dirty = true;
         }
 
         /// <summary>
@@ -347,7 +349,6 @@ namespace ConfigurationManager.Model.Types
         public override void UpdateBy(ConfigurationVariable other)
         {
             ConfigurationVariable<T, G> o = other as ConfigurationVariable<T, G>;
-              base.UpdateBy(o);
             if (Value != null)
             {
                 Value.UpdateBy(o.Value);
@@ -355,7 +356,8 @@ namespace ConfigurationManager.Model.Types
             {
                 Value = o.Value.Clone(this) as T;
             }
-            
+            base.UpdateBy(o);
+
 
         }
 

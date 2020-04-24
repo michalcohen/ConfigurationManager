@@ -65,7 +65,7 @@ namespace ConfigurationManager.Model.Types
 
         public override bool CheckDirty()
         {
-            return Variables.Any(x => x.Dirty);
+            return dirty || Variables.Any(x => x.Dirty);
         }
 
         public override UserControl GetEditView()
