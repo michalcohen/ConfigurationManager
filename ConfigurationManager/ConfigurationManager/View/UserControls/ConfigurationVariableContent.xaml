@@ -11,7 +11,11 @@
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
     <Grid>
-        <TreeView x:Name="configuration_folder_view" ItemsSource="{Binding Variables}" BorderThickness="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TreeView x:Name="configuration_folder_view" Grid.Row="0" ItemsSource="{Binding Variables}" BorderThickness="0">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Variables}" DataType="{x:Type model:ConfigurationVariable}">
                     <TreeViewItem MouseEnter="TreeViewItem_MouseEnter" MouseLeave="TreeViewItem_MouseLeave" MouseLeftButtonUp="TreeViewItem_MouseLeftButtonUp">
@@ -32,5 +36,6 @@
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
+        <Button x:Name="add_value" Content="Add Value" Grid.Row="1" Width="100" Click="add_value_Click" />
     </Grid>
 </UserControl>

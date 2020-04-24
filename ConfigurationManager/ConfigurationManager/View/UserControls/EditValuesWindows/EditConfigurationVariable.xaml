@@ -1,16 +1,14 @@
-﻿<Window x:Class="ConfigurationManager.View.Windows.EditConfigurationVariable"
+﻿<UserControl x:Class="ConfigurationManager.View.UserControls.EditValuesWindows.EditConfigurationVariable"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ConfigurationManager"
         xmlns:views="clr-namespace:ConfigurationManager.View.UserControls.EditValuesWindows"
-        mc:Ignorable="d"
-        Title="EditConfigurationVariable" Height="450" Width="800"
-        SizeToContent="WidthAndHeight">
-        <Window.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-    </Window.Resources>
+        mc:Ignorable="d">
+        <UserControl.Resources>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        </UserControl.Resources>
         <Grid>
             <Grid.RowDefinitions>
             <RowDefinition Height = "Auto" />
@@ -34,4 +32,4 @@
         <Button Grid.Row = "3" Grid.Column="0" Content = "_Cancel" Click="CancelClick" />
 
     </Grid>
-</Window>
+</UserControl>

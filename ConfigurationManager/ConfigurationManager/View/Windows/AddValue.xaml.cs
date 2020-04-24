@@ -1,5 +1,4 @@
-﻿using ConfigurationManager.Model.Types;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -9,19 +8,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ConfigurationManager.View.UserControls.EditValuesWindows
+namespace ConfigurationManager.View.Windows
 {
     /// <summary>
-    /// Interaction logic for EditList.xaml
+    /// Interaction logic for AddValue.xaml
     /// </summary>
-    public partial class EditList : UserControl
+    public partial class AddValue : Window
     {
-        public EditList(ConfigurationList cl)
+        public AddValue()
         {
-            DataContext = cl;
             InitializeComponent();
         }
     }

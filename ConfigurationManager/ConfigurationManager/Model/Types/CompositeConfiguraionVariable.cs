@@ -1,4 +1,5 @@
-﻿using ConfigurationManager.View.UserControls.EditValuesWindows;
+﻿using ConfigurationManager.View.UserControls;
+using ConfigurationManager.View.UserControls.EditValuesWindows;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -70,7 +71,7 @@ namespace ConfigurationManager.Model.Types
 
         public override UserControl GetEditView()
         {
-            return new EditComposite(this);
+            return new ConfigurationVariableContent(this);
         }
     }
 }

@@ -12,30 +12,28 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace ConfigurationManager.View.Windows
+namespace ConfigurationManager.View.UserControls.EditValuesWindows
 {
     /// <summary>
     /// Interaction logic for EditConfigurationVariable.xaml
     /// </summary>
-    public partial class EditConfigurationVariable : Window
+    public partial class EditConfigurationVariable : UserControl
     {
-        ConfigurationVariable original_CV;
-        public EditConfigurationVariable(ConfigurationVariable cv)
+        public ConfigurationVariable original_CV;
+        public EditConfigurationVariable()
         {
-            original_CV = cv;
-            DataContext = cv.Clone();
             InitializeComponent();
         }
 
         private void SaveClick(object sender, RoutedEventArgs e)
         {
             original_CV.UpdateBy(DataContext as ConfigurationVariable);
-            Close();
+            Window.GetWindow(this).Close();
         }
 
         private void CancelClick(object sender, RoutedEventArgs e)
         {
-            Close();
+            Window.GetWindow(this).Close();
         }
     }
 }

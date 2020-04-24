@@ -208,7 +208,7 @@ namespace ConfigurationManager.Model.Types
         /// </summary>
         public void OpenEditWindow()
         {
-            (new EditConfigurationVariable(this)).Show();
+            (new GeneralEditWindow(this)).Show();
         }
 
         public virtual UserControl GetEditView()

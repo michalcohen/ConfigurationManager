@@ -64,5 +64,10 @@ namespace ConfigurationManager.View.UserControls
         {
             
         }
+
+        private void add_value_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
