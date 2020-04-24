@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using ConfigurationManager.View.UserControls;
+using ConfigurationManager.View.UserControls.EditValuesWindows;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +22,7 @@ namespace ConfigurationManager.Model.Types
             IsComposite = true;
         }
 
-        public ConfigurationList(ConfigurationList other): base(other)
+        public ConfigurationList(ConfigurationList other, Changable father = null): base(other, father)
         {}
 
         public static new ConfigurationVariable TryConvert(string name, JToken fromJson, Changable father)
@@ -32,9 +34,9 @@ namespace ConfigurationManager.Model.Types
             return null;
         }
 
-        public override ConfigurationVariable Clone()
+        public override ConfigurationVariable Clone(Changable father = null)
         {
-            return new ConfigurationList(this);
+            return new ConfigurationList(this, father);
         }
 
         public override object GetDictionary()
@@ -50,6 +52,11 @@ namespace ConfigurationManager.Model.Types
         public override bool CheckDirty()
         {
             return Variables.Any(x => x.Dirty);
+        }
+
+        public override UserControl GetEditView()
+        {
+            return new ConfigurationVariableContent(this);
         }
 
     }

@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="ConfigurationManager.View.UserControls.ConfigurationFileContent"
+﻿<UserControl x:Class="ConfigurationManager.View.UserControls.ConfigurationVariableContent"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -11,7 +11,7 @@
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
     <Grid>
-        <TreeView x:Name="configuration_folder_view" ItemsSource="{Binding Content.Content.Variables}" BorderThickness="0">
+        <TreeView x:Name="configuration_folder_view" ItemsSource="{Binding Variables}" BorderThickness="0">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Variables}" DataType="{x:Type model:ConfigurationVariable}">
                     <TreeViewItem MouseEnter="TreeViewItem_MouseEnter" MouseLeave="TreeViewItem_MouseLeave" MouseLeftButtonUp="TreeViewItem_MouseLeftButtonUp">

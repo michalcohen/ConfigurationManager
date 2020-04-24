@@ -20,7 +20,7 @@
             </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>
                 <DataTemplate>
-                    <views:ConfigurationFileContent DataContext="{Binding AutoReference}"  x:Name="TabContent"/>
+                    <views:ConfigurationVariableContent DataContext="{Binding Content.Content}"  x:Name="TabContent"/>
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>

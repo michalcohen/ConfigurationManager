@@ -26,11 +26,12 @@ namespace ConfigurationManager.Model.Types
                 {
                     value_field = value;
                     RaisePropertyChanged("TextRepresentation");
-                    Father.Changed("TextRepresentation");
                     Dirty = true;
                 }
             }
         }
+
+        public ConfigurationVariable Father;
 
         public bool Dirty { get; set; }
 
@@ -43,14 +44,12 @@ namespace ConfigurationManager.Model.Types
             Dirty = false;
         }
 
-        public InnerType(InnerType<T> other)
+        public InnerType(InnerType<T> other, ConfigurationVariable father)
         {
-            Father = other.Father;
+            Father = father;
             Value = other.Value;
             Dirty = other.Dirty;
         }
-
-        public ConfigurationVariable Father;
 
         public virtual void UpdateBy(InnerType<T> other)
         {
@@ -62,7 +61,9 @@ namespace ConfigurationManager.Model.Types
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(property));
+                
             }
+            Father.Changed(property);
         }
 
         public override string ToString()
@@ -82,7 +83,7 @@ namespace ConfigurationManager.Model.Types
             return Value;
         }
 
-        public abstract InnerType<T> Clone();
+        public abstract InnerType<T> Clone(ConfigurationVariable father = null);
 
         public void Saved()
         {
@@ -94,6 +95,7 @@ namespace ConfigurationManager.Model.Types
     {
         T minValue;
         T maxValue;
+        
         public BoundedInnerType(ConfigurationVariable father, T value, T lower_bound, T higher_bound, bool is_explicit = false) : base(father, value, is_explicit)
         {
             _lowest_value = lower_bound;
@@ -102,7 +104,7 @@ namespace ConfigurationManager.Model.Types
             minValue = (T)(typeof(T).GetField("MinValue", BindingFlags.Public | BindingFlags.Static)).GetValue(null);
         }
 
-        public BoundedInnerType(BoundedInnerType<T> other): base(other)
+        public BoundedInnerType(BoundedInnerType<T> other, ConfigurationVariable father) : base(other, father)
         {
             _lowest_value = other._lowest_value;
             _highest_value = other._highest_value;

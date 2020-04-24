@@ -14,10 +14,10 @@ namespace ConfigurationManager.Model.Types
         public BoolType(ConfigurationBool father, bool value, bool is_explicit) : base(father, value, is_explicit)
         {}
 
-        public BoolType(BoolType other): base(other) { }
-        public override InnerType<bool> Clone()
+        public BoolType(BoolType other, ConfigurationVariable father = null) : base(other, father) { }
+        public override InnerType<bool> Clone(ConfigurationVariable father = null)
         {
-            return new BoolType(this);
+            return new BoolType(this, father);
         }
     }
     public class ConfigurationBool : ConfigurationVariable<BoolType, bool>
@@ -27,7 +27,7 @@ namespace ConfigurationManager.Model.Types
             Value = new BoolType(this, value, is_explicit);
         }
 
-        public ConfigurationBool(ConfigurationBool other): base(other) { }
+        public ConfigurationBool(ConfigurationBool other, Changable father = null): base(other, father) { }
 
         public static new ConfigurationVariable TryConvert(string name, JToken fromJson, Changable father)
         {
@@ -51,9 +51,9 @@ namespace ConfigurationManager.Model.Types
             return fromJson.Type == JTokenType.Object && ((JObject)fromJson)["type"].ToString().Equals("bool");
         }
 
-        public override ConfigurationVariable Clone()
+        public override ConfigurationVariable Clone(Changable father = null)
         {
-            return new ConfigurationBool(this);
+            return new ConfigurationBool(this, father);
         }
 
         public override UserControl GetEditView()

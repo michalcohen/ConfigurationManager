@@ -27,9 +27,6 @@ namespace ConfigurationManager.Model.Types
                     RaisePropertyChanged("IsGlobalEnum");
                     RaisePropertyChanged("IsLocalEnum");
                     RaisePropertyChanged("Options");
-                    Father.Changed("IsGlobalEnum");
-                    Father.Changed("IsLocalEnum");
-                    Father.Changed("Options");
                     Dirty = true;
                 }
             }
@@ -54,9 +51,7 @@ namespace ConfigurationManager.Model.Types
                 {
                     _enum_name = value;
                     RaisePropertyChanged("TextRepresentation");
-                    Father.Changed("TextRepresentation");
                     RaisePropertyChanged("Options");
-                    Father.Changed("Value.Options");
                     Dirty = true;
                 }
             }
@@ -89,7 +84,7 @@ namespace ConfigurationManager.Model.Types
             _is_global_enum = false;
         }
 
-        public EnumType(EnumType other): base(other)
+        public EnumType(EnumType other, ConfigurationVariable father = null) : base(other, father)
         {
             _is_global_enum = other._is_global_enum;
             _enum_name = other._enum_name;
@@ -123,9 +118,9 @@ namespace ConfigurationManager.Model.Types
             return Value.ToString();
         }
 
-        public override InnerType<string> Clone()
+        public override InnerType<string> Clone(ConfigurationVariable father = null)
         {
-            return new EnumType(this);
+            return new EnumType(this, father);
         }
 
         public override void UpdateBy(InnerType<string> other)
@@ -143,8 +138,6 @@ namespace ConfigurationManager.Model.Types
             EnumValues.Add(new_option);
             RaisePropertyChanged("EnumValues");
             RaisePropertyChanged("Options");
-            Father.Changed("EnumValues");
-            Father.Changed("Options");
             Dirty = true;
         }
 
@@ -153,8 +146,6 @@ namespace ConfigurationManager.Model.Types
             EnumValues.Remove(new_option);
             RaisePropertyChanged("EnumValues");
             RaisePropertyChanged("Options");
-            Father.Changed("EnumValues");
-            Father.Changed("Options");
             Dirty = true;
         }
     }
@@ -173,7 +164,7 @@ namespace ConfigurationManager.Model.Types
             IsExplicitnessChangeable = false;
         }
 
-        public ConfigurationEnumeration(ConfigurationEnumeration other): base(other)
+        public ConfigurationEnumeration(ConfigurationEnumeration other, Changable father = null): base(other, father)
         {}
         public static new ConfigurationVariable TryConvert(string name, JToken fromJson, Changable father)
         {
@@ -217,9 +208,9 @@ namespace ConfigurationManager.Model.Types
             return new EditEnum(Value);
         }
 
-        public override ConfigurationVariable Clone()
+        public override ConfigurationVariable Clone(Changable father = null)
         {
-            return new ConfigurationEnumeration(this);
+            return new ConfigurationEnumeration(this, father);
         }
 
         public void UpdateBy(ConfigurationEnumeration other)

@@ -18,10 +18,16 @@ namespace ConfigurationManager.View.UserControls
     /// <summary>
     /// Interaction logic for ConfigurationFileContent.xaml
     /// </summary>
-    public partial class ConfigurationFileContent : UserControl
+    public partial class ConfigurationVariableContent : UserControl
     {
-        public ConfigurationFileContent()
+        public ConfigurationVariableContent()
         {
+            InitializeComponent();
+        }
+
+        public ConfigurationVariableContent(ConfigurationVariable cv)
+        {
+            DataContext = cv;
             InitializeComponent();
         }
 

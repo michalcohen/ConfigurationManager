@@ -14,11 +14,11 @@ namespace ConfigurationManager.Model.Types
         public IntegerType(ConfigurationInteger father, int value, int lowest, int highest, bool is_explicit) : base(father, value, lowest, highest, is_explicit)
         {}
 
-        public IntegerType(IntegerType other): base(other) { }
+        public IntegerType(IntegerType other, ConfigurationVariable father = null) : base(other, father) { }
 
-        public override InnerType<int> Clone()
+        public override InnerType<int> Clone(ConfigurationVariable father = null)
         {
-            return new IntegerType(this);
+            return new IntegerType(this, father);
         }
     }
     public class ConfigurationInteger: ConfigurationVariable<IntegerType, int>
@@ -28,7 +28,7 @@ namespace ConfigurationManager.Model.Types
             Value = new IntegerType(this, val, lowest, highest, is_explicit);
         }
 
-        public ConfigurationInteger(ConfigurationInteger other): base(other)
+        public ConfigurationInteger(ConfigurationInteger other, Changable father = null): base(other, father)
         {}
 
         public override UserControl GetEditView()
@@ -61,9 +61,9 @@ namespace ConfigurationManager.Model.Types
             return fromJson.Type == JTokenType.Object && ((JObject)fromJson)["type"].ToString().Equals("int");
         }
 
-        public override ConfigurationVariable Clone()
+        public override ConfigurationVariable Clone(Changable father = null)
         {
-            return new ConfigurationInteger(this);
+            return new ConfigurationInteger(this, father);
         }
     }
 }

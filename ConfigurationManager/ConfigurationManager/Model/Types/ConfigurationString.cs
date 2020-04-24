@@ -15,11 +15,11 @@ namespace ConfigurationManager.Model.Types
         public StringType(ConfigurationString father, string value, bool is_explicit) : base(father, value, is_explicit)
         {}
 
-        public StringType(StringType other): base(other) { }
+        public StringType(StringType other, ConfigurationVariable father = null) : base(other, father) { }
 
-        public override InnerType<string> Clone()
+        public override InnerType<string> Clone(ConfigurationVariable father = null)
         {
-            return new StringType(this);
+            return new StringType(this, father);
         }
     }
     
@@ -30,7 +30,7 @@ namespace ConfigurationManager.Model.Types
             Value = new StringType(this, val, is_explicit);
         }
 
-        public ConfigurationString(ConfigurationString other): base(other)
+        public ConfigurationString(ConfigurationString other, Changable father = null): base(other, father)
         {}
 
         public override UserControl GetEditView()
@@ -60,9 +60,9 @@ namespace ConfigurationManager.Model.Types
             return fromJson.Type == JTokenType.Object && ((JObject)fromJson)["type"].ToString().Equals("string");
         }
 
-        public override ConfigurationVariable Clone()
+        public override ConfigurationVariable Clone(Changable father = null)
         {
-            return new ConfigurationString(this);
+            return new ConfigurationString(this, father);
         }
     }
 }

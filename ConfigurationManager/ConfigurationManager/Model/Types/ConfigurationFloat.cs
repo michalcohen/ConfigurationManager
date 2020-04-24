@@ -14,11 +14,11 @@ namespace ConfigurationManager.Model.Types
         public FloatType(ConfigurationFloat father, float value, float lowest, float highest, bool is_explicit) : base(father, value, lowest, highest, is_explicit)
         {}
 
-        public FloatType(FloatType other): base(other) { }
+        public FloatType(FloatType other, ConfigurationVariable father = null) : base(other, father) { }
 
-        public override InnerType<float> Clone()
+        public override InnerType<float> Clone(ConfigurationVariable father = null)
         {
-            return new FloatType(this);
+            return new FloatType(this, father);
         }
     }
     
@@ -33,7 +33,7 @@ namespace ConfigurationManager.Model.Types
             Value = new FloatType(this, val, lowest, highest, is_explicit);
         }
 
-        public ConfigurationFloat(ConfigurationFloat other): base(other)
+        public ConfigurationFloat(ConfigurationFloat other, Changable father = null): base(other, father)
         {}
 
         public static new ConfigurationVariable TryConvert(string name, JToken fromJson, Changable father)
@@ -61,9 +61,9 @@ namespace ConfigurationManager.Model.Types
             return fromJson.Type == JTokenType.Object && ((JObject)fromJson)["type"].ToString().Equals("float");
         }
 
-        public override ConfigurationVariable Clone()
+        public override ConfigurationVariable Clone(Changable father = null)
         {
-            return new ConfigurationFloat(this);
+            return new ConfigurationFloat(this, father);
         }
 
         public override UserControl GetEditView()

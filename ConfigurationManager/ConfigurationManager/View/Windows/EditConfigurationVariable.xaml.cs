@@ -20,18 +20,16 @@ namespace ConfigurationManager.View.Windows
     public partial class EditConfigurationVariable : Window
     {
         ConfigurationVariable original_CV;
-        ConfigurationVariable copy_CV;
         public EditConfigurationVariable(ConfigurationVariable cv)
         {
             original_CV = cv;
-            copy_CV = cv.Clone();
-            DataContext = copy_CV;
+            DataContext = cv.Clone();
             InitializeComponent();
         }
 
         private void SaveClick(object sender, RoutedEventArgs e)
         {
-            original_CV.UpdateBy(copy_CV);
+            original_CV.UpdateBy(DataContext as ConfigurationVariable);
             Close();
         }
 

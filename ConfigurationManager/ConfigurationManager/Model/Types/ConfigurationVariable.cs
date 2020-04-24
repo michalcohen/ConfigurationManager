@@ -159,9 +159,15 @@ namespace ConfigurationManager.Model.Types
             IsExplicitnessChangeable = false;
         }
 
-        protected ConfigurationVariable(ConfigurationVariable other)
+        protected ConfigurationVariable(ConfigurationVariable other, Changable father = null)
         {
-            Father = new EmptyFather();
+            if (father == null)
+            {
+                Father = new EmptyFather();
+            } else
+            {
+                Father = father;
+            }
             UpdateBy(other);
         }
 
@@ -181,11 +187,16 @@ namespace ConfigurationManager.Model.Types
             IsExplicitnessChangeable = other.IsExplicitnessChangeable;
             IsExplicit = other.IsExplicit;
             IsComposite = other.IsComposite;
-            PropertyChanged = other.PropertyChanged;
+            //PropertyChanged = other.PropertyChanged;
             FontColor = other.FontColor;
             ConfigurationName = other.ConfigurationName;
             Dirty = other.Dirty;
-            Variables = new ObservableCollection<ConfigurationVariable>(other.Variables.Select(x => x.Clone()).ToList());
+            Variables = new ObservableCollection<ConfigurationVariable>(other.Variables.Select(x => x.Clone(this)).ToList());
+            if (Variables.Any(x => x.Dirty))
+            {
+                RaisePropertyChanged("Variables");
+                RaisePropertyChanged("TextRepresentation");
+            }
         }
 
         /// <summary>
@@ -206,13 +217,13 @@ namespace ConfigurationManager.Model.Types
 
         internal void Delete()
         {
-            if (Father is ConfigurationVariable)
+            if (Father is ConfigurationFile)
             {
-                (Father as ConfigurationVariable).DeleteSon(this);
+                MessageBox.Show("cannot delete highmost hierarchy of json file", "Configuration manager", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             else
             {
-                MessageBox.Show("cannot delete highmost hierarchy of json file", "Configuration manager", MessageBoxButton.OK, MessageBoxImage.Error);
+                (Father as ConfigurationVariable).DeleteSon(this);
             }
         }
 
@@ -293,8 +304,9 @@ namespace ConfigurationManager.Model.Types
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(property));
-                Father.Changed(property);
+                
             }
+            Father.Changed(property);
         }
 
         /// <summary>
@@ -304,10 +316,10 @@ namespace ConfigurationManager.Model.Types
         public void Changed(string property)
         {
             RaisePropertyChanged(property);
-            Father.Changed(property);
         }
 
-        public abstract ConfigurationVariable Clone();
+        public abstract ConfigurationVariable Clone(Changable father = null);
+
 
         public abstract bool CheckDirty();
         #endregion
@@ -327,7 +339,7 @@ namespace ConfigurationManager.Model.Types
             IsExplicitnessChangeable = true;
         }
 
-        protected ConfigurationVariable(ConfigurationVariable<T, G> other): base(other)
+        protected ConfigurationVariable(ConfigurationVariable<T, G> other, Changable father = null): base(other, father)
         {
             UpdateBy(other);
         }
@@ -341,7 +353,7 @@ namespace ConfigurationManager.Model.Types
                 Value.UpdateBy(o.Value);
             } else
             {
-                Value = o.Value.Clone() as T;
+                Value = o.Value.Clone(this) as T;
             }
             
 

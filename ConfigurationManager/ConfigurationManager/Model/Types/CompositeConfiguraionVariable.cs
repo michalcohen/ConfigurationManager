@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using ConfigurationManager.View.UserControls.EditValuesWindows;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace ConfigurationManager.Model.Types
             IsComposite = true;
         }
 
-        public CompositeConfiguraionVariable(CompositeConfiguraionVariable other): base(other)
+        public CompositeConfiguraionVariable(CompositeConfiguraionVariable other, Changable father = null): base(other, father)
         {}
 
         public static new ConfigurationVariable TryConvert(string name, JToken fromJson, Changable father)
@@ -52,9 +53,9 @@ namespace ConfigurationManager.Model.Types
             return "";
         }
 
-        public override ConfigurationVariable Clone()
+        public override ConfigurationVariable Clone(Changable father = null)
         {
-            return new CompositeConfiguraionVariable(this);
+            return new CompositeConfiguraionVariable(this, father);
         }
 
         public ConfigurationVariable this[string key]
@@ -65,6 +66,11 @@ namespace ConfigurationManager.Model.Types
         public override bool CheckDirty()
         {
             return Variables.Any(x => x.Dirty);
+        }
+
+        public override UserControl GetEditView()
+        {
+            return new EditComposite(this);
         }
     }
 }
