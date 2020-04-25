@@ -27,7 +27,13 @@ namespace ConfigurationManager.View.UserControls.EditValuesWindows
 
         private void SaveClick(object sender, RoutedEventArgs e)
         {
-            original_CV.UpdateBy(DataContext as ConfigurationVariable);
+            if (original_CV == null)
+            {
+                original_CV = DataContext as ConfigurationVariable;
+            } else
+            {
+                original_CV.UpdateBy(DataContext as ConfigurationVariable);
+            }
             Window.GetWindow(this).Close();
         }
 

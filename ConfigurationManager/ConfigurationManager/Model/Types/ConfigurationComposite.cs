@@ -11,9 +11,11 @@ using System.Windows.Media;
 
 namespace ConfigurationManager.Model.Types
 {
-    public class CompositeConfiguraionVariable: ConfigurationVariable
+    public class ConfigurationComposite: ConfigurationVariable
     {
-        public CompositeConfiguraionVariable(JObject array, Changable father = null, string name="") : base(father, Brushes.Black, name)
+
+        private static Brush brush = Brushes.Black;
+        public ConfigurationComposite(JObject array, Changable father = null, string name="") : base(father, ConfigurationComposite.brush, name)
         {
             foreach (KeyValuePair<String, JToken> value in array)
             {
@@ -22,14 +24,19 @@ namespace ConfigurationManager.Model.Types
             IsComposite = true;
         }
 
-        public CompositeConfiguraionVariable(CompositeConfiguraionVariable other, Changable father = null): base(other, father)
+        public ConfigurationComposite(ConfigurationComposite other, Changable father = null): base(other, father)
         {}
+
+        public ConfigurationComposite(): base() 
+        {
+            FontColor = ConfigurationComposite.brush;
+        }
 
         public static new ConfigurationVariable TryConvert(string name, JToken fromJson, Changable father)
         {
             if (IsRelevantType(fromJson))
             {
-                return new CompositeConfiguraionVariable((JObject)fromJson, father, name);
+                return new ConfigurationComposite((JObject)fromJson, father, name);
             }
             return null;
         }
@@ -56,7 +63,7 @@ namespace ConfigurationManager.Model.Types
 
         public override ConfigurationVariable Clone(Changable father = null)
         {
-            return new CompositeConfiguraionVariable(this, father);
+            return new ConfigurationComposite(this, father);
         }
 
         public ConfigurationVariable this[string key]

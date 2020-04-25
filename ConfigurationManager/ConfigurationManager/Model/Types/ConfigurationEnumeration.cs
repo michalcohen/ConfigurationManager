@@ -152,7 +152,8 @@ namespace ConfigurationManager.Model.Types
     
     public class ConfigurationEnumeration: ConfigurationVariable<EnumType, string>
     {
-        public ConfigurationEnumeration(string value, Changable father = null, string enum_name = "", string name="") : base(father, Brushes.DarkGoldenrod, name, true)
+        private static Brush brush = Brushes.DarkGoldenrod;
+        public ConfigurationEnumeration(string value, Changable father = null, string enum_name = "", string name="") : base(father, ConfigurationEnumeration.brush, name, true)
         {
             Value = new EnumType(this, value, enum_name);
             IsExplicitnessChangeable = false;
@@ -166,6 +167,12 @@ namespace ConfigurationManager.Model.Types
 
         public ConfigurationEnumeration(ConfigurationEnumeration other, Changable father = null): base(other, father)
         {}
+
+        public ConfigurationEnumeration(): base()
+        {
+            FontColor = ConfigurationEnumeration.brush;
+            Value = new EnumType(this, "", new List<string>() { "" });
+        }
         public static new ConfigurationVariable TryConvert(string name, JToken fromJson, Changable father)
         {
             if (fromJson.Type != JTokenType.Object)

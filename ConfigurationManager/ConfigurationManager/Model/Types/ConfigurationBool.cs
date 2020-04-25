@@ -22,12 +22,19 @@ namespace ConfigurationManager.Model.Types
     }
     public class ConfigurationBool : ConfigurationVariable<BoolType, bool>
     {
-        public ConfigurationBool(bool value, Changable father = null, bool is_explicit = false, string name="") : base(father, Brushes.Magenta, name, is_explicit)
+        private static Brush brush = Brushes.Magenta;
+        public ConfigurationBool(bool value, Changable father = null, bool is_explicit = false, string name="") : base(father, ConfigurationBool.brush, name, is_explicit)
         {
             Value = new BoolType(this, value, is_explicit);
         }
 
         public ConfigurationBool(ConfigurationBool other, Changable father = null): base(other, father) { }
+
+        public ConfigurationBool(): base()
+        {
+            FontColor = ConfigurationBool.brush;
+            Value = new BoolType(this, false, true);
+        }
 
         public static new ConfigurationVariable TryConvert(string name, JToken fromJson, Changable father)
         {
@@ -48,7 +55,7 @@ namespace ConfigurationManager.Model.Types
 
         public static new bool IsExplicitType(JToken fromJson)
         {
-            return fromJson.Type == JTokenType.Object && ((JObject)fromJson)["type"].ToString().Equals("bool");
+            return fromJson.Type == JTokenType.Object && ((JObject)fromJson).ContainsKey("type") && ((JObject)fromJson)["type"].ToString().Equals("bool");
         }
 
         public override ConfigurationVariable Clone(Changable father = null)

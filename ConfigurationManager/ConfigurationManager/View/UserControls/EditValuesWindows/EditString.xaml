@@ -6,12 +6,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ConfigurationManager.View.UserControls.EditValuesWindows"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" >
     <Grid>
         <StackPanel Orientation="Horizontal">
             <Label Name = "valueLabel" Margin = "2" Grid.Row = "1">_Value:</Label>
 
-            <TextBox Name = "valueText" Grid.Column = "1" Grid.Row = "1" Margin = "2" Text = "{Binding Value}" VerticalAlignment="Center"/>
+            <TextBox x:Name = "valueText" Grid.Column = "1" Grid.Row = "1" Margin = "2" Text = "{Binding Value}" VerticalAlignment="Center"/>
             
         </StackPanel>
     </Grid>

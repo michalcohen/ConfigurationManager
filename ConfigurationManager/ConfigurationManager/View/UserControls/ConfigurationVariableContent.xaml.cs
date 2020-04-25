@@ -1,5 +1,6 @@
 ﻿using ConfigurationManager.Model;
 using ConfigurationManager.Model.Types;
+using ConfigurationManager.View.Windows;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -67,7 +68,7 @@ namespace ConfigurationManager.View.UserControls
 
         private void add_value_Click(object sender, RoutedEventArgs e)
         {
-
+            (new AddValue(DataContext as ConfigurationVariable)).Show();
         }
     }
 }

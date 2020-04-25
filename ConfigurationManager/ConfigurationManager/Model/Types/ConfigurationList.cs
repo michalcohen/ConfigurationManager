@@ -13,7 +13,8 @@ namespace ConfigurationManager.Model.Types
 {
     public class ConfigurationList : ConfigurationVariable
     {
-        public ConfigurationList(JArray array, Changable father = null, string name="") : base(father, Brushes.Black, name)
+        private static Brush brush = Brushes.Black;
+        public ConfigurationList(JArray array, Changable father = null, string name="") : base(father, ConfigurationList.brush, name)
         {
             foreach (JToken value in array)
             {
@@ -24,6 +25,11 @@ namespace ConfigurationManager.Model.Types
 
         public ConfigurationList(ConfigurationList other, Changable father = null): base(other, father)
         {}
+
+        public ConfigurationList() : base() 
+        {
+            FontColor = ConfigurationList.brush;
+        }
 
         public static new ConfigurationVariable TryConvert(string name, JToken fromJson, Changable father)
         {

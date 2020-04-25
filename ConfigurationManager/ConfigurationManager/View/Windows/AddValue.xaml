@@ -4,8 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ConfigurationManager.View.Windows"
-        mc:Ignorable="d" Height="450" Width="800">
+        xmlns:views="clr-namespace:ConfigurationManager.View.UserControls.EditValuesWindows"
+        mc:Ignorable="d" Height="450" Width="800" SizeToContent="WidthAndHeight"
+        Closed="Window_Closed">
     <Grid>
-        <ComboBox Name="choose_type" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <ComboBox Name="choose_type" Grid.Row="0" ItemsSource="{Binding PossibleTypesNames}" SelectedItem="{Binding CurrentType}"/>
+        <views:EditConfigurationVariable x:Name="edit_control" Grid.Row="1" DataContext="{Binding current_value}" />
     </Grid>
 </Window>

@@ -23,13 +23,20 @@ namespace ConfigurationManager.Model.Types
     }
     public class ConfigurationInteger: ConfigurationVariable<IntegerType, int>
     {
-        public ConfigurationInteger(int val, Changable father = null, bool is_explicit = false, int lowest=int.MinValue, int highest = int.MaxValue, string name="") : base(father, Brushes.Green, name, is_explicit)
+        private static Brush brush = Brushes.Green;
+        public ConfigurationInteger(int val, Changable father = null, bool is_explicit = false, int lowest=int.MinValue, int highest = int.MaxValue, string name="") : base(father, ConfigurationInteger.brush, name, is_explicit)
         {
             Value = new IntegerType(this, val, lowest, highest, is_explicit);
         }
 
         public ConfigurationInteger(ConfigurationInteger other, Changable father = null): base(other, father)
         {}
+
+        public ConfigurationInteger(): base()
+        {
+            FontColor = ConfigurationInteger.brush;
+            Value = new IntegerType(this, 0, int.MinValue, int.MaxValue, true);
+        }
 
         public override UserControl GetEditView()
         {

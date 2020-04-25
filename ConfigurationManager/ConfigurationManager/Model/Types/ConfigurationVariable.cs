@@ -27,7 +27,6 @@ namespace ConfigurationManager.Model.Types
         /// <summary>
         /// True <=> any change was made to the configuration variable name or content that wasn't saved yet.
         /// </summary>
-
         protected bool dirty;
         public bool Dirty 
         { 
@@ -106,6 +105,8 @@ namespace ConfigurationManager.Model.Types
             }
         }
 
+        private bool _is_name_visible = true;
+        
         /// <summary>
         /// If the variable is annonimous (like element in list), then its name isan't changeable.
         /// </summary>
@@ -113,11 +114,16 @@ namespace ConfigurationManager.Model.Types
         {
             get
             {
-                return !ConfigurationName.Equals("");
+                return _is_name_visible;
+            }
+            set
+            {
+                _is_name_visible = value;
             }
         }
 
         protected bool is_explicit;
+        
         /// <summary>
         /// True <=> the value was read as explicit type, or the user changed it to be explicit.
         /// </summary>
@@ -157,6 +163,7 @@ namespace ConfigurationManager.Model.Types
             IsComposite = false;
             is_explicit = false;
             IsExplicitnessChangeable = false;
+            _is_name_visible = Father is ConfigurationList;
         }
 
         protected ConfigurationVariable(ConfigurationVariable other, Changable father = null)
@@ -171,7 +178,18 @@ namespace ConfigurationManager.Model.Types
             UpdateBy(other);
         }
 
-        class EmptyFather : Changable
+        protected ConfigurationVariable()
+        {
+            Father = new EmptyFather();
+            Variables = new ObservableCollection<ConfigurationVariable>();
+            Dirty = true;
+            IsComposite = true;
+            is_explicit = false;
+            IsExplicitnessChangeable = false;
+            ConfigurationName = "";
+        }
+
+        public class EmptyFather : Changable
         {
             public void Changed(string property)
             {
@@ -192,7 +210,7 @@ namespace ConfigurationManager.Model.Types
             ConfigurationName = other.ConfigurationName;
             Dirty = other.Dirty;
             Variables = new ObservableCollection<ConfigurationVariable>(other.Variables.Select(x => x.Clone(this)).ToList());
-            
+            _is_name_visible = other._is_name_visible;
             if (Dirty)
             {
                 RaisePropertyChanged("Variables");
@@ -224,22 +242,32 @@ namespace ConfigurationManager.Model.Types
             }
             else
             {
-                (Father as ConfigurationVariable).DeleteSon(this);
+                (Father as ConfigurationVariable).DeleteVariable(this);
             }
         }
 
-        private void DeleteSon(ConfigurationVariable configurationVariable)
+        private void DeleteVariable(ConfigurationVariable configurationVariable)
         {
             Variables.Remove(configurationVariable);
             RaisePropertyChanged("Variables");
             Dirty = true;
         }
 
+        public void AddVariable(ConfigurationVariable configurationVariable)
+        {
+            Variables.Add(configurationVariable);
+            RaisePropertyChanged("Variables");
+            RaisePropertyChanged("TextRepresentation");
+            RaisePropertyChanged("LabelName");
+            Dirty = true;
+            configurationVariable.Father = this;
+        }
+
         /// <summary>
         /// Returns using reflection all the ConfigurationVariable types.
         /// </summary>
         /// <returns></returns>
-        private static List<Type> GetAllConfigurationTypes()
+        public static List<Type> GetAllConfigurationTypes()
         {
             return AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes())
                  .Where(x => typeof(ConfigurationVariable).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract).ToList();
@@ -344,6 +372,17 @@ namespace ConfigurationManager.Model.Types
         protected ConfigurationVariable(ConfigurationVariable<T, G> other, Changable father = null): base(other, father)
         {
             UpdateBy(other);
+        }
+
+        protected ConfigurationVariable()
+        {
+            Father = new EmptyFather();
+            Variables = new ObservableCollection<ConfigurationVariable>();
+            Dirty = true;
+            IsComposite = false;
+            is_explicit = false;
+            IsExplicitnessChangeable = true;
+            ConfigurationName = "";
         }
 
         public override void UpdateBy(ConfigurationVariable other)

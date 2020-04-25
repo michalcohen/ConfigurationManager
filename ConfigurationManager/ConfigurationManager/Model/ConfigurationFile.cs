@@ -15,11 +15,11 @@ namespace ConfigurationManager
         /// For example, each json file always surounded by { }. 
         /// Therefor, the root element of each configuration file is CompositeConfigurationVariable.
         /// </summary>
-        public CompositeConfiguraionVariable Content { get; }
+        public ConfigurationComposite Content { get; }
 
         public ConfigurationFile(JObject array)
         {
-            Content = new CompositeConfiguraionVariable(array, this);
+            Content = new ConfigurationComposite(array, this);
         }
 
         /// <summary>

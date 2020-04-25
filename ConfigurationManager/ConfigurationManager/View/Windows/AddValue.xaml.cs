@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ConfigurationManager.Model;
+using ConfigurationManager.Model.Types;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -17,9 +19,20 @@ namespace ConfigurationManager.View.Windows
     /// </summary>
     public partial class AddValue : Window
     {
-        public AddValue()
+        ConfigurationVariable CV;
+        public AddValue(ConfigurationVariable cv)
         {
+            CV = cv;
+            DataContext = new AddedValue(cv);
             InitializeComponent();
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            if (edit_control.original_CV != null)
+            {
+                CV.AddVariable(edit_control.original_CV as ConfigurationVariable);
+            }
         }
     }
 }

@@ -24,7 +24,8 @@ namespace ConfigurationManager.Model.Types
     
     public class ConfigurationFloat: ConfigurationVariable<FloatType, float>
     {
-        public ConfigurationFloat(float val, Changable father = null, bool is_explicit = false, float lowest=float.MinValue, float highest=float.MaxValue, string name="") : base(father, Brushes.BlueViolet, name, is_explicit)
+        private static Brush brush = Brushes.BlueViolet;
+        public ConfigurationFloat(float val, Changable father = null, bool is_explicit = false, float lowest=float.MinValue, float highest=float.MaxValue, string name="") : base(father, ConfigurationFloat.brush, name, is_explicit)
         {
             if (lowest > highest)
             {
@@ -35,6 +36,12 @@ namespace ConfigurationManager.Model.Types
 
         public ConfigurationFloat(ConfigurationFloat other, Changable father = null): base(other, father)
         {}
+
+        public ConfigurationFloat(): base()
+        {
+            FontColor = ConfigurationFloat.brush;
+            Value = new FloatType(this, (float)0.0, float.MinValue, float.MaxValue, true);
+        }
 
         public static new ConfigurationVariable TryConvert(string name, JToken fromJson, Changable father)
         {

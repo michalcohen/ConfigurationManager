@@ -28,7 +28,7 @@ namespace ConfigurationManager.Tests
             string json = r.ReadToEnd();
             JObject array = (JObject)JsonConvert.DeserializeObject(json);
             ConfigurationFile c = new ConfigurationFile(array);
-            Assert.IsInstanceOfType(c.Content["use_bloop"], typeof(CompositeConfiguraionVariable));
+            Assert.IsInstanceOfType(c.Content["use_bloop"], typeof(ConfigurationComposite));
             Assert.IsInstanceOfType(c.Content["folder"], typeof(ConfigurationString));
             Assert.IsInstanceOfType(c.Content["index"], typeof(ConfigurationInteger));
             Assert.IsInstanceOfType(c.Content["threshold"], typeof(ConfigurationFloat));
@@ -50,9 +50,9 @@ namespace ConfigurationManager.Tests
             Assert.IsInstanceOfType(c.Content["try_enum_global"], typeof(ConfigurationEnumeration));
 
 
-            Assert.AreEqual(((ConfigurationBool)((CompositeConfiguraionVariable)c.Content["use_bloop"])["first"]).Value.Value, true);
-            Assert.AreEqual(((ConfigurationBool)((CompositeConfiguraionVariable)c.Content["use_bloop"])["second"]).Value.Value, true);
-            Assert.AreEqual(((ConfigurationBool)((CompositeConfiguraionVariable)c.Content["use_bloop"])["third"]).Value.Value, false);
+            Assert.AreEqual(((ConfigurationBool)((ConfigurationComposite)c.Content["use_bloop"])["first"]).Value.Value, true);
+            Assert.AreEqual(((ConfigurationBool)((ConfigurationComposite)c.Content["use_bloop"])["second"]).Value.Value, true);
+            Assert.AreEqual(((ConfigurationBool)((ConfigurationComposite)c.Content["use_bloop"])["third"]).Value.Value, false);
 
             Assert.AreEqual(((ConfigurationString)c.Content["folder"]).Value.Value, "C:\\Users\\Trumpy\\Documents");
             Assert.AreEqual(((ConfigurationInteger)c.Content["index"]).Value.Value, 3);

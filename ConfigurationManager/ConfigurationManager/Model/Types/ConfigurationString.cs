@@ -25,13 +25,20 @@ namespace ConfigurationManager.Model.Types
     
     public class ConfigurationString: ConfigurationVariable<StringType, string>
     {
-        public ConfigurationString(string val, Changable father = null, bool is_explicit = false, string name=""): base(father, Brushes.DarkKhaki, name, is_explicit)
+        private static Brush brush = Brushes.DarkKhaki;
+        public ConfigurationString(string val, Changable father = null, bool is_explicit = false, string name=""): base(father, ConfigurationString.brush, name, is_explicit)
         {
             Value = new StringType(this, val, is_explicit);
         }
 
         public ConfigurationString(ConfigurationString other, Changable father = null): base(other, father)
         {}
+
+        public ConfigurationString(): base()
+        {
+            Value = new StringType(this, "", true);
+            FontColor = ConfigurationString.brush;
+        }
 
         public override UserControl GetEditView()
         {
