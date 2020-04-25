@@ -12,7 +12,7 @@
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TreeView x:Name="configuration_folder_view" Grid.Row="0" ItemsSource="{Binding Variables}" BorderThickness="0">
