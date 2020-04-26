@@ -155,7 +155,7 @@ namespace ConfigurationManager.Model.Types
         #region ConfigurationVariable Constructors
         protected ConfigurationVariable(Changable father = null, Brush font_color = null, string name = "", Window edit_window=null)
         {
-            Father = father;
+            Father = father != null ? father : new EmptyFather();
             FontColor = font_color;
             ConfigurationName = name;
             Variables = new ObservableCollection<ConfigurationVariable>();
