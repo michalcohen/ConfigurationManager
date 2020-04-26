@@ -34,12 +34,12 @@ namespace ConfigurationManager
 
         private void TreeViewItem_MouseEnter(object sender, MouseEventArgs e)
         {
-            ((TextBlock)sender).Background = Brushes.Aquamarine;
+            //((TextBlock)sender).Background = Brushes.Aquamarine;
         }
 
         private void TreeViewItem_MouseLeave(object sender, MouseEventArgs e)
         {
-            ((TextBlock)sender).Background = Brushes.White;
+            //((TextBlock)sender).Background = Brushes.White;
         }
 
         public string Answer

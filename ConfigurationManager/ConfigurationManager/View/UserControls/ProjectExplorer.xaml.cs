@@ -27,6 +27,8 @@ namespace ConfigurationManager.View.UserControls
 
         public void ShowFile(object sender, MouseButtonEventArgs args)
         {
+            
+            //((TextBlock)sender).Background = Brushes.ForestGreen;
             if (args.LeftButton == MouseButtonState.Pressed && args.ClickCount == 2)
             {
                 if (sender is TextBlock)
@@ -37,14 +39,24 @@ namespace ConfigurationManager.View.UserControls
             
         }
 
+        
         private void TreeViewItem_MouseEnter(object sender, MouseEventArgs e)
-        {
-            ((TextBlock)sender).Background = Brushes.Aquamarine;
+        {/*
+            if ((sender as TextBlock).DataContext.Equals(configuration_folder_view.SelectedItem))
+            {
+                ((TextBlock)sender).Background = Brushes.LightGreen;
+            }
+            else
+            {
+                ((TextBlock)sender).Background = Brushes.Aquamarine;
+            }*/
+            
         }
 
         private void TreeViewItem_MouseLeave(object sender, MouseEventArgs e)
         {
-            ((TextBlock)sender).Background = Brushes.White;
+            //((TextBlock)sender).Background = Brushes.White;
+
         }
     }
 }
