@@ -13,12 +13,14 @@ namespace ConfigurationManager.Model.Types
 {
     public class ConfigurationList : ConfigurationVariable
     {
-        private static Brush brush = Brushes.Black;
+        private static Brush brush = Brushes.DarkCyan;
         public ConfigurationList(JArray array, Changable father = null, string name="") : base(father, ConfigurationList.brush, name)
         {
+            int index = 1;
             foreach (JToken value in array)
             {
-                Variables.Add(ConfigurationVariable.ConvertJsonToConfiguration("", value, this));
+                Variables.Add(ConfigurationVariable.ConvertJsonToConfiguration("Element " + index.ToString(), value, this));
+                index++;
             }
             IsComposite = true;
         }
@@ -48,6 +50,22 @@ namespace ConfigurationManager.Model.Types
         public override object GetDictionary()
         {
             return new List<object>(Variables.Select(x => x.GetDictionary()));
+        }
+
+        public override void AddVariable(ConfigurationVariable configurationVariable)
+        {
+            configurationVariable.ConfigurationName = "Element " + (Variables.Count + 1).ToString();
+            base.AddVariable(configurationVariable);
+        }
+
+        protected override void DeleteVariable(ConfigurationVariable configurationVariable)
+        {
+            int index = Variables.IndexOf(configurationVariable);
+            for (int i = index + 1; i < Variables.Count; i++)
+            {
+                Variables[i].ConfigurationName = "Element " + i.ToString();
+            }
+            base.DeleteVariable(configurationVariable);
         }
 
         public override string ToString()

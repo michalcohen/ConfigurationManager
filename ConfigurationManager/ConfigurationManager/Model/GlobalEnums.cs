@@ -58,7 +58,7 @@ namespace ConfigurationManager.Model
             string json = r.ReadToEnd();
             foreach (KeyValuePair<String, JToken> value in (JObject)JsonConvert.DeserializeObject(json))
             {
-                instance.AddEnum(value.Key, (JArray)value.Value);
+                instance.EnumsOptions.Add(new GlobalEnum(value.Key, (JArray)value.Value));
             }
         }
 

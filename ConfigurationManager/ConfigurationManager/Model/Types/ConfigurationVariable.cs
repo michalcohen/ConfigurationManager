@@ -27,7 +27,7 @@ namespace ConfigurationManager.Model.Types
         /// <summary>
         /// True <=> any change was made to the configuration variable name or content that wasn't saved yet.
         /// </summary>
-        protected bool dirty;
+        protected bool dirty = false;
         public bool Dirty 
         { 
             get 
@@ -163,7 +163,7 @@ namespace ConfigurationManager.Model.Types
             IsComposite = false;
             is_explicit = false;
             IsExplicitnessChangeable = false;
-            _is_name_visible = Father is ConfigurationList;
+            _is_name_visible = !(Father is ConfigurationList);
         }
 
         protected ConfigurationVariable(ConfigurationVariable other, Changable father = null)
@@ -246,14 +246,14 @@ namespace ConfigurationManager.Model.Types
             }
         }
 
-        private void DeleteVariable(ConfigurationVariable configurationVariable)
+        protected virtual void DeleteVariable(ConfigurationVariable configurationVariable)
         {
             Variables.Remove(configurationVariable);
             RaisePropertyChanged("Variables");
             Dirty = true;
         }
 
-        public void AddVariable(ConfigurationVariable configurationVariable)
+        public virtual void AddVariable(ConfigurationVariable configurationVariable)
         {
             Variables.Add(configurationVariable);
             RaisePropertyChanged("Variables");
