@@ -13,7 +13,7 @@ namespace ConfigurationManager.Model.Types
 {
     public class ConfigurationList : ConfigurationVariable
     {
-        private static Brush brush = Brushes.DarkCyan;
+        private static Brush brush = Brushes.LightGray;
         public ConfigurationList(JArray array, Changable father = null, string name="") : base(father, ConfigurationList.brush, name)
         {
             int index = 1;
@@ -68,9 +68,26 @@ namespace ConfigurationManager.Model.Types
             base.DeleteVariable(configurationVariable);
         }
 
+        public override string ShortPreview()
+        {
+            string s = String.Join(", ", Variables.Select(x => x.ShortPreview()).ToList());
+            if (s.Length > 12)
+            {
+                s = s.Substring(0, 12);
+            }
+            for (int i = 0; i < 3; i++)
+            {
+                if (!s.EndsWith("..."))
+                {
+                    s += ".";
+                }
+            }
+            return s;
+        }
+
         public override string ToString()
         {
-            return "";
+            return ShortPreview();
         }
 
         public override bool CheckDirty()

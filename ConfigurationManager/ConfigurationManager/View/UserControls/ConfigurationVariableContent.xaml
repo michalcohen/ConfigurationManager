@@ -22,7 +22,7 @@
                         <TreeViewItem.Header>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="{Binding LabelName}"/>
-                                <TextBlock Text="{Binding TextRepresentation}" Foreground="{Binding FontColor}"/>
+                                <TextBlock Text="{Binding TextRepresentation}" Foreground="{Binding FontColor}" FontWeight="Bold"/>
                                 <StackPanel.ContextMenu>
                                     <ContextMenu>
                                         <MenuItem Header="Edit" Click="ConfigurationVariable_Edit"/>

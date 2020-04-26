@@ -352,6 +352,8 @@ namespace ConfigurationManager.Model.Types
 
 
         public abstract bool CheckDirty();
+
+        abstract public string ShortPreview();
         #endregion
 
     }
@@ -406,7 +408,6 @@ namespace ConfigurationManager.Model.Types
         /// Updates the value when the view changes. Still needs to be worked on since bounded inner types are not supported.
         /// </summary>
         /// <param name="new_value"></param>
-        
         public override object GetDictionary()
         {
             return Value.GetDictionary();
@@ -421,6 +422,18 @@ namespace ConfigurationManager.Model.Types
         {
             return dirty || Value.Dirty;
         }
+
+        public override string ShortPreview()
+        {
+            string s = Value.Value.ToString();
+            if (s.Length > 6)
+            {
+                s = s.Substring(0, 3) + "...";
+            }
+            return s;
+        }
+
+
 
     }
 }
