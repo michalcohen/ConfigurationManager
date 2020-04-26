@@ -149,6 +149,25 @@ namespace ConfigurationManager.Model.Types
 
         public bool IsExplicitnessChangeable { get; set; }
 
+        protected bool _is_valid = true;
+        public bool IsValid 
+        {
+            get
+            { 
+                return CheckValidity(); 
+            }
+            set 
+            {
+                if (value != _is_valid)
+                {
+                    _is_valid = value;
+                    RaisePropertyChanged("IsValid");
+                }
+            } 
+        }
+
+        
+
         #endregion
 
 
@@ -200,6 +219,11 @@ namespace ConfigurationManager.Model.Types
 
         #region ConfigurationVariable Methods
 
+
+        public virtual bool CheckValidity()
+        {
+            return _is_valid;
+        }
         public virtual void UpdateBy(ConfigurationVariable other)
         {
             IsExplicitnessChangeable = other.IsExplicitnessChangeable;
@@ -215,6 +239,7 @@ namespace ConfigurationManager.Model.Types
             {
                 RaisePropertyChanged("Variables");
                 RaisePropertyChanged("TextRepresentation");
+                RaisePropertyChanged("IsValid");
             }
         }
 
@@ -334,6 +359,10 @@ namespace ConfigurationManager.Model.Types
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(property));
+                if (property.Equals("IsValid"))
+                {
+                    IsValid = CheckValidity();
+                }
                 
             }
             Father.Changed(property);
@@ -410,7 +439,7 @@ namespace ConfigurationManager.Model.Types
         /// <param name="new_value"></param>
         public override object GetDictionary()
         {
-            return Value.GetDictionary();
+            return Value.GetDictionary(IsExplicit);
         }
 
         public override string ToString()
@@ -433,7 +462,10 @@ namespace ConfigurationManager.Model.Types
             return s;
         }
 
-
+        public override bool CheckValidity()
+        {
+            return Value.CheckValidity();
+        }
 
     }
 }

@@ -9,6 +9,8 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <SolidColorBrush x:Key="BGBrush" Color="White"/>
+        <SolidColorBrush x:Key="BGBrushValidityChanged" Color="LightSalmon"/>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -30,6 +32,19 @@
                                         <MenuItem Header="Add configuration" Click="ConfigurationVariable_Add" Visibility ="{Binding IsComposite, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                     </ContextMenu>
                                 </StackPanel.ContextMenu>
+                                <StackPanel.Style>
+                                    <Style TargetType="{x:Type StackPanel}">
+                                         <Setter Property="Background" Value="{DynamicResource BGBrush}"/>
+                                            <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsValid}" Value="false">
+                                                <Setter Property="Background" Value="{DynamicResource BGBrushValidityChanged}"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsValid}" Value="true">
+                                                <Setter Property="Background" Value="{DynamicResource BGBrush}"/>
+                                            </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                </StackPanel.Style>
                             </StackPanel>
                         </TreeViewItem.Header>
                     </TreeViewItem>

@@ -85,6 +85,11 @@ namespace ConfigurationManager.Model.Types
             return s;
         }
 
+        public override bool CheckValidity()
+        {
+            return Variables.All(x => x.IsValid);
+        }
+
         public override string ToString()
         {
             return ShortPreview();

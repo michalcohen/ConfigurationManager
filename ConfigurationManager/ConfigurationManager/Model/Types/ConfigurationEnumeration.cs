@@ -91,8 +91,9 @@ namespace ConfigurationManager.Model.Types
             EnumValues = new ObservableCollection<string>(other.EnumValues);
         }
 
-        public override object GetDictionary()
+        public override object GetDictionary(bool is_explicit)
         {
+            IsExplicit = is_explicit;
             if (IsGlobalEnum)
             {
                 Dictionary<string, object> dict = new Dictionary<string, object>
@@ -130,7 +131,6 @@ namespace ConfigurationManager.Model.Types
             IsGlobalEnum = o.IsGlobalEnum;
             EnumName = o.EnumName;
             EnumValues = o.EnumValues;
-
         }
 
         public void AddLocalEnumOption(string new_option)
@@ -147,6 +147,11 @@ namespace ConfigurationManager.Model.Types
             RaisePropertyChanged("EnumValues");
             RaisePropertyChanged("Options");
             Dirty = true;
+        }
+
+        public override bool CheckValidity()
+        {
+            return Options.Contains(Value);
         }
     }
     

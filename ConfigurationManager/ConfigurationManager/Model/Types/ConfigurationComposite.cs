@@ -32,6 +32,10 @@ namespace ConfigurationManager.Model.Types
             FontColor = ConfigurationComposite.brush;
         }
 
+        public override bool CheckValidity()
+        {
+            return Variables.All(x => x.IsValid);
+        }
         public static new ConfigurationVariable TryConvert(string name, JToken fromJson, Changable father)
         {
             if (IsRelevantType(fromJson))

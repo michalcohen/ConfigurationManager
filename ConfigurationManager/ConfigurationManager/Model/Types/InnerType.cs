@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -26,6 +27,7 @@ namespace ConfigurationManager.Model.Types
                 {
                     value_field = value;
                     RaisePropertyChanged("TextRepresentation");
+                    RaisePropertyChanged("IsValid");
                     Dirty = true;
                 }
             }
@@ -54,6 +56,7 @@ namespace ConfigurationManager.Model.Types
         public virtual void UpdateBy(InnerType<T> other)
         {
             Value = other.value_field;
+            RaisePropertyChanged("IsValid");
         }
 
         public void RaisePropertyChanged(string property)
@@ -71,12 +74,13 @@ namespace ConfigurationManager.Model.Types
             return Value.ToString();
         }
 
-        public virtual object GetDictionary()
+        public virtual object GetDictionary(bool is_explicit)
         {
+            IsExplicit = is_explicit;
             if (IsExplicit)
             {
                 Dictionary<string, object> dict = new Dictionary<string, object>();
-                dict["type"] = typeof(T).Name;
+                dict["type"] = String.Join("", typeof(T).Name.ToLower().Where(x => x >= 'a' && x <= 'z').ToList());
                 dict["value"] = Value;
                 return dict;
             }
@@ -88,6 +92,11 @@ namespace ConfigurationManager.Model.Types
         public void Saved()
         {
             Dirty = false;
+        }
+
+        public virtual bool CheckValidity()
+        {
+            return true;
         }
     }
 
@@ -164,11 +173,12 @@ namespace ConfigurationManager.Model.Types
             return Value.ToString() + " [" + ls + ", " + hs + "]";
         }
 
-        public override object GetDictionary()
+        public override object GetDictionary(bool is_explicit)
         {
+            IsExplicit = is_explicit;
             if (IsExplicit)
             {
-                Dictionary<string, object> dict = base.GetDictionary() as Dictionary<string, object>;
+                Dictionary<string, object> dict = base.GetDictionary(is_explicit) as Dictionary<string, object>;
                 if (HighestValue.CompareTo(maxValue) < 0)
                 {
                     dict["higher_bound"] = HighestValue;
@@ -180,6 +190,11 @@ namespace ConfigurationManager.Model.Types
                 return dict;
             }
             return Value;
+        }
+
+        public override bool CheckValidity()
+        {
+            return Value.CompareTo(LowestValue) >= 0 && Value.CompareTo(HighestValue) <= 0;
         }
     }
 }
