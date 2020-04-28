@@ -28,6 +28,7 @@ namespace ConfigurationManager.Model.Types
                     value_field = value;
                     RaisePropertyChanged("TextRepresentation");
                     RaisePropertyChanged("IsValid");
+                    RaisePropertyChanged("Value");
                     Dirty = true;
                 }
             }
@@ -105,12 +106,15 @@ namespace ConfigurationManager.Model.Types
         T minValue;
         T maxValue;
         
-        public BoundedInnerType(ConfigurationVariable father, T value, T lower_bound, T higher_bound, bool is_explicit = false) : base(father, value, is_explicit)
+        public BoundedInnerType(ConfigurationVariable father, T value, T lower_bound, T higher_bound,
+            bool is_low_bound, bool is_high_bound, bool is_explicit = false) : base(father, value, is_explicit)
         {
             _lowest_value = lower_bound;
             _highest_value = higher_bound;
             maxValue = (T)(typeof(T).GetField("MaxValue", BindingFlags.Public | BindingFlags.Static)).GetValue(null);
             minValue = (T)(typeof(T).GetField("MinValue", BindingFlags.Public | BindingFlags.Static)).GetValue(null);
+            _is_high_bound = is_low_bound;
+            _is_low_bound = is_high_bound;
         }
 
         public BoundedInnerType(BoundedInnerType<T> other, ConfigurationVariable father) : base(other, father)
@@ -119,6 +123,8 @@ namespace ConfigurationManager.Model.Types
             _highest_value = other._highest_value;
             minValue = other.minValue;
             maxValue = other.maxValue;
+            _is_low_bound = other._is_low_bound;
+            _is_high_bound = other._is_high_bound;
         }
 
         public override void UpdateBy(InnerType<T> other)
@@ -127,6 +133,8 @@ namespace ConfigurationManager.Model.Types
             base.UpdateBy(o);
             LowestValue = o.LowestValue;
             HighestValue = o.HighestValue;
+            IsLowBound = o.IsLowBound;
+            IsHighBound = o.IsHighBound;
         }
 
         private T _lowest_value;
@@ -141,8 +149,7 @@ namespace ConfigurationManager.Model.Types
                 if (!value.Equals(_lowest_value))
                 {
                     _lowest_value = value;
-                    RaisePropertyChanged("TextRepresentation");
-                    Father.Changed("TextRepresentation");
+                    RaisePropertyChanged("LowestValue");
                     Dirty = true;
                 }
             } 
@@ -164,7 +171,44 @@ namespace ConfigurationManager.Model.Types
                     Father.Changed("TextRepresentation");
                     Dirty = true;
                 }
-            } }
+            }
+        }
+
+        private bool _is_low_bound;
+        public bool IsLowBound
+        {
+            get
+            {
+                return _is_low_bound;
+            }
+            set
+            {
+                if (!value.Equals(_is_low_bound))
+                {
+                    _is_low_bound = value;
+                    RaisePropertyChanged("IsLowBound");
+                    Dirty = true;
+                }
+            }
+        }
+
+        private bool _is_high_bound;
+        public bool IsHighBound
+        {
+            get
+            {
+                return _is_high_bound;
+            }
+            set
+            {
+                if (!value.Equals(_is_high_bound))
+                {
+                    _is_high_bound = value;
+                    RaisePropertyChanged("IsHighBound");
+                    Dirty = true;
+                }
+            }
+        }
 
         public override string ToString()
         {

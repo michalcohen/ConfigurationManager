@@ -6,26 +6,29 @@
              xmlns:local="clr-namespace:ConfigurationManager.View.UserControls.EditValuesWindows"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height = "Auto" />
-            <RowDefinition Height = "Auto" />
-            <RowDefinition Height = "Auto" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Grid.Row = "0">
-            <Label Name = "valueLabel" Margin = "2">_Value:</Label>
-            <TextBox Name = "valueText" Grid.Column = "1" Margin = "2" 
-         Text = "{Binding Value}"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <Label Name="valueLabel" Margin="2">_Value:</Label>
+            <TextBox Name="valueText" Margin="2" Text="{Binding Value}"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="1">
-            <Label Name = "lowestLabel" Margin = "2">_Lowest Value:</Label>
-            <TextBox Name = "lowestText" Grid.Column = "1" Margin = "2" 
-         Text = "{Binding LowestValue}"/>
+            <CheckBox Name="lowBoundCheckBox" Margin="2" VerticalAlignment="Center" IsChecked="{Binding IsLowBound}">_Low Bound</CheckBox>
+            <Label Name="lowestLabel" Margin="2" VerticalAlignment="Center" Visibility="{Binding IsLowBound, Converter={StaticResource BooleanToVisibilityConverter}}">_Lowest Value:</Label>
+            <TextBox Name="lowestText" Margin="2" VerticalAlignment="Center" Text="{Binding LowestValue}" Visibility="{Binding IsLowBound, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="2">
-            <Label Name = "highestLabel" Margin = "2">_Highest Value:</Label>
-            <TextBox Name = "highestText" Grid.Column = "1" Margin = "2" 
-         Text = "{Binding HighestValue}"/>
+            <CheckBox Name="highBoundCheckBox" Margin="2" VerticalAlignment="Center" IsChecked="{Binding IsHighBound}">_High Bound</CheckBox>
+            <Label Name="highestLabel" Margin="2" VerticalAlignment="Center" Visibility="{Binding IsHighBound, Converter={StaticResource BooleanToVisibilityConverter}}">_Highest Value:</Label>
+            <TextBox Name="highestText" Margin="2" VerticalAlignment="Center" Text="{Binding HighestValue}" Visibility="{Binding IsHighBound, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         </StackPanel>
     </Grid>
 </UserControl>

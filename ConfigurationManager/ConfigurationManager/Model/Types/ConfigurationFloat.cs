@@ -11,7 +11,9 @@ namespace ConfigurationManager.Model.Types
 {
     public class FloatType: BoundedInnerType<float>
     {
-        public FloatType(ConfigurationFloat father, float value, float lowest, float highest, bool is_explicit) : base(father, value, lowest, highest, is_explicit)
+        public FloatType(ConfigurationFloat father, float value, float lowest, float highest,
+            bool is_low_bound, bool is_high_bound, bool is_explicit) : base(father, value, lowest,
+                highest, is_low_bound, is_high_bound, is_explicit)
         {}
 
         public FloatType(FloatType other, ConfigurationVariable father = null) : base(other, father) { }
@@ -25,13 +27,13 @@ namespace ConfigurationManager.Model.Types
     public class ConfigurationFloat: ConfigurationVariable<FloatType, float>
     {
         private static Brush brush = Brushes.BlueViolet;
-        public ConfigurationFloat(float val, Changable father = null, bool is_explicit = false, float lowest=float.MinValue, float highest=float.MaxValue, string name="") : base(father, ConfigurationFloat.brush, name, is_explicit)
+        public ConfigurationFloat(float val, Changable father = null, bool is_explicit = false, float lowest=float.MinValue, float highest=float.MaxValue, string name="", bool is_low_bound = false, bool is_high_bound = false) : base(father, ConfigurationFloat.brush, name, is_explicit)
         {
             if (lowest > highest)
             {
                 throw new Exception("Invlid bounderies");
             }
-            Value = new FloatType(this, val, lowest, highest, is_explicit);
+            Value = new FloatType(this, val, lowest, highest, is_low_bound, is_high_bound, is_explicit);
         }
 
         public ConfigurationFloat(ConfigurationFloat other, Changable father = null): base(other, father)
@@ -40,7 +42,7 @@ namespace ConfigurationManager.Model.Types
         public ConfigurationFloat(): base()
         {
             FontColor = ConfigurationFloat.brush;
-            Value = new FloatType(this, (float)0.0, float.MinValue, float.MaxValue, true);
+            Value = new FloatType(this, (float)0.0, float.MinValue, float.MaxValue, false, false, true);
         }
 
         public static new ConfigurationVariable TryConvert(string name, JToken fromJson, Changable father)
@@ -51,9 +53,11 @@ namespace ConfigurationManager.Model.Types
             } else if (IsExplicitType(fromJson))
             {
                 JObject j = (JObject)fromJson;
-                float l = j.ContainsKey("lower_bound") ? j["lower_bound"].ToObject<float>() : float.MinValue;
-                float h = j.ContainsKey("higher_bound") ? j["higher_bound"].ToObject<float>() : float.MaxValue;
-                return new ConfigurationFloat(fromJson["value"].ToObject<float>(), father, true, lowest: l, highest: h, name:name);
+                bool isLowBound = j.ContainsKey("lower_bound");
+                bool isHighBound = j.ContainsKey("higher_bound");
+                float l = isLowBound ? j["lower_bound"].ToObject<float>() : float.MinValue;
+                float h = isHighBound ? j["higher_bound"].ToObject<float>() : float.MaxValue;
+                return new ConfigurationFloat(fromJson["value"].ToObject<float>(), father, true, lowest: l, highest: h, name:name, is_low_bound: isLowBound, is_high_bound: isHighBound);
             }
             return null;
         }
