@@ -18,16 +18,17 @@ namespace ConfigurationManager
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static string path = "";
         private static String RootPath;
 
         private ProjectViewModel PVM;
 
         private static readonly string configuration_manager_configuration = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\ConfiurationManagerData\\RecentConfigurationFolder.json";
-        
+
         public MainWindow()
         {
             InitializeComponent();
-            RootPath = GetRootPath();
+            RootPath = path.Equals("") ? GetRootPath() : path;
             PVM = new ProjectViewModel(RootPath);
         }
 

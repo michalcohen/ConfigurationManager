@@ -12,7 +12,7 @@ using ConfigurationManager.Model;
 namespace ConfigurationManager.Tests
 {
     [TestClass()]
-    public class ConfigurationFileTests
+    public class MainWindowTest
     {
         [TestMethod()]
         public void ConfigurationFileTest()
