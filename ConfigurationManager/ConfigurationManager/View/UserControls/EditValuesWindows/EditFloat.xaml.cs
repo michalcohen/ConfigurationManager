@@ -24,6 +24,5 @@ namespace ConfigurationManager.View.UserControls.EditValuesWindows
             DataContext = cf;
             InitializeComponent();
         }
-
     }
 }
