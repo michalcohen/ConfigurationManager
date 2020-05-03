@@ -18,17 +18,25 @@ namespace ConfigurationManager
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static string path = "";
         private static String RootPath;
 
         private ProjectViewModel PVM;
 
+        private bool IsUderTest = false;
+
         private static readonly string configuration_manager_configuration = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\ConfiurationManagerData\\RecentConfigurationFolder.json";
 
-        public MainWindow()
+        public MainWindow(bool is_under_test)
         {
             InitializeComponent();
-            RootPath = path.Equals("") ? GetRootPath() : path;
+            if (is_under_test)
+            {
+                RootPath = @"D:\ConfigurationManager\ConfigurationManager\ConfigurationManager\ConfigurationManager\bin\Debug\netcoreapp3.1\Resources\ConfigurationsForExample";
+                IsUderTest = true;
+            } else
+            {
+                RootPath = GetRootPath();
+            }
             PVM = new ProjectViewModel(RootPath);
         }
 
@@ -84,13 +92,15 @@ namespace ConfigurationManager
 
         void MainWindowClosing(object sender, EventArgs e)
         { 
-            Dictionary<string, string> to_save = new Dictionary<string, string>();
-            to_save["recent_configuration_folder"] = RootPath;
-            string json = JsonConvert.SerializeObject(to_save);
-
-            System.IO.FileInfo file = new System.IO.FileInfo(configuration_manager_configuration);
-            file.Directory.Create(); // If the directory already exists, this method does nothing.
-            System.IO.File.WriteAllText(file.FullName, json);
+            if (!IsUderTest)
+            {
+                Dictionary<string, string> to_save = new Dictionary<string, string>();
+                to_save["recent_configuration_folder"] = RootPath;
+                string json = JsonConvert.SerializeObject(to_save);
+                System.IO.FileInfo file = new System.IO.FileInfo(configuration_manager_configuration);
+                file.Directory.Create(); // If the directory already exists, this method does nothing.
+                System.IO.File.WriteAllText(file.FullName, json);
+            }
             SaveContentIfNeeded();
         }
         

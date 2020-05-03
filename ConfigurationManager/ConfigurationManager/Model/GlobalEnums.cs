@@ -111,11 +111,6 @@ namespace ConfigurationManager.Model
             return instance.Dirty;
         }
 
-        public static void Saved()
-        {
-            instance.Dirty = false;
-        }
-
         internal static object GetDictionary()
         {
             Dictionary<string, object> dict = new Dictionary<string, object>();
@@ -131,7 +126,7 @@ namespace ConfigurationManager.Model
             if (GlobalEnums.IsDirty())
             {
                 System.IO.File.WriteAllText(root_path + "\\Enums.json", JsonConvert.SerializeObject(GlobalEnums.GetDictionary(), Formatting.Indented));
-                GlobalEnums.Saved();
+                instance.Dirty = false;
             }
         }
 
@@ -141,6 +136,11 @@ namespace ConfigurationManager.Model
             {
                 return instance.EnumsOptions.Select(x => x.Name).ToList();
             }
+        }
+
+        public static void Reset()
+        {
+            instance = new GlobalEnums();
         }
     }
 
@@ -158,10 +158,11 @@ namespace ConfigurationManager.Model
                 if (value != _name) 
                 { 
                     _name = value; 
-                    GlobalEnums.GetIntance().Dirty = false; 
+                    GlobalEnums.GetIntance().Dirty = true; 
                 } 
             } 
         }
+
         public ObservableCollection<GlobalEnumValue> Options { get; set; }
 
         public List<string> Values
@@ -174,7 +175,7 @@ namespace ConfigurationManager.Model
 
         public GlobalEnum(string name, JArray values = null)
         {
-            Name = name;
+            _name = name;
             if (values != null)
             {
                 Options = new ObservableCollection<GlobalEnumValue>(values.Values<string>().Select(x => new GlobalEnumValue(x, this)).ToList());
@@ -198,6 +199,7 @@ namespace ConfigurationManager.Model
         internal void AddOption(string text)
         {
             Options.Add(new GlobalEnumValue(text, this));
+            GlobalEnums.GetIntance().Dirty = true;
             RaisePropertyChanged("Options");
         }
 
@@ -209,6 +211,7 @@ namespace ConfigurationManager.Model
         internal void Delete()
         {
             GlobalEnums.RemoveEnum(this);
+
         }
 
         internal object GetDictionary()
@@ -232,7 +235,7 @@ namespace ConfigurationManager.Model
                 {
                     _value = value;
                     RaisePropertyChanged("Value");
-                    GlobalEnums.GetIntance().Dirty = false;
+                    GlobalEnums.GetIntance().Dirty = true;
                 } 
             } 
         }
@@ -270,6 +273,7 @@ namespace ConfigurationManager.Model
         public void Delete()
         {
             ContainingGlobalEnum.Options.Remove(this);
+            GlobalEnums.GetIntance().Dirty = true;
             ContainingGlobalEnum.RaisePropertyChanged("Options");
         }
     }

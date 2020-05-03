@@ -9,9 +9,14 @@
              d:DesignHeight="450" d:DesignWidth="800">
     
     <TreeView x:Name="configuration_folder_view" ItemsSource="{Binding RootExplorerItem.ProjectExplorerItems}">
+        <TreeView.ItemContainerStyle>
+            <Style TargetType="{x:Type TreeViewItem}">
+                <EventSetter Event="MouseDoubleClick" Handler="ShowFile" />
+            </Style>
+        </TreeView.ItemContainerStyle>
         <TreeView.ItemTemplate>
             <HierarchicalDataTemplate ItemsSource="{Binding ProjectExplorerItems}" DataType="{x:Type local:Model.ProjectExplorerItem}">
-                <TextBlock Text="{Binding ProjectExplorerItemsLabel}" MouseDown="ShowFile" MouseEnter="TreeViewItem_MouseEnter" MouseLeave="TreeViewItem_MouseLeave">
+                <TextBlock x:Name="file_name" Text="{Binding ProjectExplorerItemsLabel}" MouseEnter="TreeViewItem_MouseEnter" MouseLeave="TreeViewItem_MouseLeave">
                 </TextBlock>
             </HierarchicalDataTemplate>
         </TreeView.ItemTemplate>

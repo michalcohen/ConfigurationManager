@@ -28,14 +28,7 @@ namespace ConfigurationManager.View.UserControls
         public void ShowFile(object sender, MouseButtonEventArgs args)
         {
             
-            //((TextBlock)sender).Background = Brushes.ForestGreen;
-            if (args.LeftButton == MouseButtonState.Pressed && args.ClickCount == 2)
-            {
-                if (sender is TextBlock)
-                {
-                    ((ProjectExplorerItem)((TextBlock)sender).DataContext).OpenTab();
-                }
-            }
+            ((ProjectExplorerItem)((TreeViewItem)sender).DataContext).OpenTab();
             
         }
 

@@ -62,6 +62,7 @@ namespace ConfigurationManager.Model
         public ProjectModel(string root_path)
         {
             RootPath = root_path;
+            GlobalEnums.Reset();
             GlobalEnums.LoadEnums(RootPath);
             GE = GlobalEnums.GetIntance();
             RootExplorerItem = new ProjectExplorerItem(RootPath, this, this);
