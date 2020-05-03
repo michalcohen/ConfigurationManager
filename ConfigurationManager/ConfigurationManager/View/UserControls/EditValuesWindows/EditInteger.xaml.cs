@@ -19,7 +19,6 @@ namespace ConfigurationManager.View.UserControls.EditValuesWindows
     /// </summary>
     public partial class EditInteger : UserControl
     {
-
         public EditInteger(IntegerType ci)
         {
             DataContext = ci;
