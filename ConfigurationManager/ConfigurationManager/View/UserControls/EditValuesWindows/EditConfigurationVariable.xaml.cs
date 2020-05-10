@@ -25,14 +25,38 @@ namespace ConfigurationManager.View.UserControls.EditValuesWindows
             InitializeComponent();
         }
 
+        private bool UserAwerOfMetaDataWithImplicit()
+        {
+            string messageBoxText = "Defining variable to be implictly represented might cause information lost.\nAre you sure you want to save these changes?";
+            string caption = "Word Processor";
+            MessageBoxButton button = MessageBoxButton.YesNo;
+            MessageBoxImage icon = MessageBoxImage.Warning;
+            MessageBoxResult result = MessageBox.Show(messageBoxText, caption, button, icon);
+            return result == MessageBoxResult.Yes;
+        }
         private void SaveClick(object sender, RoutedEventArgs e)
         {
+            ConfigurationVariable cv = DataContext as ConfigurationVariable;
+            
             if (original_CV == null)
             {
-                original_CV = DataContext as ConfigurationVariable;
+                if (!(cv.IsImplicit && cv.ContainsMetaData()) || UserAwerOfMetaDataWithImplicit())
+                {
+                    original_CV = cv;
+                } else
+                {
+                    return;
+                }
+                    
             } else
             {
-                original_CV.UpdateBy(DataContext as ConfigurationVariable);
+                if (!(cv.IsImplicit && original_CV.IsExplicit && cv.ContainsMetaData()) || UserAwerOfMetaDataWithImplicit())
+                {
+                    original_CV.UpdateBy(cv);
+                } else
+                {
+                    return;
+                }
             }
             Window.GetWindow(this).Close();
         }

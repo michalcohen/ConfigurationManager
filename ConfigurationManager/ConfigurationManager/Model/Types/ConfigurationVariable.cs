@@ -447,6 +447,11 @@ namespace ConfigurationManager.Model.Types
         public abstract bool CheckDirty();
 
         abstract public string ShortPreview();
+
+        public virtual bool ContainsMetaData()
+        {
+            return !Description.Equals("") || Notes.Equals("");
+        }
         #endregion
 
     }
@@ -531,6 +536,11 @@ namespace ConfigurationManager.Model.Types
         public override bool CheckValidity()
         {
             return Value.CheckValidity();
+        }
+
+        public override bool ContainsMetaData()
+        {
+            return base.ContainsMetaData() || Value.ContainsMetaData();
         }
 
     }

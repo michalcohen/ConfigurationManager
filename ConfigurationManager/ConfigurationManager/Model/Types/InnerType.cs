@@ -99,6 +99,11 @@ namespace ConfigurationManager.Model.Types
         {
             return true;
         }
+
+        public virtual bool ContainsMetaData()
+        {
+            return false;
+        }
     }
 
     public abstract class BoundedInnerType<T> : InnerType<T> where T : IComparable
@@ -239,6 +244,11 @@ namespace ConfigurationManager.Model.Types
         public override bool CheckValidity()
         {
             return Value.CompareTo(LowestValue) >= 0 && Value.CompareTo(HighestValue) <= 0;
+        }
+
+        public override bool ContainsMetaData()
+        {
+            return base.ContainsMetaData() || IsHighBound || IsLowBound;
         }
     }
 }
