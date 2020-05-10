@@ -47,5 +47,9 @@ namespace ConfigurationManager
             get { return ((Folder)folder_view.SelectedItem).FullPath; }
         }
 
+        private void HierarchicalDataTemplate_Expanded(object sender, RoutedEventArgs e)
+        {
+            ((e.OriginalSource as TreeViewItem).DataContext as Folder).AddLayer();
+        }
     }
 }

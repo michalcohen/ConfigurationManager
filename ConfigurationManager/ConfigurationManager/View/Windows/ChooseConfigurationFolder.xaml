@@ -16,7 +16,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        <TreeView x:Name="folder_view" BorderThickness="0" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding SubFolders}">
+        <TreeView x:Name="folder_view" BorderThickness="0" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding SubFolders}" TreeViewItem.Expanded="HierarchicalDataTemplate_Expanded">
             
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding SubFolders}" DataType="{x:Type local:Model.Folder}">

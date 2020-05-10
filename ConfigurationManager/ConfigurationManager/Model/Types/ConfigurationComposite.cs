@@ -19,7 +19,11 @@ namespace ConfigurationManager.Model.Types
         {
             foreach (KeyValuePair<String, JToken> value in array)
             {
-                Variables.Add(ConfigurationVariable.ConvertJsonToConfiguration(value.Key, value.Value, this));
+                ConfigurationVariable cv = ConfigurationVariable.ConvertJsonToConfiguration(value.Key, value.Value, this);
+                if (cv != null)
+                {
+                    Variables.Add(ConfigurationVariable.ConvertJsonToConfiguration(value.Key, value.Value, this));
+                }
             }
             IsComposite = true;
         }

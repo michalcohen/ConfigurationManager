@@ -355,7 +355,19 @@ namespace ConfigurationManager.Model.Types
         /// <returns></returns>
         public static ConfigurationVariable ConvertJsonToConfiguration(string name, JToken fromJson, Changable father)
         {
-            return GetAllConfigurationTypes().Select(t => t.GetMethod("TryConvert").Invoke(null, new object[] { name, fromJson, father })).First(o => o != null) as ConfigurationVariable;
+            try
+            {
+                return GetAllConfigurationTypes().Select(t => t.GetMethod("TryConvert").Invoke(null, new object[] { name, fromJson, father })).First(o => o != null) as ConfigurationVariable;
+            } catch (InvalidOperationException e)
+            {
+                string messageBoxText = "Coud not load variable: " + name;
+                string caption = "Word Processor";
+                MessageBoxButton button = MessageBoxButton.OK;
+                MessageBoxImage icon = MessageBoxImage.Error;
+                MessageBoxResult result = MessageBox.Show(messageBoxText, caption, button, icon);
+                return null;
+            }
+            
         }
 
         /// <summary>

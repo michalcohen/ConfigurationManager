@@ -59,7 +59,7 @@ namespace ConfigurationManager.Model.Types
 
         public static new bool IsExplicitType(JToken fromJson)
         {
-            return fromJson.Type == JTokenType.Object && ((JObject)fromJson).ContainsKey("type") && ((JObject)fromJson)["type"].ToString().Equals("bool");
+            return fromJson.Type == JTokenType.Object && ((JObject)fromJson).ContainsKey("type") && ((JObject)fromJson)["type"].ToString().Equals("boolean");
         }
 
         public override ConfigurationVariable Clone(Changable father = null)

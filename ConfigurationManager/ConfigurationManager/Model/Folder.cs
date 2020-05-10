@@ -31,29 +31,42 @@ namespace ConfigurationManager.Model
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public Folder(string path)
+        public Folder(string path, bool is_expendedable = false, bool are_sub_folders_expendable = false)
         {
             FullPath = path;
             Name = path.Split("\\")[^1];
             SubFolders = new List<Folder>();
-            DirSearch();
+            if (is_expendedable)
+            {
+                DirSearch(are_sub_folders_expendable);
+            }
+            
         }
 
         /// <summary>
         /// Recursievly creates the folder hierarchy from a given path.
         /// </summary>
-        void DirSearch()
+        private void DirSearch(bool are_sub_folders_expendable)
         {
+            SubFolders = new List<Folder>();
             foreach (string d in Directory.GetDirectories(FullPath))
             {
                 try
                 {
-                    SubFolders.Add(new Folder(d));
+                    SubFolders.Add(new Folder(d, is_expendedable: are_sub_folders_expendable));
                 }
                 catch (UnauthorizedAccessException)
                 {
                 }
 
+            }
+        }
+
+        public void AddLayer()
+        {
+            foreach (Folder folder in SubFolders)
+            {
+                folder.DirSearch(true);
             }
         }
 

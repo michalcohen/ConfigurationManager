@@ -19,8 +19,12 @@ namespace ConfigurationManager.Model.Types
             int index = 1;
             foreach (JToken value in array)
             {
-                Variables.Add(ConfigurationVariable.ConvertJsonToConfiguration("Element " + index.ToString(), value, this));
-                index++;
+                ConfigurationVariable cv = ConfigurationVariable.ConvertJsonToConfiguration("Element " + index.ToString(), value, this);
+                if (cv != null)
+                {
+                    Variables.Add(ConfigurationVariable.ConvertJsonToConfiguration("Element " + index.ToString(), value, this));
+                    index++;
+                }
             }
             IsComposite = true;
         }

@@ -11,7 +11,7 @@ namespace ConfigurationManager.ViewModel
         public FolderViewModel()
         {
             string base_path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            RootFolder = new Folder(base_path);
+            RootFolder = new Folder(base_path, is_expendedable: true, are_sub_folders_expendable: true);
         }
     }
 }
