@@ -27,7 +27,7 @@ namespace ConfigurationManager.Model.Types
     public class ConfigurationFloat: ConfigurationVariable<FloatType, float>
     {
         private static Brush brush = Brushes.BlueViolet;
-        public ConfigurationFloat(float val, Changable father = null, bool is_explicit = false, float lowest=float.MinValue, float highest=float.MaxValue, string name="", bool is_low_bound = false, bool is_high_bound = false) : base(father, ConfigurationFloat.brush, name, is_explicit)
+        public ConfigurationFloat(float val, Changable father = null, bool is_explicit = false, float lowest=float.MinValue, float highest=float.MaxValue, string name="", bool is_low_bound = false, bool is_high_bound = false, string description = "", string notes = "") : base(father, ConfigurationFloat.brush, name, is_explicit, description, notes)
         {
             if (lowest > highest)
             {
@@ -53,11 +53,13 @@ namespace ConfigurationManager.Model.Types
             } else if (IsExplicitType(fromJson))
             {
                 JObject j = (JObject)fromJson;
+                string description = j.ContainsKey("description") ? j["description"].ToString() : "";
+                string notes = j.ContainsKey("notes") ? j["notes"].ToString() : "";
                 bool isLowBound = j.ContainsKey("lower_bound");
                 bool isHighBound = j.ContainsKey("higher_bound");
                 float l = isLowBound ? j["lower_bound"].ToObject<float>() : float.MinValue;
                 float h = isHighBound ? j["higher_bound"].ToObject<float>() : float.MaxValue;
-                return new ConfigurationFloat(fromJson["value"].ToObject<float>(), father, true, lowest: l, highest: h, name:name, is_low_bound: isLowBound, is_high_bound: isHighBound);
+                return new ConfigurationFloat(fromJson["value"].ToObject<float>(), father, true, lowest: l, highest: h, name:name, is_low_bound: isLowBound, is_high_bound: isHighBound, description: description, notes: notes);
             }
             return null;
         }

@@ -20,10 +20,11 @@ namespace ConfigurationManager.Model.Types
             return new BoolType(this, father);
         }
     }
+    
     public class ConfigurationBool : ConfigurationVariable<BoolType, bool>
     {
         private static Brush brush = Brushes.Magenta;
-        public ConfigurationBool(bool value, Changable father = null, bool is_explicit = false, string name="") : base(father, ConfigurationBool.brush, name, is_explicit)
+        public ConfigurationBool(bool value, Changable father = null, bool is_explicit = false, string name = "", string description = "", string notes = "") : base(father, ConfigurationBool.brush, name, is_explicit, description, notes)
         {
             Value = new BoolType(this, value, is_explicit);
         }
@@ -43,7 +44,10 @@ namespace ConfigurationManager.Model.Types
                 return new ConfigurationBool(fromJson.ToObject<bool>(), father, false, name);
             } else if (IsExplicitType(fromJson))
             {
-                return new ConfigurationBool(fromJson["value"].ToObject<bool>(), father, true, name);
+                JObject x = fromJson as JObject;
+                string description = x.ContainsKey("description") ? x["description"].ToString() : "";
+                string notes = x.ContainsKey("notes") ? x["notes"].ToString() : "";
+                return new ConfigurationBool(fromJson["value"].ToObject<bool>(), father: father, name: name, is_explicit: true, description: description, notes: notes);
             }
             return null;
         }

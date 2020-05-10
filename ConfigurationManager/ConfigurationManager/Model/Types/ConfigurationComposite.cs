@@ -15,7 +15,7 @@ namespace ConfigurationManager.Model.Types
     {
 
         private static Brush brush = Brushes.LightGray;
-        public ConfigurationComposite(JObject array, Changable father = null, string name="") : base(father, ConfigurationComposite.brush, name)
+        public ConfigurationComposite(JObject array, Changable father = null, string name="", bool is_explicit = false, string description = "", string notes = "") : base(father, ConfigurationComposite.brush, name, is_explicit, description, notes)
         {
             foreach (KeyValuePair<String, JToken> value in array)
             {
@@ -38,26 +38,39 @@ namespace ConfigurationManager.Model.Types
         }
         public static new ConfigurationVariable TryConvert(string name, JToken fromJson, Changable father)
         {
-            if (IsRelevantType(fromJson))
+            if (IsImplicitType(fromJson))
             {
-                return new ConfigurationComposite((JObject)fromJson, father, name);
+                return new ConfigurationComposite(array: (JObject)fromJson, father: father, name: name);
+            } else if (IsExplicitType(fromJson))
+            {
+                JObject x = fromJson as JObject;
+                string description = x.ContainsKey("description") ? x["description"].ToString() : "";
+                string notes = x.ContainsKey("notes") ? x["notes"].ToString() : "";
+                return new ConfigurationComposite(array: (JObject)(x["value"]), father: father, name: name, is_explicit: true, description: description, notes: notes);
             }
             return null;
         }
 
-        public static bool IsRelevantType(JToken fromJson)
+        public static new bool IsImplicitType(JToken fromJson)
         {
             return fromJson.Type == JTokenType.Object && !((JObject)fromJson).ContainsKey("type");
         }
 
-        public override object GetDictionary()
+        public static new bool IsExplicitType(JToken fromJson)
         {
-            Dictionary<string, object> dict = new Dictionary<string, object>();
-            foreach (ConfigurationVariable variable in Variables)
+            return fromJson.Type == JTokenType.Object && ((JObject)fromJson).ContainsKey("type") && ((JObject)fromJson)["type"].ToString().Equals("composite");
+        }
+
+        public override dynamic GetDictionaryToSerialize()
+        {
+            if (IsExplicit)
             {
-                dict[variable.ConfigurationName] = variable.GetDictionary();
+                Dictionary<string, object> base_dict = base.GetDictionaryToSerialize() as Dictionary<string, object>;
+                base_dict["type"] = "composite";
+                base_dict["value"] = Variables.ToDictionary(x => x.ConfigurationName, x => x.GetDictionaryToSerialize());
+                return base_dict;
             }
-            return dict;
+            return Variables.ToDictionary(x => x.ConfigurationName, x => x.GetDictionaryToSerialize());
         }
 
         public override string ToString()

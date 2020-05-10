@@ -75,15 +75,15 @@ namespace ConfigurationManager.Model.Types
             return Value.ToString();
         }
 
-        public virtual object GetDictionary(bool is_explicit)
+        public virtual dynamic GetObjectToSerialize(bool is_explicit)
         {
             IsExplicit = is_explicit;
+            Dictionary<string, object> d = new Dictionary<string, object>();
             if (IsExplicit)
             {
-                Dictionary<string, object> dict = new Dictionary<string, object>();
-                dict["type"] = String.Join("", typeof(T).Name.ToLower().Where(x => x >= 'a' && x <= 'z').ToList());
-                dict["value"] = Value;
-                return dict;
+                d["type"] = String.Join("", typeof(T).Name.ToLower().Where(x => x >= 'a' && x <= 'z').ToList());
+                d["value"] = Value;
+                return d;
             }
             return Value;
         }
@@ -217,12 +217,12 @@ namespace ConfigurationManager.Model.Types
             return Value.ToString() + " [" + ls + ", " + hs + "]";
         }
 
-        public override object GetDictionary(bool is_explicit)
+        public override dynamic GetObjectToSerialize(bool is_explicit)
         {
             IsExplicit = is_explicit;
             if (IsExplicit)
             {
-                Dictionary<string, object> dict = base.GetDictionary(is_explicit) as Dictionary<string, object>;
+                Dictionary<string, object> dict = base.GetObjectToSerialize(is_explicit) as Dictionary<string, object>;
                 if (HighestValue.CompareTo(maxValue) < 0)
                 {
                     dict["higher_bound"] = HighestValue;

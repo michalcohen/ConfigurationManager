@@ -26,7 +26,7 @@ namespace ConfigurationManager.Model.Types
     public class ConfigurationString: ConfigurationVariable<StringType, string>
     {
         private static Brush brush = Brushes.DarkKhaki;
-        public ConfigurationString(string val, Changable father = null, bool is_explicit = false, string name=""): base(father, ConfigurationString.brush, name, is_explicit)
+        public ConfigurationString(string val, Changable father = null, bool is_explicit = false, string name="", string description = "", string notes = "") : base(father, ConfigurationString.brush, name, is_explicit, description, notes)
         {
             Value = new StringType(this, val, is_explicit);
         }
@@ -52,7 +52,10 @@ namespace ConfigurationManager.Model.Types
                 return new ConfigurationString(fromJson.ToObject<string>(), father, false, name);
             } else if (IsExplicitType(fromJson))
             {
-                return new ConfigurationString(fromJson["value"].ToObject<string>(), father, true, name);
+                JObject x = fromJson as JObject;
+                string description = x.ContainsKey("description") ? x["description"].ToString() : "";
+                string notes = x.ContainsKey("notes") ? x["notes"].ToString() : "";
+                return new ConfigurationString(fromJson["value"].ToObject<string>(), father, true, name, description, notes);
             }
             return null;
         }

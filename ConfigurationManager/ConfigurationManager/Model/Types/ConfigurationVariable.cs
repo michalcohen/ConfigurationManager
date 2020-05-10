@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Security.Policy;
 using System.Windows;
 using System.Windows.Controls;
@@ -135,6 +136,9 @@ namespace ConfigurationManager.Model.Types
                 if (value != is_explicit)
                 {
                     is_explicit = value;
+                    Dirty = true;
+                    RaisePropertyChanged("IsExplicit");
+                    RaisePropertyChanged("IsImplicit");
                 }
             }
         }
@@ -166,13 +170,49 @@ namespace ConfigurationManager.Model.Types
             } 
         }
 
-        
+        private string _notes = "";
+        public string Notes
+        {
+            get
+            {
+                return _notes;
+            }
+            set
+            {
+                if (!value.Equals(_notes))
+                {
+                    _notes = value;
+                    Dirty = true;
+                    RaisePropertyChanged("Notes");
+                }
+            }
+        }
+
+        private string _description = "";
+        public string Description
+        {
+            get
+            {
+                return _description;
+            }
+            set
+            {
+                if (!value.Equals(_description))
+                {
+                    _description = value;
+                    Dirty = true;
+                    RaisePropertyChanged("Description");
+                }
+            }
+        }
+
+
 
         #endregion
 
 
         #region ConfigurationVariable Constructors
-        protected ConfigurationVariable(Changable father = null, Brush font_color = null, string name = "", Window edit_window=null)
+        protected ConfigurationVariable(Changable father = null, Brush font_color = null, string name = "", bool is_explicit = false,  string description = "", string notes = "")
         {
             Father = father != null ? father : new EmptyFather();
             FontColor = font_color;
@@ -180,9 +220,11 @@ namespace ConfigurationManager.Model.Types
             Variables = new ObservableCollection<ConfigurationVariable>();
             Dirty = false;
             IsComposite = false;
-            is_explicit = false;
-            IsExplicitnessChangeable = false;
+            this.is_explicit = is_explicit;
             _is_name_visible = !(Father is ConfigurationList);
+            _description = description;
+            _notes = notes;
+            IsExplicitnessChangeable = true;
         }
 
         protected ConfigurationVariable(ConfigurationVariable other, Changable father = null)
@@ -204,8 +246,8 @@ namespace ConfigurationManager.Model.Types
             Dirty = true;
             IsComposite = true;
             is_explicit = false;
-            IsExplicitnessChangeable = false;
             ConfigurationName = "";
+            IsExplicitnessChangeable = true;
         }
 
         public class EmptyFather : Changable
@@ -224,9 +266,9 @@ namespace ConfigurationManager.Model.Types
         {
             return _is_valid;
         }
+        
         public virtual void UpdateBy(ConfigurationVariable other)
         {
-            IsExplicitnessChangeable = other.IsExplicitnessChangeable;
             IsExplicit = other.IsExplicit;
             IsComposite = other.IsComposite;
             //PropertyChanged = other.PropertyChanged;
@@ -235,9 +277,15 @@ namespace ConfigurationManager.Model.Types
             Dirty = other.Dirty;
             Variables = new ObservableCollection<ConfigurationVariable>(other.Variables.Select(x => x.Clone(this)).ToList());
             _is_name_visible = other._is_name_visible;
+            _notes = other._notes;
+            _description = other._description;
+            IsExplicitnessChangeable = other.IsExplicitnessChangeable;
             if (Dirty)
             {
                 RaisePropertyChanged("Variables");
+                RaisePropertyChanged("ConfigurationName");
+                RaisePropertyChanged("Description");
+                RaisePropertyChanged("Notes");
                 RaisePropertyChanged("TextRepresentation");
                 RaisePropertyChanged("IsValid");
             }
@@ -249,6 +297,7 @@ namespace ConfigurationManager.Model.Types
         /// This function is momentary virtual until each configuration variable will implement it, then we will
         /// change this function to abstract, forcing future configuration variables to implement it.
         /// </summary>
+        
         public void OpenEditWindow()
         {
             (new GeneralEditWindow(this)).Show();
@@ -326,7 +375,22 @@ namespace ConfigurationManager.Model.Types
         /// when saving file to the disk.
         /// </summary>
         /// <returns></returns>
-        public abstract object GetDictionary();
+        public virtual dynamic GetDictionaryToSerialize()
+        {
+            Dictionary<string, object> d = new Dictionary<string, object>();
+            if (IsExplicit)
+            {
+                if (!Description.Equals(""))
+                {
+                    d["description"] = Description;
+                }
+                if (!Notes.Equals(""))
+                {
+                    d["notes"] = Notes;
+                }
+            }
+            return d;
+        }
 
         /// <summary>
         /// Is implictly loaded data of current ConfigurationVariable type.
@@ -394,10 +458,8 @@ namespace ConfigurationManager.Model.Types
         /// </summary>
         public T Value { get; set; }
 
-        protected ConfigurationVariable(Changable father= null, Brush font_color = null, string name = "", bool is_explicit = false): base(father, font_color, name)
+        protected ConfigurationVariable(Changable father= null, Brush font_color = null, string name = "", bool is_explicit = false, string description = "", string notes = "") : base(father, font_color, name, is_explicit, description, notes)
         {
-            this.is_explicit = is_explicit;
-            IsExplicitnessChangeable = true;
         }
 
         protected ConfigurationVariable(ConfigurationVariable<T, G> other, Changable father = null): base(other, father)
@@ -412,7 +474,6 @@ namespace ConfigurationManager.Model.Types
             Dirty = true;
             IsComposite = false;
             is_explicit = false;
-            IsExplicitnessChangeable = true;
             ConfigurationName = "";
         }
 
@@ -437,9 +498,14 @@ namespace ConfigurationManager.Model.Types
         /// Updates the value when the view changes. Still needs to be worked on since bounded inner types are not supported.
         /// </summary>
         /// <param name="new_value"></param>
-        public override object GetDictionary()
+        public override dynamic GetDictionaryToSerialize()
         {
-            return Value.GetDictionary(IsExplicit);
+            if (IsExplicit)
+            {
+                Dictionary<string, object> base_object = base.GetDictionaryToSerialize();
+                return base_object.Concat(Value.GetObjectToSerialize(IsExplicit) as Dictionary<string, object>).ToDictionary(x => x.Key, x => x.Value);
+            }
+            return Value.GetObjectToSerialize(IsExplicit);
         }
 
         public override string ToString()

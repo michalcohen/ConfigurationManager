@@ -91,7 +91,7 @@ namespace ConfigurationManager.Model.Types
             EnumValues = new ObservableCollection<string>(other.EnumValues);
         }
 
-        public override object GetDictionary(bool is_explicit)
+        public override object GetObjectToSerialize(bool is_explicit)
         {
             IsExplicit = is_explicit;
             if (IsGlobalEnum)
@@ -158,13 +158,13 @@ namespace ConfigurationManager.Model.Types
     public class ConfigurationEnumeration: ConfigurationVariable<EnumType, string>
     {
         private static Brush brush = Brushes.DarkGoldenrod;
-        public ConfigurationEnumeration(string value, Changable father = null, string enum_name = "", string name="") : base(father, ConfigurationEnumeration.brush, name, true)
+        public ConfigurationEnumeration(string value, Changable father = null, string enum_name = "", string name="", string description = "", string notes = "") : base(father, ConfigurationEnumeration.brush, name, true, description, notes)
         {
             Value = new EnumType(this, value, enum_name);
             IsExplicitnessChangeable = false;
         }
 
-        public ConfigurationEnumeration(string value, Changable father = null, List<string> enum_values = null, string name="") : base(father, Brushes.DarkGoldenrod, name, true)
+        public ConfigurationEnumeration(string value, Changable father = null, List<string> enum_values = null, string name="", string description = "", string notes = "") : base(father, Brushes.DarkGoldenrod, name, true, description, notes)
         {
             Value = new EnumType(this, value, enum_values);
             IsExplicitnessChangeable = false;
@@ -189,13 +189,16 @@ namespace ConfigurationManager.Model.Types
             {
                 return null;
             }
+            string description = j.ContainsKey("description") ? j["description"].ToString() : "";
+            string notes = j.ContainsKey("notes") ? j["notes"].ToString() : "";
+
             JToken t = j["type"];
             if (t.Type == JTokenType.String)
             {
                 string type_name = t.ToObject<string>();
                 if (GlobalEnums.HasEnum(type_name))
                 {
-                    return new ConfigurationEnumeration(j["value"].ToObject<string>(), father, type_name, name);
+                    return new ConfigurationEnumeration(j["value"].ToObject<string>(), father, type_name, name, description, notes);
                 }
             }
             else if (t.Type == JTokenType.Array)
@@ -210,7 +213,7 @@ namespace ConfigurationManager.Model.Types
                 {
                     values.Add(value.ToObject<string>());
                 }
-                return new ConfigurationEnumeration(j["value"].ToObject<string>(), father, values, name);
+                return new ConfigurationEnumeration(j["value"].ToObject<string>(), father, values, name, description, notes);
             }
             return null;
         }

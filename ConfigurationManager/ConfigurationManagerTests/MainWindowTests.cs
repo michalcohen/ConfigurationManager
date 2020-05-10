@@ -13,6 +13,7 @@ using OpenQA.Selenium.Interactions;
 namespace ConfigurationManager.Tests
 {
     [TestClass()]
+    [Ignore()]
     public class MainWindowTests
     {
 

@@ -29,7 +29,7 @@ namespace ConfigurationManager
         /// <returns></returns>
         public Dictionary<string, object> GetDictionary()
         {
-            return Content.GetDictionary() as Dictionary<string, object>;
+            return Content.GetDictionaryToSerialize() as Dictionary<string, object>;
         }
 
         /// <summary>

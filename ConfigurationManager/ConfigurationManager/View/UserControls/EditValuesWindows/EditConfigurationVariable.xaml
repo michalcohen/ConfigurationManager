@@ -15,21 +15,29 @@
             <RowDefinition Height = "Auto" />
             <RowDefinition Height = "Auto" />
             <RowDefinition Height = "Auto" />
+            <RowDefinition Height = "Auto" />
+            <RowDefinition Height = "Auto" />
         </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
             <ColumnDefinition Width = "Auto" />
             <ColumnDefinition Width = "200" />
         </Grid.ColumnDefinitions>
-            <Label Name = "nameLabel" Margin = "2" Visibility="{Binding IsNameVisable, Converter={StaticResource BooleanToVisibilityConverter}}" >_Name:</Label>
-            <TextBox Name = "nameText" Grid.Column = "1" Margin = "2" VerticalAlignment="Center" Visibility="{Binding IsNameVisable, Converter={StaticResource BooleanToVisibilityConverter}}" Text = "{Binding ConfigurationName}"/>
+        <Label Name = "nameLabel" Grid.Row="0" Margin = "2" Visibility="{Binding IsNameVisable, Converter={StaticResource BooleanToVisibilityConverter}}" >_Name:</Label>
+        <TextBox Name = "nameText" Grid.Row="0" Grid.Column = "1" Margin = "2" VerticalAlignment="Center" Visibility="{Binding IsNameVisable, Converter={StaticResource BooleanToVisibilityConverter}}" Text = "{Binding ConfigurationName}"/>
 
-        <ContentControl x:Name="ContentControl" Content="{Binding EditWindow}" Grid.ColumnSpan="2" Grid.Row = "1"/>
+        <Label Name = "descriptionLabel" Grid.Row="1" Margin = "2" >_Description:</Label>
+        <TextBox Name = "descriptionText" Grid.Row="1" Grid.Column = "1" Margin = "2" VerticalAlignment="Center"  Text = "{Binding Description}" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" MaxHeight="50"/>
+
+        <Label Name = "commentLabel" Grid.Row="2" Margin = "2" >_Notes:</Label>
+        <TextBox Name = "commentText" Grid.Row="2" Grid.Column = "1" Margin = "2" VerticalAlignment="Center"  Text = "{Binding Notes}" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" MaxHeight="50" />
+
+        <ContentControl x:Name="ContentControl" Grid.Row="3" Content="{Binding EditWindow}" Grid.ColumnSpan="2"/>
 
 
 
-        <CheckBox x:Name="IsExplicit" IsChecked="{Binding IsExplicit}" Grid.ColumnSpan="2" Margin = "2" Grid.Row = "2" Visibility="{Binding IsExplicitnessChangeable, Converter={StaticResource BooleanToVisibilityConverter}}">Type explicitly represented</CheckBox>
-        <Button  Grid.Row = "3" Grid.Column="1" Content = "_OK" Click="SaveClick"/>
-        <Button Grid.Row = "3" Grid.Column="0" Content = "_Cancel" Click="CancelClick" />
+        <CheckBox x:Name="IsExplicit" IsChecked="{Binding IsExplicit}" Grid.ColumnSpan="2" Margin = "2" Grid.Row = "4" Visibility="{Binding IsExplicitnessChangeable, Converter={StaticResource BooleanToVisibilityConverter}}">Type explicitly represented</CheckBox>
+        <Button  Grid.Row = "5" Grid.Column="1" Content = "_OK" Click="SaveClick"/>
+        <Button Grid.Row = "5" Grid.Column="0" Content = "_Cancel" Click="CancelClick" />
 
     </Grid>
 </UserControl>

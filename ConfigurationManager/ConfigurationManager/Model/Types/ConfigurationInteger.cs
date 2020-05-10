@@ -26,7 +26,7 @@ namespace ConfigurationManager.Model.Types
     public class ConfigurationInteger: ConfigurationVariable<IntegerType, int>
     {
         private static Brush brush = Brushes.Green;
-        public ConfigurationInteger(int val, Changable father = null, bool is_explicit = false, int lowest=int.MinValue, int highest = int.MaxValue, string name="", bool is_low_bound=false, bool is_high_bound = false) : base(father, ConfigurationInteger.brush, name, is_explicit)
+        public ConfigurationInteger(int val, Changable father = null, bool is_explicit = false, int lowest=int.MinValue, int highest = int.MaxValue, string name="", bool is_low_bound=false, bool is_high_bound = false, string description = "", string notes = "") : base(father, ConfigurationInteger.brush, name, is_explicit, description, notes)
         {
             Value = new IntegerType(this, val, lowest, highest, is_low_bound, is_high_bound, is_explicit);
         }
@@ -53,11 +53,13 @@ namespace ConfigurationManager.Model.Types
             } else if (IsExplicitType(fromJson))
             {
                 JObject j = (JObject)fromJson;
+                string description = j.ContainsKey("description") ? j["description"].ToString() : "";
+                string notes = j.ContainsKey("notes") ? j["notes"].ToString() : "";
                 bool isLowBound = j.ContainsKey("lower_bound");
                 bool isHighBound = j.ContainsKey("higher_bound");
                 int l = isLowBound ? j["lower_bound"].ToObject<int>() : int.MinValue;
                 int h = isHighBound ? j["higher_bound"].ToObject<int>() : int.MaxValue;
-                return new ConfigurationInteger(fromJson["value"].ToObject<int>(), father, true, lowest: l, highest: h, name:name, is_low_bound: isLowBound, is_high_bound: isHighBound);
+                return new ConfigurationInteger(fromJson["value"].ToObject<int>(), father, true, lowest: l, highest: h, name:name, is_low_bound: isLowBound, is_high_bound: isHighBound, description: description, notes: notes);
             }
             return null;
         }
