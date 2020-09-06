@@ -25,6 +25,7 @@ namespace ConfigurationManager.Model
         public ObservableCollection<GlobalEnum> EnumsOptions { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
         public bool Dirty;
+        private ProjectModel AnounceGEChange;
 
         private GlobalEnums()
         {
@@ -67,6 +68,11 @@ namespace ConfigurationManager.Model
             return instance;
         }
 
+        public static void NotifyOnChangeTo(ProjectModel pm)
+        {
+            instance.AnounceGEChange = pm;
+        }
+
         /// <summary>
         /// Checks if enum type name exists in EnumOptions
         /// </summary>
@@ -103,6 +109,7 @@ namespace ConfigurationManager.Model
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(property));
                 PropertyChanged(this, new PropertyChangedEventArgs("EnumsOptions"));
+                instance.AnounceGEChange.GlobalEnumChanged();
             }
         }
 

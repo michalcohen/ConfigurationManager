@@ -59,5 +59,10 @@ namespace ConfigurationManager
                 return Content.Dirty;
             }
         }
+
+        public void GlobalEnumChanged()
+        {
+            Content.GlobalEnumChanged();
+        }
     }
 }

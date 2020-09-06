@@ -64,8 +64,8 @@ namespace ConfigurationManager.Model
             RootPath = root_path;
             GlobalEnums.Reset();
             GlobalEnums.LoadEnums(RootPath);
-            GE = GlobalEnums.GetIntance();
             RootExplorerItem = new ProjectExplorerItem(RootPath, this, this);
+            GlobalEnums.NotifyOnChangeTo(this);
             FocusedTab = -1;
         }
 
@@ -154,6 +154,13 @@ namespace ConfigurationManager.Model
                 RaisePropertyChanged("OpenedExplorerItems");
             }
             RaisePropertyChanged(property);
+        }
+    
+        public void GlobalEnumChanged()
+        {
+            foreach (ProjectExplorerItem pei in OpenedExplorerItems){
+                pei.GlobalEnumChanged();
+            }
         }
     }
 }

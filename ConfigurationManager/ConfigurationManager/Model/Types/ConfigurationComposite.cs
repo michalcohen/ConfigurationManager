@@ -119,5 +119,6 @@ namespace ConfigurationManager.Model.Types
             }
             return s;
         }
+
     }
 }

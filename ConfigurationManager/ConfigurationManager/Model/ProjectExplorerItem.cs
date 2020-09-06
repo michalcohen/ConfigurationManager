@@ -235,5 +235,16 @@ namespace ConfigurationManager.Model
             }
         }
 
+        public void GlobalEnumChanged()
+        {
+            foreach (ProjectExplorerItem pei in ProjectExplorerItems)
+            {
+                pei.GlobalEnumChanged();
+            }
+            if (Content != null)
+            {
+                Content.GlobalEnumChanged();
+            }
+        }
     }
 }

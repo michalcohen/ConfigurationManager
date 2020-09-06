@@ -153,20 +153,11 @@ namespace ConfigurationManager.Model.Types
 
         public bool IsExplicitnessChangeable { get; set; }
 
-        protected bool _is_valid = true;
         public bool IsValid 
         {
             get
             { 
                 return CheckValidity(); 
-            }
-            set 
-            {
-                if (value != _is_valid)
-                {
-                    _is_valid = value;
-                    RaisePropertyChanged("IsValid");
-                }
             } 
         }
 
@@ -264,7 +255,7 @@ namespace ConfigurationManager.Model.Types
 
         public virtual bool CheckValidity()
         {
-            return _is_valid;
+            return true;
         }
         
         public virtual void UpdateBy(ConfigurationVariable other)
@@ -435,10 +426,6 @@ namespace ConfigurationManager.Model.Types
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(property));
-                if (property.Equals("IsValid"))
-                {
-                    IsValid = CheckValidity();
-                }
                 
             }
             Father.Changed(property);
@@ -463,6 +450,15 @@ namespace ConfigurationManager.Model.Types
         public virtual bool ContainsMetaData()
         {
             return !Description.Equals("") || Notes.Equals("");
+        }
+
+        public void GlobalEnumChanged()
+        {
+            foreach (ConfigurationVariable cv in Variables)
+            {
+                cv.GlobalEnumChanged();
+            }
+            RaisePropertyChanged("IsValid");
         }
         #endregion
 
@@ -555,5 +551,6 @@ namespace ConfigurationManager.Model.Types
             return base.ContainsMetaData() || Value.ContainsMetaData();
         }
 
+        
     }
 }
