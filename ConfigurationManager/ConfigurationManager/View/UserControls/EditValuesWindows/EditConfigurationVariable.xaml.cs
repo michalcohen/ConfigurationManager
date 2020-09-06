@@ -37,7 +37,6 @@ namespace ConfigurationManager.View.UserControls.EditValuesWindows
         private void SaveClick(object sender, RoutedEventArgs e)
         {
             ConfigurationVariable cv = DataContext as ConfigurationVariable;
-            
             if (original_CV == null)
             {
                 if (!(cv.IsImplicit && cv.ContainsMetaData()) || UserAwerOfMetaDataWithImplicit())

@@ -37,7 +37,7 @@ namespace ConfigurationManager.View.UserControls.EditValuesWindows
 
         private void add_local_enum_option()
         {
-            (DataContext as ConfigurationEnumeration).Value.AddLocalEnumOption(add_enum_value.Text);
+            (DataContext as EnumType).AddLocalEnumOption(add_enum_value.Text);
         }
 
         private bool add_enum_value_has_value()
@@ -66,7 +66,7 @@ namespace ConfigurationManager.View.UserControls.EditValuesWindows
         private void local_enum_option_delete_Click(object sender, RoutedEventArgs e)
         {
             string name = (sender as MenuItem).DataContext as string;
-            (DataContext as ConfigurationEnumeration).Value.RemoveLocalEnumOption(name);
+            (DataContext as EnumType).RemoveLocalEnumOption(name);
         }
     }
 }
